@@ -3,13 +3,13 @@ package gov.nyc.doitt.casematters.submitter.domain.cmii;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,9 +20,12 @@ public class CmiiSubmission {
 	@Column(name = "ID")
 	private long id;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "SUBMISSION_STATE")
-	private CmiiSubmissionState submissionState;
+	@OneToOne
+	@JoinColumn(name = "userId", referencedColumnName = "id", updatable = false, insertable = false)
+	private CmiiUser cmiiUser;
+
+	@Embedded
+	private CmiiSubmissionControl cmiiSubmissionControl;
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
@@ -32,16 +35,23 @@ public class CmiiSubmission {
 		return id;
 	}
 
-	public CmiiSubmissionState getSubmissionState() {
-		return submissionState;
-	}
-
-	public void setSubmissionState(CmiiSubmissionState submissionState) {
-		this.submissionState = submissionState;
-	}
-
 	public List<CmiiSubmissionData> getSubmissionDataList() {
 		return submissionDataList;
+	}
+
+	
+	public CmiiSubmissionControl getCmiiSubmissionControl() {
+		return cmiiSubmissionControl;
+	}
+
+	
+	public void setCmiiSubmissionControl(CmiiSubmissionControl cmiiSubmissionControl) {
+		this.cmiiSubmissionControl = cmiiSubmissionControl;
+	}
+
+	
+	public CmiiUser getCmiiUser() {
+		return cmiiUser;
 	}
 
 }

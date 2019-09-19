@@ -15,7 +15,7 @@ import gov.nyc.doitt.casematters.submitter.domain.SubmitterService;
 public class CmiiSubmissionService {
 
 	private Logger logger = LoggerFactory.getLogger(CmiiSubmissionService.class);
-	
+
 	@Autowired
 	private CmiiSubmissionRepository cmiiSubmissionRepository;
 
@@ -23,14 +23,14 @@ public class CmiiSubmissionService {
 	public List<CmiiSubmission> getNextBatch() {
 
 		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findBySubmissionStateIn(Arrays.asList(new CmiiSubmissionState[]{CmiiSubmissionState.NEW, CmiiSubmissionState.ERROR}));
+				.findByCmiiSubmissionControlCmiiSubmissionSubmitterStatusIn(Arrays.asList(new CmiiSubmissionSubmitterStatus[]{
+						CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}));
 
 		logger.debug("getNextBatch: number of submissions found: {}", submissions.size());
 
 		return submissions;
 	}
 
-	
 	@Transactional("cmiiTransactionManager")
 	public void updateCmiiSubmission(CmiiSubmission cmiiSubmission) {
 

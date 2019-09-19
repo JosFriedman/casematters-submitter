@@ -1,5 +1,6 @@
 package gov.nyc.doitt.casematters.submitter.domain;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionControl;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionService;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionState;
-import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionService;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionSubmitterStatus;
 import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionData;
+import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionService;
 
 @Component
 public class SubmitterService {
@@ -32,7 +34,7 @@ public class SubmitterService {
 		logger.debug("submitBatch: entering");
 
 		List<CmiiSubmission> cmiiSubmissionList = cmiiSubmissionService.getNextBatch();
-		
+
 		cmiiSubmissionList.forEach(p -> submitOne(p));
 
 		logger.debug("submitBatch: exiting");
@@ -41,9 +43,19 @@ public class SubmitterService {
 	private void submitOne(CmiiSubmission cmiiSubmission) {
 
 		List<LmSubmissionData> lmSubmissionDataList = cmiiToLmMapper.fromCmii(cmiiSubmission.getSubmissionDataList());
+		
 		boolean saved = lmSubmissionService.saveSubmissions(lmSubmissionDataList);
-		cmiiSubmission.setSubmissionState(saved ? CmiiSubmissionState.COMPLETED : CmiiSubmissionState.ERROR);
+
+		recordInSubmissionControl(cmiiSubmission, saved);
+
 		cmiiSubmissionService.updateCmiiSubmission(cmiiSubmission);
 	}
 
+	private void recordInSubmissionControl(CmiiSubmission cmiiSubmission, boolean saved) {
+
+		CmiiSubmissionControl cmiiSubmissionControl = cmiiSubmission.getCmiiSubmissionControl();
+		cmiiSubmissionControl.setCmiiSubmissionSubmitterStatus(saved ? CmiiSubmissionSubmitterStatus.COMPLETED : CmiiSubmissionSubmitterStatus.ERROR);
+		cmiiSubmissionControl.setSubmitterEndTimestamp(new Timestamp(System.currentTimeMillis()));
+		cmiiSubmissionControl.incrementSubmitterRetryCount();
+	}
 }
