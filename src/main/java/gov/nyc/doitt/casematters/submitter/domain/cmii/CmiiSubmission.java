@@ -8,6 +8,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,17 +22,22 @@ public class CmiiSubmission {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SUBMISSION_STATE")
-	private SubmissionState submissionState;
+	private CmiiSubmissionState submissionState;
 
-	@OneToMany(mappedBy = "submissionId", fetch=FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
 	private List<CmiiSubmissionData> submissionDataList;
 
 	public long getId() {
 		return id;
 	}
 
-	public SubmissionState getSubmissionState() {
+	public CmiiSubmissionState getSubmissionState() {
 		return submissionState;
+	}
+
+	public void setSubmissionState(CmiiSubmissionState submissionState) {
+		this.submissionState = submissionState;
 	}
 
 	public List<CmiiSubmissionData> getSubmissionDataList() {

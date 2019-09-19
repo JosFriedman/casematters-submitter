@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionRepository;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.SubmissionState;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionState;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,7 +27,7 @@ public class CmiiSubmissionsRepositoryTest {
 	@Transactional("cmiiTransactionManager")
 	public void testFindNew() {
 
-		List<CmiiSubmission> submissions = cmiiSubmissionRepository.findBySubmissionState(SubmissionState.NEW);
+		List<CmiiSubmission> submissions = cmiiSubmissionRepository.findBySubmissionState(CmiiSubmissionState.NEW);
 		assertTrue(submissions.size() != 0);
 		assertTrue(submissions.get(0).getSubmissionDataList().size() != 0);
 	}
@@ -37,7 +37,7 @@ public class CmiiSubmissionsRepositoryTest {
 	public void testFindNewAndError() {
 
 		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findBySubmissionStateIn(Arrays.asList(new SubmissionState[]{SubmissionState.NEW, SubmissionState.ERROR}));
+				.findBySubmissionStateIn(Arrays.asList(new CmiiSubmissionState[]{CmiiSubmissionState.NEW, CmiiSubmissionState.ERROR}));
 		assertTrue(submissions.size() != 0);
 		assertTrue(submissions.get(0).getSubmissionDataList().size() != 0);
 	}

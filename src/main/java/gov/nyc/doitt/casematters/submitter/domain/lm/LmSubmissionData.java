@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class LmSubmissionData {
 
 	@EmbeddedId
-	private LmSubmissionDataKey mSubmissionDataKey;
+	private LmSubmissionDataKey lmSubmissionDataKey;
 
 	@Column(name = "fieldValue")
 	private String fieldValue;
@@ -22,15 +22,15 @@ public class LmSubmissionData {
 	}
 
 	public LmSubmissionData(int submissionId, String fieldName) {
-		this.mSubmissionDataKey = new LmSubmissionDataKey(submissionId, fieldName);
+		this.lmSubmissionDataKey = new LmSubmissionDataKey(submissionId, fieldName);
 	}
 
-	public LmSubmissionDataKey getmSubmissionDataKey() {
-		return mSubmissionDataKey;
+	public LmSubmissionDataKey getLmSubmissionDataKey() {
+		return lmSubmissionDataKey;
 	}
 
-	public void setmSubmissionDataKey(LmSubmissionDataKey mSubmissionDataKey) {
-		this.mSubmissionDataKey = mSubmissionDataKey;
+	public void setLmSubmissionDataKey(LmSubmissionDataKey lmSubmissionDataKey) {
+		this.lmSubmissionDataKey = lmSubmissionDataKey;
 	}
 
 	public String getFieldValue() {
@@ -51,7 +51,7 @@ public class LmSubmissionData {
 
 	@Override
 	public String toString() {
-		return "LmSubmissionData [mSubmissionDataKey=" + mSubmissionDataKey + ", fieldValue=" + fieldValue + ", messageId="
+		return "LmSubmissionData [lmSubmissionDataKey=" + lmSubmissionDataKey + ", fieldValue=" + fieldValue + ", messageId="
 				+ messageId + "]";
 	}
 
