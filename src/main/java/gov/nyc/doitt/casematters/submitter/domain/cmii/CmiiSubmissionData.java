@@ -35,6 +35,11 @@ public class CmiiSubmissionData {
 		return entity;
 	}
 
+	@Override
+	public String toString() {
+		return "CmiiSubmissionData [id=" + id + ", submissionId=" + submissionId + ", entity=" + entity + ", value=" + value + "]";
+	}
+
 	public String getValue() {
 		return value;
 	}

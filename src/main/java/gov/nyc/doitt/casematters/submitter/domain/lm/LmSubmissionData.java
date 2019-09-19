@@ -49,4 +49,10 @@ public class LmSubmissionData {
 		this.messageId = messageId;
 	}
 
+	@Override
+	public String toString() {
+		return "LmSubmissionData [mSubmissionDataKey=" + mSubmissionDataKey + ", fieldValue=" + fieldValue + ", messageId="
+				+ messageId + "]";
+	}
+
 }

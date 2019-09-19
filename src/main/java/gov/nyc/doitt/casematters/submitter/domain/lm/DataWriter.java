@@ -13,9 +13,10 @@ public class DataWriter {
 	private LmSubmissionDataRepository lmSubmissionDataRepository;
 
 	@Transactional("lmTransactionManager")
-	public void saveSubmissions(List<LmSubmissionData> submissionDataList) {
+	public boolean saveSubmissions(List<LmSubmissionData> submissionDataList) {
 
 		lmSubmissionDataRepository.saveAll(submissionDataList);
+		return true;
 	}
 
 }
