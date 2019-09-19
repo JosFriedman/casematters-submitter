@@ -23,8 +23,8 @@ public class CmiiSubmissionControl implements Serializable {
 	@Column(name = "SUBMITTER_END_TIMESTAMP")
 	private Timestamp submitterEndTimestamp;
 
-	@Column(name = "SUBMITTER_RETRY_COUNT")
-	private int submitterRetryCount;
+	@Column(name = "SUBMITTER_ERROR_COUNT")
+	private int submitterErrorCount;
 
 	public CmiiSubmissionSubmitterStatus getCmiiSubmissionSubmitterStatus() {
 		return cmiiSubmissionSubmitterStatus;
@@ -50,22 +50,22 @@ public class CmiiSubmissionControl implements Serializable {
 		this.submitterEndTimestamp = submitterEndTimestamp;
 	}
 
-	public int getSubmitterRetryCount() {
-		return submitterRetryCount;
+	public int getSubmitterErrorCount() {
+		return submitterErrorCount;
 	}
 
-	public void setSubmitterRetryCount(int submitterRetryCount) {
-		this.submitterRetryCount = submitterRetryCount;
+	public void setSubmitterErrorCount(int submitterErrorCount) {
+		this.submitterErrorCount = submitterErrorCount;
 	}
 	
-	public void incrementSubmitterRetryCount() {
-		submitterRetryCount++;
+	public void incrementSubmitterErrorCount() {
+		submitterErrorCount++;
 	}
 
 	@Override
 	public String toString() {
 		return "CmiiSubmitterControl [cmiiSubmissionSubmitterStatus=" + cmiiSubmissionSubmitterStatus + ", submitterStartTimestamp=" + submitterStartTimestamp
-				+ ", submitterEndTimestamp=" + submitterEndTimestamp + ", submitterRetryCount=" + submitterRetryCount + "]";
+				+ ", submitterEndTimestamp=" + submitterEndTimestamp + ", submitterErrorCount=" + submitterErrorCount + "]";
 	}
 
 }

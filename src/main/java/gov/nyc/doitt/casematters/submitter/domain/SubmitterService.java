@@ -43,7 +43,7 @@ public class SubmitterService {
 	private void submitOne(CmiiSubmission cmiiSubmission) {
 
 		List<LmSubmissionData> lmSubmissionDataList = cmiiToLmMapper.fromCmii(cmiiSubmission.getSubmissionDataList());
-		
+
 		boolean saved = lmSubmissionService.saveSubmissions(lmSubmissionDataList);
 
 		recordInSubmissionControl(cmiiSubmission, saved);
@@ -54,8 +54,12 @@ public class SubmitterService {
 	private void recordInSubmissionControl(CmiiSubmission cmiiSubmission, boolean saved) {
 
 		CmiiSubmissionControl cmiiSubmissionControl = cmiiSubmission.getCmiiSubmissionControl();
-		cmiiSubmissionControl.setCmiiSubmissionSubmitterStatus(saved ? CmiiSubmissionSubmitterStatus.COMPLETED : CmiiSubmissionSubmitterStatus.ERROR);
 		cmiiSubmissionControl.setSubmitterEndTimestamp(new Timestamp(System.currentTimeMillis()));
-		cmiiSubmissionControl.incrementSubmitterRetryCount();
+		if (saved) {
+			cmiiSubmissionControl.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.COMPLETED);
+		} else {
+			cmiiSubmissionControl.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.ERROR);
+			cmiiSubmissionControl.incrementSubmitterErrorCount();
+		}
 	}
 }
