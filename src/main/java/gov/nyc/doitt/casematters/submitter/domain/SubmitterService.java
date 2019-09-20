@@ -12,7 +12,7 @@ import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionService;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
 import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionService;
-import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmissionData;
+import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmission;
 
 @Component
 public class SubmitterService {
@@ -43,9 +43,9 @@ public class SubmitterService {
 
 		logger.debug("submitOne: cmiiSubmission: {}", cmiiSubmission);
 
-		List<LmSubmissionData> lmSubmissionDataList = cmiiToLmMapper.fromCmii(cmiiSubmission.getSubmissionDataList());
+		LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
 
-		boolean saved = lmSubmissionService.saveSubmissions(lmSubmissionDataList);
+		boolean saved = lmSubmissionService.saveSubmission(lmSubmission);
 
 		setSubmissionResult(cmiiSubmission, saved);
 

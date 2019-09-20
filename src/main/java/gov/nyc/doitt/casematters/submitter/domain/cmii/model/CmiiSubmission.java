@@ -22,6 +22,15 @@ public class CmiiSubmission {
 	@Column(name = "ID")
 	private long id;
 
+	@Column(name = "PARENTID")
+	private Long parentId;
+
+	@Column(name = "SUBMITTED")
+	private Timestamp submitted;
+
+	@Column(name = "DESCRIPTION")
+	private String description;
+
 	@OneToOne
 	@JoinColumn(name = "userId", referencedColumnName = "id", updatable = false, insertable = false)
 	private CmiiUser cmiiUser;
@@ -32,7 +41,7 @@ public class CmiiSubmission {
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
-	private List<CmiiSubmissionData> submissionDataList;
+	private List<CmiiSubmissionData> cmiiSubmissionDataList;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SUBMITTER_STATUS")
@@ -51,6 +60,18 @@ public class CmiiSubmission {
 		return id;
 	}
 
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public Timestamp getSubmitted() {
+		return submitted;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
 	public CmiiUser getCmiiUser() {
 		return cmiiUser;
 	}
@@ -59,12 +80,8 @@ public class CmiiSubmission {
 		return cmiiFormVersion;
 	}
 
-	public List<CmiiSubmissionData> getSubmissionDataList() {
-		return submissionDataList;
-	}
-
-	public void setSubmissionDataList(List<CmiiSubmissionData> submissionDataList) {
-		this.submissionDataList = submissionDataList;
+	public List<CmiiSubmissionData> getCmiiSubmissionDataList() {
+		return cmiiSubmissionDataList;
 	}
 
 	public CmiiSubmissionSubmitterStatus getCmiiSubmissionSubmitterStatus() {
@@ -106,7 +123,7 @@ public class CmiiSubmission {
 	@Override
 	public String toString() {
 		return "CmiiSubmission [id=" + id + ", cmiiUser=" + cmiiUser + ", cmiiFormVersion=" + cmiiFormVersion
-				+ ", submissionDataList=" + submissionDataList + ", cmiiSubmissionSubmitterStatus=" + cmiiSubmissionSubmitterStatus
+				+ ", submissionDataList=" + cmiiSubmissionDataList + ", cmiiSubmissionSubmitterStatus=" + cmiiSubmissionSubmitterStatus
 				+ ", submitterStartTimestamp=" + submitterStartTimestamp + ", submitterEndTimestamp=" + submitterEndTimestamp
 				+ ", submitterErrorCount=" + submitterErrorCount + "]";
 	}
