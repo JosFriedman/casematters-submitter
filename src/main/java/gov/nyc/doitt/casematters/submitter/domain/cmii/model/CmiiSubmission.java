@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -31,7 +30,6 @@ public class CmiiSubmission {
 	@JoinColumn(name = "formVersionId", referencedColumnName = "id", updatable = false, insertable = false)
 	private CmiiFormVersion cmiiFormVersion;
 
-
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
 	private List<CmiiSubmissionData> submissionDataList;
@@ -49,7 +47,26 @@ public class CmiiSubmission {
 	@Column(name = "SUBMITTER_ERROR_COUNT")
 	private int submitterErrorCount;
 
-	
+	public long getId() {
+		return id;
+	}
+
+	public CmiiUser getCmiiUser() {
+		return cmiiUser;
+	}
+
+	public CmiiFormVersion getCmiiFormVersion() {
+		return cmiiFormVersion;
+	}
+
+	public List<CmiiSubmissionData> getSubmissionDataList() {
+		return submissionDataList;
+	}
+
+	public void setSubmissionDataList(List<CmiiSubmissionData> submissionDataList) {
+		this.submissionDataList = submissionDataList;
+	}
+
 	public CmiiSubmissionSubmitterStatus getCmiiSubmissionSubmitterStatus() {
 		return cmiiSubmissionSubmitterStatus;
 	}
@@ -81,22 +98,23 @@ public class CmiiSubmission {
 	public void setSubmitterErrorCount(int submitterErrorCount) {
 		this.submitterErrorCount = submitterErrorCount;
 	}
-	
+
 	public void incrementSubmitterErrorCount() {
 		submitterErrorCount++;
 	}
 
-	public long getId() {
-		return id;
+	@Override
+	public String toString() {
+		return "CmiiSubmission [id=" + id + ", cmiiUser=" + cmiiUser + ", cmiiFormVersion=" + cmiiFormVersion
+				+ ", submissionDataList=" + submissionDataList + ", cmiiSubmissionSubmitterStatus=" + cmiiSubmissionSubmitterStatus
+				+ ", submitterStartTimestamp=" + submitterStartTimestamp + ", submitterEndTimestamp=" + submitterEndTimestamp
+				+ ", submitterErrorCount=" + submitterErrorCount + "]";
 	}
 
-	public List<CmiiSubmissionData> getSubmissionDataList() {
-		return submissionDataList;
-	}
-
-	
-	public CmiiUser getCmiiUser() {
-		return cmiiUser;
+	public String toSubmissionResult() {
+		return "CmiiSubmission [id=" + id + ", cmiiSubmissionSubmitterStatus=" + cmiiSubmissionSubmitterStatus
+				+ ", submitterStartTimestamp=" + submitterStartTimestamp + ", submitterEndTimestamp=" + submitterEndTimestamp
+				+ ", submitterErrorCount=" + submitterErrorCount + "]";
 	}
 
 }
