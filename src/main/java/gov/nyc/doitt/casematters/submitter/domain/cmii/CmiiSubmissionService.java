@@ -23,7 +23,7 @@ public class CmiiSubmissionService {
 	public List<CmiiSubmission> getNextBatch() {
 
 		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findByCmiiSubmissionControlCmiiSubmissionSubmitterStatusIn(Arrays.asList(new CmiiSubmissionSubmitterStatus[]{
+				.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(new CmiiSubmissionSubmitterStatus[]{
 						CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}));
 
 		logger.debug("getNextBatch: number of submissions found: {}", submissions.size());

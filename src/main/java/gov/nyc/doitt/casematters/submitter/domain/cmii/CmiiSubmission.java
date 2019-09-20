@@ -1,10 +1,13 @@
 package gov.nyc.doitt.casematters.submitter.domain.cmii;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,8 +27,56 @@ public class CmiiSubmission {
 	@JoinColumn(name = "userId", referencedColumnName = "id", updatable = false, insertable = false)
 	private CmiiUser cmiiUser;
 
-	@Embedded
-	private CmiiSubmissionControl cmiiSubmissionControl;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "SUBMITTER_STATUS")
+	private CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus;
+
+	@Column(name = "SUBMITTER_START_TIMESTAMP")
+	private Timestamp submitterStartTimestamp;
+
+	@Column(name = "SUBMITTER_END_TIMESTAMP")
+	private Timestamp submitterEndTimestamp;
+
+	@Column(name = "SUBMITTER_ERROR_COUNT")
+	private int submitterErrorCount;
+
+	public CmiiSubmissionSubmitterStatus getCmiiSubmissionSubmitterStatus() {
+		return cmiiSubmissionSubmitterStatus;
+	}
+
+	public void setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus) {
+		this.cmiiSubmissionSubmitterStatus = cmiiSubmissionSubmitterStatus;
+	}
+
+	public Timestamp getSubmitterStartTimestamp() {
+		return submitterStartTimestamp;
+	}
+
+	public void setSubmitterStartTimestamp(Timestamp submitterStartTimestamp) {
+		this.submitterStartTimestamp = submitterStartTimestamp;
+	}
+
+	public Timestamp getSubmitterEndTimestamp() {
+		return submitterEndTimestamp;
+	}
+
+	public void setSubmitterEndTimestamp(Timestamp submitterEndTimestamp) {
+		this.submitterEndTimestamp = submitterEndTimestamp;
+	}
+
+	public int getSubmitterErrorCount() {
+		return submitterErrorCount;
+	}
+
+	public void setSubmitterErrorCount(int submitterErrorCount) {
+		this.submitterErrorCount = submitterErrorCount;
+	}
+	
+	public void incrementSubmitterErrorCount() {
+		submitterErrorCount++;
+	}
+
+
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
@@ -37,16 +88,6 @@ public class CmiiSubmission {
 
 	public List<CmiiSubmissionData> getSubmissionDataList() {
 		return submissionDataList;
-	}
-
-	
-	public CmiiSubmissionControl getCmiiSubmissionControl() {
-		return cmiiSubmissionControl;
-	}
-
-	
-	public void setCmiiSubmissionControl(CmiiSubmissionControl cmiiSubmissionControl) {
-		this.cmiiSubmissionControl = cmiiSubmissionControl;
 	}
 
 	

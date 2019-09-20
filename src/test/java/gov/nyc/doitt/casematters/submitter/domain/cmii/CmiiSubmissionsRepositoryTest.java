@@ -24,7 +24,7 @@ public class CmiiSubmissionsRepositoryTest {
 	public void testFindNew() {
 
 		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findByCmiiSubmissionControlCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.NEW);
+				.findByCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.NEW);
 		assertTrue(submissions.size() != 0);
 		assertTrue(submissions.get(0).getSubmissionDataList().size() != 0);
 	}
@@ -34,7 +34,7 @@ public class CmiiSubmissionsRepositoryTest {
 	public void testFindNewAndError() {
 
 		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findByCmiiSubmissionControlCmiiSubmissionSubmitterStatusIn(Arrays.asList(new CmiiSubmissionSubmitterStatus[]{
+				.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(new CmiiSubmissionSubmitterStatus[]{
 						CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}));
 		assertTrue(submissions.size() != 0);
 		assertTrue(submissions.get(0).getSubmissionDataList().size() != 0);

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 interface CmiiSubmissionRepository extends JpaRepository<CmiiSubmission, Integer> {
 
-	List<CmiiSubmission> findByCmiiSubmissionControlCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus);
+	List<CmiiSubmission> findByCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus);
 	
-	List<CmiiSubmission> findByCmiiSubmissionControlCmiiSubmissionSubmitterStatusIn(List<CmiiSubmissionSubmitterStatus> cmiiSubmissionSubmitterStatuses);
+	List<CmiiSubmission> findByCmiiSubmissionSubmitterStatusIn(List<CmiiSubmissionSubmitterStatus> cmiiSubmissionSubmitterStatuses);
 
 }

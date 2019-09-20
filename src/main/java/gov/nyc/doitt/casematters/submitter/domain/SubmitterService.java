@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionControl;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionService;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionSubmitterStatus;
 import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionData;
@@ -53,13 +52,12 @@ public class SubmitterService {
 
 	private void recordInSubmissionControl(CmiiSubmission cmiiSubmission, boolean saved) {
 
-		CmiiSubmissionControl cmiiSubmissionControl = cmiiSubmission.getCmiiSubmissionControl();
-		cmiiSubmissionControl.setSubmitterEndTimestamp(new Timestamp(System.currentTimeMillis()));
+		cmiiSubmission.setSubmitterEndTimestamp(new Timestamp(System.currentTimeMillis()));
 		if (saved) {
-			cmiiSubmissionControl.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.COMPLETED);
+			cmiiSubmission.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.COMPLETED);
 		} else {
-			cmiiSubmissionControl.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.ERROR);
-			cmiiSubmissionControl.incrementSubmitterErrorCount();
+			cmiiSubmission.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.ERROR);
+			cmiiSubmission.incrementSubmitterErrorCount();
 		}
 	}
 }
