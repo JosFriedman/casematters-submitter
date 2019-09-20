@@ -22,7 +22,7 @@ public class LmSubmissionService {
 		try {
 			lmSubmissionRepository.save(submission);
 			
-			// do an update to force the update trigger to run
+			// do an update to force the update trigger to fire
 			submission.setMessageID(0);
 			lmSubmissionRepository.save(submission);
 			

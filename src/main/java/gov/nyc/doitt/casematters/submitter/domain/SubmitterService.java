@@ -33,7 +33,6 @@ public class SubmitterService {
 		logger.debug("submitBatch: entering");
 
 		List<CmiiSubmission> cmiiSubmissionList = cmiiSubmissionService.getNextBatch();
-
 		cmiiSubmissionList.forEach(p -> submitOne(p));
 
 		logger.debug("submitBatch: exiting");
@@ -44,11 +43,8 @@ public class SubmitterService {
 		logger.debug("submitOne: cmiiSubmission: {}", cmiiSubmission);
 
 		LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
-
 		boolean saved = lmSubmissionService.saveSubmission(lmSubmission);
-
 		setSubmissionResult(cmiiSubmission, saved);
-
 		cmiiSubmissionService.updateCmiiSubmission(cmiiSubmission);
 	}
 
