@@ -80,7 +80,7 @@ public class CmiiToLmMapper {
 
 		LmSubmissionData lmSubmissionData = new LmSubmissionData((int) cmiiSubmissionData.getSubmissionId(),
 				cmiiSubmissionData.getEntity());
-		lmSubmissionData.setMessageId((int) cmiiSubmissionData.getId());
+		lmSubmissionData.setMessageId(-1);
 		lmSubmissionData.setFieldValue(cmiiSubmissionData.getValue());
 
 		logger.debug("lmSubmissionData={}", lmSubmissionData);

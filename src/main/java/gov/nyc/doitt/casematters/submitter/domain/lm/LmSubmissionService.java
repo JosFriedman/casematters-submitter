@@ -21,6 +21,11 @@ public class LmSubmissionService {
 
 		try {
 			lmSubmissionRepository.save(submission);
+			
+			// do an update to force the update trigger to run
+			submission.setMessageID(0);
+			lmSubmissionRepository.save(submission);
+			
 			return true;
 		} catch (Exception e) {
 			logger.error("Can't save submission to LawManager", e);
