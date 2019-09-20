@@ -12,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CmiiSubmissionsRepositoryTest {

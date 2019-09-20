@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.cmii;
+package gov.nyc.doitt.casematters.submitter.domain.cmii.model;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,6 +27,15 @@ public class CmiiSubmission {
 	@JoinColumn(name = "userId", referencedColumnName = "id", updatable = false, insertable = false)
 	private CmiiUser cmiiUser;
 
+	@OneToOne
+	@JoinColumn(name = "formVersionId", referencedColumnName = "id", updatable = false, insertable = false)
+	private CmiiFormVersion cmiiFormVersion;
+
+
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
+	private List<CmiiSubmissionData> submissionDataList;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SUBMITTER_STATUS")
 	private CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus;
@@ -40,6 +49,7 @@ public class CmiiSubmission {
 	@Column(name = "SUBMITTER_ERROR_COUNT")
 	private int submitterErrorCount;
 
+	
 	public CmiiSubmissionSubmitterStatus getCmiiSubmissionSubmitterStatus() {
 		return cmiiSubmissionSubmitterStatus;
 	}
@@ -75,12 +85,6 @@ public class CmiiSubmission {
 	public void incrementSubmitterErrorCount() {
 		submitterErrorCount++;
 	}
-
-
-
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
-	private List<CmiiSubmissionData> submissionDataList;
 
 	public long getId() {
 		return id;

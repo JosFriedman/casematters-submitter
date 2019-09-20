@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionData;
-import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionData;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionData;
+import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmissionData;
 
 /**
  * Map CmiiSubmissionData to LmSubmissionData

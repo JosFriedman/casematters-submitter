@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import gov.nyc.doitt.casematters.submitter.domain.SubmitterService;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
 
 @Component
 public class CmiiSubmissionService {

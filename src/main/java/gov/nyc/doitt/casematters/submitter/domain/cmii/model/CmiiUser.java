@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.cmii;
+package gov.nyc.doitt.casematters.submitter.domain.cmii.model;
 
 import java.sql.Timestamp;
 
@@ -39,47 +39,38 @@ public class CmiiUser {
 	@Column(name = "LASTPROFILEUPDATE")
 	private Timestamp lastProfileUpdate;
 
-	
 	public long getId() {
 		return id;
 	}
 
-	
 	public String getSamlId() {
 		return samlId;
 	}
 
-	
 	public String getEmail() {
 		return email;
 	}
 
-	
 	public String getFirstName() {
 		return firstName;
 	}
 
-	
 	public String getLastName() {
 		return lastName;
 	}
 
-	
 	public String getUsername() {
 		return username;
 	}
 
-	
 	public String getPrimaryPhone() {
 		return primaryPhone;
 	}
 
-	
 	public String getAlternatePhone() {
 		return alternatePhone;
 	}
 
-	
 	public Timestamp getLastProfileUpdate() {
 		return lastProfileUpdate;
 	}
@@ -91,5 +82,4 @@ public class CmiiUser {
 				+ ", lastProfileUpdate=" + lastProfileUpdate + "]";
 	}
 
-	
 }

@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionService;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionSubmitterStatus;
-import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionData;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
 import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionService;
+import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmissionData;
 
 @Component
 public class SubmitterService {

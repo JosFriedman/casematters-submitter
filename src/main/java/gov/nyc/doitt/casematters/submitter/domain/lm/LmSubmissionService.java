@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmissionData;
+
 @Component
 public class LmSubmissionService {
 

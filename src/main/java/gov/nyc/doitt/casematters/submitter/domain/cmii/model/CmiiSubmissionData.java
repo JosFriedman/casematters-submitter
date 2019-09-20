@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.cmii;
+package gov.nyc.doitt.casematters.submitter.domain.cmii.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

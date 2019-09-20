@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.cmii;
+package gov.nyc.doitt.casematters.submitter.domain.cmii.model;
 
 public enum CmiiSubmissionSubmitterStatus {
 
