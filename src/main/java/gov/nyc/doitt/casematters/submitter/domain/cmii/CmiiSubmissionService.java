@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import gov.nyc.doitt.casematters.submitter.domain.SubmitterService;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
 
@@ -24,9 +23,8 @@ public class CmiiSubmissionService {
 	@Transactional("cmiiTransactionManager")
 	public List<CmiiSubmission> getNextBatch() {
 
-		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(new CmiiSubmissionSubmitterStatus[]{
-						CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}));
+		List<CmiiSubmission> submissions = cmiiSubmissionRepository.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(
+				new CmiiSubmissionSubmitterStatus[]{CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}));
 
 		logger.debug("getNextBatch: number of submissions found: {}", submissions.size());
 

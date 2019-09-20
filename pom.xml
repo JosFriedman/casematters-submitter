@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>gov.nyc.doitt.casematters</groupId>
-	<artifactId>submitter</artifactId>
+	<artifactId>CaseMatters-Submitter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Submitter Service</name>
+	<name>CaseMatters Submitter Service</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -40,7 +40,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -53,14 +52,11 @@
 			<version>1.2.3</version>
 		</dependency>
 
-		<!-- This .jar must be placed lib folder because it is not available in 
-			the Maven Repo -->
+		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<dependency>
-			<groupId>com.microsoft</groupId>
-			<artifactId>sqljdbc4</artifactId>
-			<version>3.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/sqljdbc4.jar</systemPath>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>6.1.0.jre8</version>
 		</dependency>
 
 		<!-- This .jar must be placed lib folder because it is not available in 
