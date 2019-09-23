@@ -1,11 +1,13 @@
 package gov.nyc.doitt.casematters.submitter.domain;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -33,11 +35,13 @@ public class SubmitterService {
 	public void submitBatch() {
 
 		logger.debug("submitBatch: entering");
-
-		List<CmiiSubmission> cmiiSubmissionList = cmiiSubmissionService.getNextBatch();
-		cmiiSubmissionList.forEach(p -> submitOne(p));
-
-		logger.debug("submitBatch: exiting");
+		try {
+			cmiiSubmissionService.getNextBatch().forEach(p -> submitOne(p));
+		} catch (ObjectOptimisticLockingFailureException e) {
+			logger.warn("Another instance has picked up one or more of the submissions; no processing to do.");
+		} finally {
+			logger.debug("submitBatch: exiting");
+		}
 	}
 
 	private void submitOne(CmiiSubmission cmiiSubmission) {
@@ -59,7 +63,6 @@ public class SubmitterService {
 			cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.ERROR);
 			cmiiSubmission.incrementSubmitterErrorCount();
 		}
-
 		if (logger.isDebugEnabled()) {
 			logger.debug("setSubmissionResult: {}", cmiiSubmission.toSubmissionResult());
 		}

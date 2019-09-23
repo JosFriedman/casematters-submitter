@@ -20,7 +20,7 @@ interface CmiiSubmissionRepository extends JpaRepository<CmiiSubmission, Integer
 	List<CmiiSubmission> findByCmiiSubmitterStatusIn(List<CmiiSubmitterStatus> cmiiSubmitterStatuses);
 
 	@Lock(LockModeType.PESSIMISTIC_READ)
-	List<CmiiSubmission> findByCmiiSubmitterStatusIn(List<CmiiSubmitterStatus> cmiiSubmitterStatuses,
-			Pageable pageable);
+	List<CmiiSubmission> findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(List<CmiiSubmitterStatus> cmiiSubmitterStatuses,
+			int submitterErrorCount, Pageable pageable);
 
 }

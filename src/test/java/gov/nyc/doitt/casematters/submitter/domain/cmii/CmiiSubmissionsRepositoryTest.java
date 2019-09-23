@@ -50,8 +50,8 @@ public class CmiiSubmissionsRepositoryTest {
 	public void testFindNewAndErrorPage() {
 
 		PageRequest pageRequest = PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "submitted"));
-		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusIn(Arrays.asList(
-				new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}), pageRequest);
+		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(Arrays.asList(
+				new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}), 3, pageRequest);
 		assertNotNull(cmiiSubmissions);
 	}
 

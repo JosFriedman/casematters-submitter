@@ -2,7 +2,6 @@ package gov.nyc.doitt.casematters.submitter.domain.cmii;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +26,11 @@ public class CmiiSubmissionService {
 	@Autowired
 	private CmiiSubmissionRepository cmiiSubmissionRepository;
 
-	@Value(" ${submitter.cmii.maxBatchSize:2}")
+	@Value(" ${submitter.maxBatchSize}")
 	private int maxBatchSize;
+
+	@Value(" ${submitter.maxRetriesForError}")
+	private int maxRetriesForError;
 
 	private PageRequest pageRequest;
 
@@ -41,24 +42,18 @@ public class CmiiSubmissionService {
 	@Transactional(transactionManager = "cmiiTransactionManager")
 	public List<CmiiSubmission> getNextBatch() {
 
-		try {
-			List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusIn(Arrays.asList(
-					new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}),
-					pageRequest);
-			logger.debug("getNextBatch: number of submissions found: {}", cmiiSubmissions.size());
+		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(
+				Arrays.asList(new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}),
+				maxRetriesForError + 1, pageRequest);
+		logger.debug("getNextBatch: number of submissions found: {}", cmiiSubmissions.size());
 
-			cmiiSubmissions.forEach(p -> {
-				p.setCmiiSubmitterStatus(CmiiSubmitterStatus.PROCESSING);
-				p.setSubmitterStartTimestamp(new Timestamp(System.currentTimeMillis()));
-				updateCmiiSubmission(p);
-			});
+		cmiiSubmissions.forEach(p -> {
+			p.setCmiiSubmitterStatus(CmiiSubmitterStatus.PROCESSING);
+			p.setSubmitterStartTimestamp(new Timestamp(System.currentTimeMillis()));
+			updateCmiiSubmission(p);
+		});
+		return cmiiSubmissions;
 
-			return cmiiSubmissions;
-
-		} catch (ObjectOptimisticLockingFailureException e) {
-			logger.warn("Another instance has picked up one or more of the submissions");
-			return Collections.emptyList();
-		}
 	}
 
 	@Transactional("cmiiTransactionManager")
