@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionService;
 import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmitterStatus;
 import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionService;
 import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmission;
 
@@ -54,9 +54,9 @@ public class SubmitterService {
 
 		cmiiSubmission.setSubmitterEndTimestamp(new Timestamp(System.currentTimeMillis()));
 		if (saved) {
-			cmiiSubmission.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.COMPLETED);
+			cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.COMPLETED);
 		} else {
-			cmiiSubmission.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.ERROR);
+			cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.ERROR);
 			cmiiSubmission.incrementSubmitterErrorCount();
 		}
 

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmitterStatus;
 
 @Component
 public class CmiiSubmissionService {
@@ -42,13 +42,13 @@ public class CmiiSubmissionService {
 	public List<CmiiSubmission> getNextBatch() {
 
 		try {
-			List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(
-					new CmiiSubmissionSubmitterStatus[]{CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}),
+			List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusIn(Arrays.asList(
+					new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}),
 					pageRequest);
 			logger.debug("getNextBatch: number of submissions found: {}", cmiiSubmissions.size());
 
 			cmiiSubmissions.forEach(p -> {
-				p.setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.PROCESSING);
+				p.setCmiiSubmitterStatus(CmiiSubmitterStatus.PROCESSING);
 				p.setSubmitterStartTimestamp(new Timestamp(System.currentTimeMillis()));
 				updateCmiiSubmission(p);
 			});

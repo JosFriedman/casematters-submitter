@@ -1,6 +1,6 @@
 package gov.nyc.doitt.casematters.submitter.domain.cmii.model;
 
-public enum CmiiSubmissionSubmitterStatus {
+public enum CmiiSubmitterStatus {
 
 	NEW,
 	PROCESSING,

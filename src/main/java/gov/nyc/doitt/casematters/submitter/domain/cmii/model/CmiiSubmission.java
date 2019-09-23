@@ -46,7 +46,7 @@ public class CmiiSubmission {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SUBMITTER_STATUS")
-	private CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus;
+	private CmiiSubmitterStatus cmiiSubmitterStatus;
 
 	@Column(name = "SUBMITTER_START_TIMESTAMP")
 	private Timestamp submitterStartTimestamp;
@@ -89,12 +89,12 @@ public class CmiiSubmission {
 		return cmiiSubmissionDataList;
 	}
 
-	public CmiiSubmissionSubmitterStatus getCmiiSubmissionSubmitterStatus() {
-		return cmiiSubmissionSubmitterStatus;
+	public CmiiSubmitterStatus getCmiiSubmitterStatus() {
+		return cmiiSubmitterStatus;
 	}
 
-	public void setCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus) {
-		this.cmiiSubmissionSubmitterStatus = cmiiSubmissionSubmitterStatus;
+	public void setCmiiSubmitterStatus(CmiiSubmitterStatus cmiiSubmitterStatus) {
+		this.cmiiSubmitterStatus = cmiiSubmitterStatus;
 	}
 
 	public Timestamp getSubmitterStartTimestamp() {
@@ -128,13 +128,13 @@ public class CmiiSubmission {
 	@Override
 	public String toString() {
 		return "CmiiSubmission [id=" + id + ", cmiiUser=" + cmiiUser + ", cmiiFormVersion=" + cmiiFormVersion
-				+ ", submissionDataList=" + cmiiSubmissionDataList + ", cmiiSubmissionSubmitterStatus=" + cmiiSubmissionSubmitterStatus
+				+ ", submissionDataList=" + cmiiSubmissionDataList + ", cmiiSubmitterStatus=" + cmiiSubmitterStatus
 				+ ", submitterStartTimestamp=" + submitterStartTimestamp + ", submitterEndTimestamp=" + submitterEndTimestamp
 				+ ", submitterErrorCount=" + submitterErrorCount + "]";
 	}
 
 	public String toSubmissionResult() {
-		return "CmiiSubmission [id=" + id + ", cmiiSubmissionSubmitterStatus=" + cmiiSubmissionSubmitterStatus
+		return "CmiiSubmission [id=" + id + ", cmiiSubmitterStatus=" + cmiiSubmitterStatus
 				+ ", submitterStartTimestamp=" + submitterStartTimestamp + ", submitterEndTimestamp=" + submitterEndTimestamp
 				+ ", submitterErrorCount=" + submitterErrorCount + "]";
 	}

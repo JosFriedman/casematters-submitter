@@ -10,17 +10,17 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 
 import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionSubmitterStatus;
+import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmitterStatus;
 
 @Repository
 interface CmiiSubmissionRepository extends JpaRepository<CmiiSubmission, Integer> {
 
-	List<CmiiSubmission> findByCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus cmiiSubmissionSubmitterStatus);
+	List<CmiiSubmission> findByCmiiSubmitterStatus(CmiiSubmitterStatus cmiiSubmitterStatus);
 
-	List<CmiiSubmission> findByCmiiSubmissionSubmitterStatusIn(List<CmiiSubmissionSubmitterStatus> cmiiSubmissionSubmitterStatuses);
+	List<CmiiSubmission> findByCmiiSubmitterStatusIn(List<CmiiSubmitterStatus> cmiiSubmitterStatuses);
 
 	@Lock(LockModeType.PESSIMISTIC_READ)
-	List<CmiiSubmission> findByCmiiSubmissionSubmitterStatusIn(List<CmiiSubmissionSubmitterStatus> cmiiSubmissionSubmitterStatuses,
+	List<CmiiSubmission> findByCmiiSubmitterStatusIn(List<CmiiSubmitterStatus> cmiiSubmitterStatuses,
 			Pageable pageable);
 
 }
