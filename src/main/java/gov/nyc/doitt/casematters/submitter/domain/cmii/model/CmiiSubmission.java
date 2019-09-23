@@ -57,6 +57,10 @@ public class CmiiSubmission {
 	@Column(name = "SUBMITTER_ERROR_COUNT")
 	private int submitterErrorCount;
 
+	@Version
+	@Column(name = "SUBMITTER_MULTI_INSTANCE_CTRL")
+	private int submitterMultiInstanceCtrl;
+
 	public long getId() {
 		return id;
 	}
