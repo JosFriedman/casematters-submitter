@@ -29,8 +29,7 @@ public class SubmitterService {
 	@Autowired
 	private CmiiToLmMapper cmiiToLmMapper;
 
-//	@Scheduled(fixedDelayString = "${submitter.polling.fixedDelay}", initialDelayString = "${submitter.polling.initialDelay}")
-	@Scheduled(cron = "${submitter.polling.cron:0 1/2 0-23 * * *}")
+	@Scheduled(cron = "${submitter.polling.cron}")
 	public void submitBatch() {
 
 		logger.debug("submitBatch: entering");
