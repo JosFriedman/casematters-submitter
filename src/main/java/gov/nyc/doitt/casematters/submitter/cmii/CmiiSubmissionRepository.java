@@ -15,10 +15,6 @@ import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 @Repository
 interface CmiiSubmissionRepository extends JpaRepository<CmiiSubmission, Integer> {
 
-	List<CmiiSubmission> findByCmiiSubmitterStatus(CmiiSubmitterStatus cmiiSubmitterStatus);
-
-	List<CmiiSubmission> findByCmiiSubmitterStatusIn(List<CmiiSubmitterStatus> cmiiSubmitterStatuses);
-
 	@Lock(LockModeType.PESSIMISTIC_READ)
 	List<CmiiSubmission> findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(List<CmiiSubmitterStatus> cmiiSubmitterStatuses,
 			int submitterErrorCount, Pageable pageable);

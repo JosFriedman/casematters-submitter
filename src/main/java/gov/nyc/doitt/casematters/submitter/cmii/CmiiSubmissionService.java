@@ -40,25 +40,31 @@ public class CmiiSubmissionService {
 	}
 
 	/**
-	 * Return next batch for submissions
+	 * Return next batch of submissions
 	 * 
 	 * @return
 	 */
 	@Transactional(transactionManager = "cmiiTransactionManager")
-	public List<CmiiSubmission> getNextBatch() {
+	public List<CmiiSubmission> getNextBatch()  { 
 
-		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(
-				Arrays.asList(new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}),
-				maxRetriesForError + 1, pageRequest);
-		logger.debug("getNextBatch: number of submissions found: {}", cmiiSubmissions.size());
+		try {
+			List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository
+					.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(
+							Arrays.asList(new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}),
+							maxRetriesForError + 1, pageRequest);
+			logger.info("getNextBatch: number of submissions found: {}", cmiiSubmissions.size());
 
-		// mark each submission as picked up for processing
-		cmiiSubmissions.forEach(p -> {
-			p.setCmiiSubmitterStatus(CmiiSubmitterStatus.PROCESSING);
-			p.setSubmitterStartTimestamp(new Timestamp(System.currentTimeMillis()));
-			updateCmiiSubmission(p);
-		});
-		return cmiiSubmissions;
+			// mark each submission as picked up for processing
+			cmiiSubmissions.forEach(p -> {
+				p.setCmiiSubmitterStatus(CmiiSubmitterStatus.PROCESSING);
+				p.setSubmitterStartTimestamp(new Timestamp(System.currentTimeMillis()));
+				updateCmiiSubmission(p);
+			});
+			return cmiiSubmissions;
+
+		} catch (Exception e) {
+			throw new SubmitterConcurrencyException(e);
+		}
 
 	}
 

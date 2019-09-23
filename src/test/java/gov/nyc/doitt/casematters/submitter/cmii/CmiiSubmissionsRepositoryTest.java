@@ -26,26 +26,6 @@ public class CmiiSubmissionsRepositoryTest {
 
 	@Test
 	@Transactional("cmiiTransactionManager")
-	public void testFindNew() {
-
-		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findByCmiiSubmitterStatus(CmiiSubmitterStatus.NEW);
-		// assertTrue(submissions.size() != 0);
-		// assertTrue(submissions.get(0).getCmiiSubmissionDataList().size() != 0);
-	}
-
-//	@Test
-//	@Transactional("cmiiTransactionManager")
-//	public void testFindNewAndError() {
-//
-//		List<CmiiSubmission> submissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusIn(Arrays.asList(
-//				new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}));
-//		// assertTrue(submissions.size() != 0);
-//		// assertTrue(submissions.get(0).getCmiiSubmissionDataList().size() != 0);
-//	}
-
-	@Test
-	@Transactional("cmiiTransactionManager")
 	public void testFindNewAndErrorPage() {
 
 		PageRequest pageRequest = PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "submitted"));

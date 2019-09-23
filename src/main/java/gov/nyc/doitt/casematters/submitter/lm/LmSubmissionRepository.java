@@ -7,5 +7,4 @@ import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
 
 @Repository
 interface LmSubmissionRepository extends JpaRepository<LmSubmission, Integer> {
-
 }

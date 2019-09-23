@@ -1,17 +1,15 @@
 package gov.nyc.doitt.casematters.submitter;
 
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionService;
+import gov.nyc.doitt.casematters.submitter.cmii.SubmitterConcurrencyException;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionService;
@@ -34,13 +32,13 @@ public class SubmitterService {
 	@Scheduled(cron = "${submitter.polling.cron}")
 	public void submitBatch() {
 
-		logger.debug("submitBatch: entering");
+		logger.info("submitBatch: entering");
 		try {
 			cmiiSubmissionService.getNextBatch().forEach(p -> submitOne(p));
-		} catch (ObjectOptimisticLockingFailureException e) {
+		} catch (SubmitterConcurrencyException e) {
 			logger.warn("Another instance has picked up one or more of the submissions; no processing to do.");
 		} finally {
-			logger.debug("submitBatch: exiting");
+			logger.info("submitBatch: exiting");
 		}
 	}
 

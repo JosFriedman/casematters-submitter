@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SubmitterServiceTest {
 
 	@Autowired
-	private gov.nyc.doitt.casematters.submitter.SubmitterService submitterService;
+	private SubmitterService submitterService;
 
 	@Test
 	public void testSubmitterService() {
