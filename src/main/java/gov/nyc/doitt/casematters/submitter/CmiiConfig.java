@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "cmiiEntityManagerFactory",
         transactionManagerRef = "cmiiTransactionManager",
-        basePackages = {"gov.nyc.doitt.casematters.submitter.domain.cmii"}
+        basePackages = {"gov.nyc.doitt.casematters.submitter.cmii"}
 )
 public class CmiiConfig {
 
@@ -42,7 +42,7 @@ public class CmiiConfig {
     ) {
         return builder
                 .dataSource(dataSource)
-                .packages("gov.nyc.doitt.casematters.submitter.domain.cmii")
+                .packages("gov.nyc.doitt.casematters.submitter.cmii")
                 .persistenceUnit("josfriedman")
                 .build();
     }

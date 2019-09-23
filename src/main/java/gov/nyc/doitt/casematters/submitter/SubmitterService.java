@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain;
+package gov.nyc.doitt.casematters.submitter;
 
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -11,11 +11,11 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionService;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmitterStatus;
-import gov.nyc.doitt.casematters.submitter.domain.lm.LmSubmissionService;
-import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmission;
+import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionService;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
+import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionService;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
 
 @Component
 public class SubmitterService {

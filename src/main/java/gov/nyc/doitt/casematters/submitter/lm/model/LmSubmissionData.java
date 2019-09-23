@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.lm.model;
+package gov.nyc.doitt.casematters.submitter.lm.model;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;

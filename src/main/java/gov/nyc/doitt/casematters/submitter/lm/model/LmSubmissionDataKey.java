@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.lm.model;
+package gov.nyc.doitt.casematters.submitter.lm.model;
 
 import java.io.Serializable;
 

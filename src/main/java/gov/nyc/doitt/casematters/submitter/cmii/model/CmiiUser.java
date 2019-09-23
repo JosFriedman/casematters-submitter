@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.cmii.model;
+package gov.nyc.doitt.casematters.submitter.cmii.model;
 
 import java.sql.Timestamp;
 

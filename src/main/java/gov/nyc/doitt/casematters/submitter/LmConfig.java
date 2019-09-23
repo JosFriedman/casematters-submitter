@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "lmEntityManagerFactory",
         transactionManagerRef = "lmTransactionManager",
-        basePackages = {"gov.nyc.doitt.casematters.submitter.domain.lm"}
+        basePackages = {"gov.nyc.doitt.casematters.submitter.lm"}
 )
 
 public class LmConfig {
@@ -41,7 +41,7 @@ public class LmConfig {
             return
                     builder
                             .dataSource(dataSource)
-                            .packages("gov.nyc.doitt.casematters.submitter.domain.lm")
+                            .packages("gov.nyc.doitt.casematters.submitter.lm")
                             .persistenceUnit("CASEMATTERS_INTERNET_INTAKE")
                             .build();
         }

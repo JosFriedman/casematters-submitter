@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain.cmii;
+package gov.nyc.doitt.casematters.submitter.cmii;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -15,8 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmitterStatus;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 
 @Component
 public class CmiiSubmissionService {
@@ -39,6 +39,11 @@ public class CmiiSubmissionService {
 		pageRequest = PageRequest.of(0, maxBatchSize, Sort.by(Sort.Direction.ASC, "submitted"));
 	}
 
+	/**
+	 * Return next batch for submissions
+	 * 
+	 * @return
+	 */
 	@Transactional(transactionManager = "cmiiTransactionManager")
 	public List<CmiiSubmission> getNextBatch() {
 
@@ -47,6 +52,7 @@ public class CmiiSubmissionService {
 				maxRetriesForError + 1, pageRequest);
 		logger.debug("getNextBatch: number of submissions found: {}", cmiiSubmissions.size());
 
+		// mark each submission as picked up for processing
 		cmiiSubmissions.forEach(p -> {
 			p.setCmiiSubmitterStatus(CmiiSubmitterStatus.PROCESSING);
 			p.setSubmitterStartTimestamp(new Timestamp(System.currentTimeMillis()));

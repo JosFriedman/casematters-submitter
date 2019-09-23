@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.domain;
+package gov.nyc.doitt.casematters.submitter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,14 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiAgency;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiForm;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiFormVersion;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiSubmissionData;
-import gov.nyc.doitt.casematters.submitter.domain.cmii.model.CmiiUser;
-import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmission;
-import gov.nyc.doitt.casematters.submitter.domain.lm.model.LmSubmissionData;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiAgency;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiForm;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiFormVersion;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionData;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiUser;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionData;
 
 /**
  * Map CmiiSubmissionData to LmSubmissionData

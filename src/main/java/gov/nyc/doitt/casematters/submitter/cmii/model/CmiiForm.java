@@ -1,13 +1,15 @@
-package gov.nyc.doitt.casematters.submitter.domain.cmii.model;
+package gov.nyc.doitt.casematters.submitter.cmii.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "AGENCIES")
-public class CmiiAgency {
+@Table(name = "FORMS")
+public class CmiiForm {
 
 	@Id
 	@Column(name = "ID")
@@ -22,8 +24,9 @@ public class CmiiAgency {
 	@Column(name = "TAG")
 	private String tag;
 
-	@Column(name = "FORMLISTTEXT")
-	private String formListText;
+	@OneToOne
+	@JoinColumn(name = "agencyId", referencedColumnName = "id", updatable = false, insertable = false)
+	private CmiiAgency cmiiAgency;
 
 	public long getId() {
 		return id;
@@ -41,14 +44,13 @@ public class CmiiAgency {
 		return tag;
 	}
 
-	public String getFormListText() {
-		return formListText;
+	public CmiiAgency getCmiiAgency() {
+		return cmiiAgency;
 	}
 
 	@Override
 	public String toString() {
-		return "CmiiAgency [id=" + id + ", active=" + active + ", name=" + name + ", tag=" + tag + ", formListText=" + formListText
-				+ "]";
+		return "CmiiForm [id=" + id + ", active=" + active + ", name=" + name + ", tag=" + tag + ", cmiiAgency=" + cmiiAgency + "]";
 	}
 
 }
