@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.domain.cmii.CmiiSubmissionService;
@@ -28,6 +29,7 @@ public class SubmitterService {
 	@Autowired
 	private CmiiToLmMapper cmiiToLmMapper;
 
+	@Scheduled(fixedDelayString = "${submitter.polling.fixedDelay}", initialDelayString = "${submitter.polling.initialDelay}")
 	public void submitBatch() {
 
 		logger.debug("submitBatch: entering");

@@ -1,5 +1,7 @@
 package gov.nyc.doitt.casematters.submitter.domain.cmii;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,19 +31,28 @@ public class CmiiSubmissionsRepositoryTest {
 
 		List<CmiiSubmission> submissions = cmiiSubmissionRepository
 				.findByCmiiSubmissionSubmitterStatus(CmiiSubmissionSubmitterStatus.NEW);
-//		assertTrue(submissions.size() != 0);
-//		assertTrue(submissions.get(0).getCmiiSubmissionDataList().size() != 0);
+		// assertTrue(submissions.size() != 0);
+		// assertTrue(submissions.get(0).getCmiiSubmissionDataList().size() != 0);
 	}
+
+//	@Test
+//	@Transactional("cmiiTransactionManager")
+//	public void testFindNewAndError() {
+//
+//		List<CmiiSubmission> submissions = cmiiSubmissionRepository.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(
+//				new CmiiSubmissionSubmitterStatus[]{CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}));
+//		// assertTrue(submissions.size() != 0);
+//		// assertTrue(submissions.get(0).getCmiiSubmissionDataList().size() != 0);
+//	}
 
 	@Test
 	@Transactional("cmiiTransactionManager")
-	public void testFindNewAndError() {
+	public void testFindNewAndErrorPage() {
 
-		List<CmiiSubmission> submissions = cmiiSubmissionRepository
-				.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(new CmiiSubmissionSubmitterStatus[]{
-						CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}));
-//		assertTrue(submissions.size() != 0);
-//		assertTrue(submissions.get(0).getCmiiSubmissionDataList().size() != 0);
+		PageRequest pageRequest = PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "submitted"));
+		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmissionSubmitterStatusIn(Arrays.asList(
+				new CmiiSubmissionSubmitterStatus[]{CmiiSubmissionSubmitterStatus.NEW, CmiiSubmissionSubmitterStatus.ERROR}), pageRequest);
+		assertNotNull(cmiiSubmissions);
 	}
 
 }
