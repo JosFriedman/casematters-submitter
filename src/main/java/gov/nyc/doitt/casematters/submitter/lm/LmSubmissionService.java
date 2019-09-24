@@ -17,20 +17,15 @@ public class LmSubmissionService {
 	private LmSubmissionRepository lmSubmissionRepository;
 
 	@Transactional("lmTransactionManager")
-	public boolean saveSubmission(LmSubmission submission) {
+	public void saveSubmission(LmSubmission lmSubmission) {
 
-		try {
-			lmSubmissionRepository.save(submission);
-			
-			// do an update to force the update trigger to fire
-			submission.setMessageID(0);
-			lmSubmissionRepository.save(submission);
-			
-			return true;
-		} catch (Exception e) {
-			logger.error("Can't save submission to LawManager", e);
-			return false;
-		}
+		logger.debug("saveSubmission: lmSubmission: {}", lmSubmission);
+		
+		lmSubmissionRepository.save(lmSubmission);
+
+		// do an update to force the update trigger to fire
+		lmSubmission.setMessageID(0);
+		lmSubmissionRepository.save(lmSubmission);
 	}
 
 }

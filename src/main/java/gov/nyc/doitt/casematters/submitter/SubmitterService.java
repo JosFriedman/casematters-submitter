@@ -47,23 +47,17 @@ public class SubmitterService {
 		logger.debug("submitOne: cmiiSubmission: {}", cmiiSubmission);
 
 		LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
-		boolean saved = lmSubmissionService.saveSubmission(lmSubmission);
-		setSubmissionResult(cmiiSubmission, saved);
-		cmiiSubmissionService.updateCmiiSubmission(cmiiSubmission);
-	}
-
-	private void setSubmissionResult(CmiiSubmission cmiiSubmission, boolean saved) {
-
-		cmiiSubmission.setSubmitterEndTimestamp(new Timestamp(System.currentTimeMillis()));
-		if (saved) {
+		try {
+			lmSubmissionService.saveSubmission(lmSubmission);
 			cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.COMPLETED);
-		} else {
+		} catch (Exception e) {
+			logger.error("Can't save submission to LawManager", e);
 			cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.ERROR);
 			cmiiSubmission.incrementSubmitterErrorCount();
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("setSubmissionResult: {}", cmiiSubmission.toSubmissionResult());
-		}
 
+		cmiiSubmission.setSubmitterEndTimestamp(new Timestamp(System.currentTimeMillis()));
+		cmiiSubmissionService.updateCmiiSubmission(cmiiSubmission);
 	}
+
 }
