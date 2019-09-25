@@ -1,6 +1,7 @@
 package gov.nyc.doitt.casematters.submitter.cmii;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,14 +25,34 @@ public class CmiiSubmissionsRepositoryTest {
 	@Autowired
 	private CmiiSubmissionRepository cmiiSubmissionRepository;
 
+	@Autowired
+	private CmiiSubmissionMockerUpper cmiiSubmissionMockerUpper;
+
+	// @Test
+	// @Transactional("cmiiTransactionManager")
+	// public void testFindNewAndErrorPage() {
+	//
+	// PageRequest pageRequest = PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "submitted"));
+	// List<CmiiSubmission> cmiiSubmissions =
+	// cmiiSubmissionRepository.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(Arrays.asList(
+	// new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}), 3, pageRequest);
+	// assertNotNull(cmiiSubmissions);
+	// }
+	//
 	@Test
 	@Transactional("cmiiTransactionManager")
-	public void testFindNewAndErrorPage() {
+	public void testFindByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan() throws Exception {
+
+		CmiiSubmission cmiiSubmission = cmiiSubmissionMockerUpper.create(1);
+		cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.NEW);
+		cmiiSubmissionRepository.save(cmiiSubmission);
 
 		PageRequest pageRequest = PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "submitted"));
-		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(Arrays.asList(
-				new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}), 3, pageRequest);
+		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(
+				Arrays.asList(new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}), 3, pageRequest);
 		assertNotNull(cmiiSubmissions);
+		assertTrue(cmiiSubmissions.size() >= 1);
+		assertTrue(cmiiSubmissions.contains(cmiiSubmission));
 	}
 
 }

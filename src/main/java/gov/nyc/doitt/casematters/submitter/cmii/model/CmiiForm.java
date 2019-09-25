@@ -1,5 +1,6 @@
 package gov.nyc.doitt.casematters.submitter.cmii.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,8 +25,8 @@ public class CmiiForm {
 	@Column(name = "TAG")
 	private String tag;
 
-	@OneToOne
-	@JoinColumn(name = "agencyId", referencedColumnName = "id", updatable = false, insertable = false)
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "agencyId", referencedColumnName = "id", updatable = false, insertable = true)
 	private CmiiAgency cmiiAgency;
 
 	public long getId() {

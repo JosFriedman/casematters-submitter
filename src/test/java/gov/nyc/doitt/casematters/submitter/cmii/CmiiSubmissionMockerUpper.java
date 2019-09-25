@@ -40,7 +40,7 @@ public class CmiiSubmissionMockerUpper {
 
 		CmiiSubmission cmiiSubmission = new CmiiSubmission();
 
-		FieldUtils.writeField(cmiiSubmission, "id", i, true);
+//		FieldUtils.writeField(cmiiSubmission, "id", i, true);
 		FieldUtils.writeField(cmiiSubmission, "parentId", null, true);
 		FieldUtils.writeField(cmiiSubmission, "submitted", new Timestamp(System.currentTimeMillis()), true);
 		FieldUtils.writeField(cmiiSubmission, "description", "description" + i, true);
@@ -68,7 +68,7 @@ class CmiiSubmissionDataMockerUpper {
 
 		CmiiSubmissionData cmiiSubmissionData = new CmiiSubmissionData();
 
-		FieldUtils.writeField(cmiiSubmissionData, "id", i, true);
+//		FieldUtils.writeField(cmiiSubmissionData, "id", i, true);
 		FieldUtils.writeField(cmiiSubmissionData, "submissionId", submissionId, true);
 		FieldUtils.writeField(cmiiSubmissionData, "entity", "entity" + i, true);
 		FieldUtils.writeField(cmiiSubmissionData, "value", "value" + i, true);
@@ -84,7 +84,7 @@ class CmiiUserMockerUpper {
 
 		CmiiUser cmiiUser = new CmiiUser();
 
-		FieldUtils.writeField(cmiiUser, "id", i, true);
+//		FieldUtils.writeField(cmiiUser, "id", i, true);
 		FieldUtils.writeField(cmiiUser, "samlId", "deadbeef" + i, true);
 		FieldUtils.writeField(cmiiUser, "email", "abc@gmail.com" + i, true);
 		FieldUtils.writeField(cmiiUser, "firstName", "John" + i, true);
@@ -108,7 +108,7 @@ class CmiiFormVersionMockerUpper {
 
 		CmiiFormVersion cmiiFormVersion = new CmiiFormVersion();
 
-		FieldUtils.writeField(cmiiFormVersion, "id", i, true);
+//		FieldUtils.writeField(cmiiFormVersion, "id", i, true);
 		FieldUtils.writeField(cmiiFormVersion, "active", true, true);
 		FieldUtils.writeField(cmiiFormVersion, "version", 100 + i, true);
 		FieldUtils.writeField(cmiiFormVersion, "cmiiForm", cmiiFormMockerUpper.create(i), true);
@@ -128,7 +128,7 @@ class CmiiFormMockerUpper {
 		CmiiForm cmiiForm = new CmiiForm();
 
 		FieldUtils.writeField(cmiiForm, "id", i, true);
-		FieldUtils.writeField(cmiiForm, "active", true, true);
+//		FieldUtils.writeField(cmiiForm, "active", true, true);
 		FieldUtils.writeField(cmiiForm, "name", "name" + i, true);
 		FieldUtils.writeField(cmiiForm, "tag", "tag" + i, true);
 		FieldUtils.writeField(cmiiForm, "cmiiAgency", cmiiAgencyMockerUpper.create(i), true);
@@ -144,7 +144,7 @@ class CmiiAgencyMockerUpper {
 
 		CmiiAgency cmiiAgency = new CmiiAgency();
 
-		FieldUtils.writeField(cmiiAgency, "id", i, true);
+//		FieldUtils.writeField(cmiiAgency, "id", i, true);
 		FieldUtils.writeField(cmiiAgency, "active", true, true);
 		FieldUtils.writeField(cmiiAgency, "name", "name" + i, true);
 		FieldUtils.writeField(cmiiAgency, "tag", "tag" + i, true);

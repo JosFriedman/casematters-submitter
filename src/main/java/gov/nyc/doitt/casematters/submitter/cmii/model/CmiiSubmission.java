@@ -3,6 +3,7 @@ package gov.nyc.doitt.casematters.submitter.cmii.model;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,16 +33,16 @@ public class CmiiSubmission {
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	@OneToOne
-	@JoinColumn(name = "userId", referencedColumnName = "id", updatable = false, insertable = false)
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "userId", referencedColumnName = "id", updatable = false, insertable = true)
 	private CmiiUser cmiiUser;
 
-	@OneToOne
-	@JoinColumn(name = "formVersionId", referencedColumnName = "id", updatable = false, insertable = false)
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "formVersionId", referencedColumnName = "id", updatable = false, insertable = true)
 	private CmiiFormVersion cmiiFormVersion;
 
 	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "submissionId", updatable = false, insertable = false)
+	@JoinColumn(name = "submissionId", updatable = false, insertable = true)
 	private List<CmiiSubmissionData> cmiiSubmissionDataList;
 
 	@Enumerated(EnumType.STRING)
