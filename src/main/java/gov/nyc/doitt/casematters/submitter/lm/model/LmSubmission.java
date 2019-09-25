@@ -57,7 +57,7 @@ public class LmSubmission {
 		this.submissionID = submissionID;
 	}
 
-	public int getSubmissionParentID() {
+	public Integer getSubmissionParentID() {
 		return submissionParentID;
 	}
 

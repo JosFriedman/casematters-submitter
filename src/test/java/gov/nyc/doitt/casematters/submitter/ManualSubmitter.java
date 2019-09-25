@@ -14,7 +14,7 @@ public class ManualSubmitter extends TestBase {
 	private SubmitterService submitterService;
 
 	// this test is an integration test and should not be enabled except on developer's desktop
-	private static boolean enabled = false;
+	private static boolean enabled = true;
 
 	@Test
 	public void testSubmitterService() {
