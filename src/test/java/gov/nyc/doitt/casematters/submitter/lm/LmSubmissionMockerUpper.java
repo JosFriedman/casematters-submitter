@@ -14,12 +14,12 @@ public class LmSubmissionMockerUpper {
 
 		List<LmSubmission> lmSubmissions = new ArrayList<>();
 		for (int i = 0; i < listSize; i++) {
-			lmSubmissions.add(create());
+			lmSubmissions.add(create(i));
 		}
 		return lmSubmissions;
 	}
 
-	public LmSubmission create() throws Exception {
+	public LmSubmission create(int i) throws Exception {
 
 		LmSubmission lmSubmission = new LmSubmission();
 		return lmSubmission;

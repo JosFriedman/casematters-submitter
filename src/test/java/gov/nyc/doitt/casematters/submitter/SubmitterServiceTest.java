@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionMockerUpper;
 import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionService;
+import gov.nyc.doitt.casematters.submitter.cmii.SubmitterConcurrencyException;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionMockerUpper;
 import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionService;
@@ -74,4 +75,17 @@ public class SubmitterServiceTest {
 		verify(lmSubmissionService, times(listSize)).saveSubmission(any(LmSubmission.class));
 	}
 
+	@Test
+	public void testSubmitterServiceConcurrencyException() {
+
+		List<CmiiSubmission> cmiiSubmissions = Collections.emptyList();
+		when(cmiiSubmissionService.getNextBatch()).thenThrow(SubmitterConcurrencyException.class);
+
+		submitterService.submitBatch();
+
+		verify(cmiiToLmMapper, times(0)).fromCmii(cmiiSubmissions);
+		verify(lmSubmissionService, times(0)).saveSubmission(any(LmSubmission.class));
+	}
+
+	
 }
