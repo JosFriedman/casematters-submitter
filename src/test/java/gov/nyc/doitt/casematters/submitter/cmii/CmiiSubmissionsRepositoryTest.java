@@ -74,7 +74,7 @@ public class CmiiSubmissionsRepositoryTest {
 				.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(
 						Arrays.asList(new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}),
 						maxRetriesForError, pageRequest);
-		assertNotNull(cmiiSubmissions);
+		assertNotNull(batchOfCmiiSubmissions);
 		assertEquals(maxBatchSize, batchOfCmiiSubmissions.size());
 		assertTrue(cmiiSubmissions.containsAll(batchOfCmiiSubmissions));
 	}
@@ -112,8 +112,8 @@ public class CmiiSubmissionsRepositoryTest {
 				.findByCmiiSubmitterStatusInAndSubmitterErrorCountLessThan(
 						Arrays.asList(new CmiiSubmitterStatus[]{CmiiSubmitterStatus.NEW, CmiiSubmitterStatus.ERROR}),
 						maxRetriesForError, pageRequest);
-		assertNotNull(cmiiSubmissions);
-		assertEquals(min(maxBatchSize, couldInBatchCmiiSubmissions.size()), batchOfCmiiSubmissions.size());
+		assertNotNull(batchOfCmiiSubmissions);
+		assertEquals(maxBatchSize, batchOfCmiiSubmissions.size());
 		assertTrue(couldInBatchCmiiSubmissions.containsAll(batchOfCmiiSubmissions));
 	}
 
