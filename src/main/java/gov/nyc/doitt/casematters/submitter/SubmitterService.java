@@ -48,7 +48,7 @@ public class SubmitterService {
 
 		LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
 		try {
-			lmSubmissionService.saveSubmission(lmSubmission);
+			lmSubmissionService.processSubmission(lmSubmission);
 			cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.COMPLETED);
 		} catch (Exception e) {
 			logger.error("Can't save submission to LawManager", e);

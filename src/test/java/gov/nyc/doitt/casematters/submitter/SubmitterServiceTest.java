@@ -55,7 +55,7 @@ public class SubmitterServiceTest extends TestBase {
 		submitterService.submitBatch();
 
 		verify(cmiiToLmMapper, times(0)).fromCmii(cmiiSubmissions);
-		verify(lmSubmissionService, times(0)).saveSubmission(any(LmSubmission.class));
+		verify(lmSubmissionService, times(0)).processSubmission(any(LmSubmission.class));
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class SubmitterServiceTest extends TestBase {
 		submitterService.submitBatch();
 
 		verify(cmiiToLmMapper, times(listSize)).fromCmii(any(CmiiSubmission.class));
-		verify(lmSubmissionService, times(listSize)).saveSubmission(any(LmSubmission.class));
+		verify(lmSubmissionService, times(listSize)).processSubmission(any(LmSubmission.class));
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class SubmitterServiceTest extends TestBase {
 		submitterService.submitBatch();
 
 		verify(cmiiToLmMapper, times(0)).fromCmii(cmiiSubmissions);
-		verify(lmSubmissionService, times(0)).saveSubmission(any(LmSubmission.class));
+		verify(lmSubmissionService, times(0)).processSubmission(any(LmSubmission.class));
 	}
 
 	

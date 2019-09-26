@@ -17,15 +17,28 @@ public class LmSubmissionService {
 	private LmSubmissionRepository lmSubmissionRepository;
 
 	@Transactional("lmTransactionManager")
-	public void saveSubmission(LmSubmission lmSubmission) {
+	public void processSubmission(LmSubmission lmSubmission) {
+
+		transferAttachments(lmSubmission);
+		saveSubmission(lmSubmission);
+	}
+
+	private void saveSubmission(LmSubmission lmSubmission) {
 
 		logger.debug("saveSubmission: lmSubmission: {}", lmSubmission);
-		
+
 		lmSubmissionRepository.save(lmSubmission);
 
 		// do an update to force the update trigger to fire
 		lmSubmission.setMessageID(0);
 		lmSubmissionRepository.save(lmSubmission);
+	}
+
+	private void transferAttachments(LmSubmission lmSubmission) {
+
+//		\\msdwvw-ctwcmwb1.csc.nycnet\CM_DEV_OATH_FS
+		logger.debug("transferAttachments: lmSubmission: {}", lmSubmission);
+
 	}
 
 }
