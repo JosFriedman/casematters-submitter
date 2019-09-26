@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Math.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +65,6 @@ public class CmiiSubmissionsRepositoryTest {
 			CmiiSubmission cmiiSubmission = cmiiSubmissions.get(i);
 			cmiiSubmission.setCmiiSubmitterStatus(i == 0 ? CmiiSubmitterStatus.NEW : CmiiSubmitterStatus.ERROR);
 			cmiiSubmissionRepository.save(cmiiSubmission);
-
 		}
 
 		PageRequest pageRequest = PageRequest.of(0, maxBatchSize, Sort.by(Sort.Direction.ASC, "submitted"));
