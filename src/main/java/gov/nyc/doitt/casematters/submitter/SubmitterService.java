@@ -29,7 +29,7 @@ public class SubmitterService {
 	@Autowired
 	private CmiiToLmMapper cmiiToLmMapper;
 
-	@Scheduled(cron = "${submitter.polling.cron}")
+	@Scheduled(cron = "${submitter.cron}")
 	public void submitBatch() {
 
 		logger.info("submitBatch: entering");

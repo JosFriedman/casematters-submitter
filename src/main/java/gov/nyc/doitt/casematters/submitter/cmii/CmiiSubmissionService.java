@@ -26,10 +26,10 @@ public class CmiiSubmissionService {
 	@Autowired
 	private CmiiSubmissionRepository cmiiSubmissionRepository;
 
-	@Value("${submitter.maxBatchSize}")
+	@Value("${submitter.cmii.maxBatchSize}")
 	private int maxBatchSize;
 
-	@Value(" ${submitter.maxRetriesForError}")
+	@Value(" ${submitter.cmii.maxRetriesForError}")
 	private int maxRetriesForError;
 
 	private PageRequest pageRequest;

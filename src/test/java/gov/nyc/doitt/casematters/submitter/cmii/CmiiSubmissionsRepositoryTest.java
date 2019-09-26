@@ -31,10 +31,10 @@ public class CmiiSubmissionsRepositoryTest {
 	@Autowired
 	private CmiiSubmissionMockerUpper cmiiSubmissionMockerUpper;
 
-	@Value("${submitter.maxBatchSize}")
+	@Value("${submitter.cmii.maxBatchSize}")
 	private int maxBatchSize;
 
-	@Value(" ${submitter.maxRetriesForError}")
+	@Value(" ${submitter.cmii.maxRetriesForError}")
 	private int maxRetriesForError;
 
 	@Test
@@ -84,7 +84,7 @@ public class CmiiSubmissionsRepositoryTest {
 		int numberOfCmiiSubmissions = maxBatchSize + 20; // create more that are returned in batch
 		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionMockerUpper.createList(numberOfCmiiSubmissions);
 
-		List<CmiiSubmission> couldInBatchCmiiSubmissions = new ArrayList<>();
+		List<CmiiSubmission> couldBeInBatchCmiiSubmissions = new ArrayList<>();
 		for (int i = 0; i < cmiiSubmissions.size(); i++) {
 			CmiiSubmission cmiiSubmission = cmiiSubmissions.get(i);
 			if (i % 11 == 0) {
@@ -96,14 +96,14 @@ public class CmiiSubmissionsRepositoryTest {
 				cmiiSubmission.setSubmitterErrorCount(maxRetriesForError + 1);
 			} else if (i % 3 == 0) {
 				cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.ERROR);
-				couldInBatchCmiiSubmissions.add(cmiiSubmission);
+				couldBeInBatchCmiiSubmissions.add(cmiiSubmission);
 			} else if (i % 2 == 0) {
 				cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.NEW);
-				couldInBatchCmiiSubmissions.add(cmiiSubmission);
+				couldBeInBatchCmiiSubmissions.add(cmiiSubmission);
 			}
 			cmiiSubmissionRepository.save(cmiiSubmission);
 		}
-		assertTrue(couldInBatchCmiiSubmissions.size() >= maxBatchSize); // make sure our test data is valid
+		assertTrue(couldBeInBatchCmiiSubmissions.size() >= maxBatchSize); // make sure our test data is valid
 
 		PageRequest pageRequest = PageRequest.of(0, maxBatchSize, Sort.by(Sort.Direction.ASC, "submitted"));
 		List<CmiiSubmission> batchOfCmiiSubmissions = cmiiSubmissionRepository
@@ -112,7 +112,7 @@ public class CmiiSubmissionsRepositoryTest {
 						maxRetriesForError, pageRequest);
 		assertNotNull(batchOfCmiiSubmissions);
 		assertEquals(maxBatchSize, batchOfCmiiSubmissions.size());
-		assertTrue(couldInBatchCmiiSubmissions.containsAll(batchOfCmiiSubmissions));
+		assertTrue(couldBeInBatchCmiiSubmissions.containsAll(batchOfCmiiSubmissions));
 	}
 
 }

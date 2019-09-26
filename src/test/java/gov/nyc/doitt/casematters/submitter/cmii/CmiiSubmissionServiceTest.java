@@ -46,10 +46,10 @@ public class CmiiSubmissionServiceTest {
 	@InjectMocks
 	private CmiiSubmissionService cmiiSubmissionService = new CmiiSubmissionService();
 
-	@Value("${submitter.maxBatchSize}")
+	@Value("${submitter.cmii.maxBatchSize}")
 	private int maxBatchSize;
 
-	@Value(" ${submitter.maxRetriesForError}")
+	@Value(" ${submitter.cmii.maxRetriesForError}")
 	private int maxRetriesForError;
 
 	private Pageable pageable;
