@@ -8,9 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import gov.nyc.doitt.casematters.submitter.TestBase;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LmSubmissionsRepositoryTest {
+public class LmSubmissionsRepositoryTest extends TestBase {
 
 	@Autowired
 	private LmSubmissionRepository lmSubmissionRepository;

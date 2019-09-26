@@ -22,7 +22,7 @@ import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionData;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CmiiToLmMapperTest {
+public class CmiiToLmMapperTest extends TestBase {
 
 	@Autowired
 	private CmiiSubmissionMockerUpper cmiiSubmissionMockerUpper;

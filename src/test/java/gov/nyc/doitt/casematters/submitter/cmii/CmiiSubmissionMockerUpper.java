@@ -2,7 +2,6 @@ package gov.nyc.doitt.casematters.submitter.cmii;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -22,7 +21,7 @@ public class CmiiSubmissionMockerUpper {
 
 	@Autowired
 	private CmiiSubmissionDataMockerUpper cmiiSubmissionDataMockerUpper;
-	
+
 	@Autowired
 	private CmiiUserMockerUpper cmiiUserMockerUpper;
 
@@ -32,7 +31,7 @@ public class CmiiSubmissionMockerUpper {
 	public List<CmiiSubmission> createList(int listSize) throws Exception {
 
 		int id = new Random().nextInt(100) * -1;
-		
+
 		List<CmiiSubmission> cmiiSubmissions = new ArrayList<>();
 		for (int i = 0; i < listSize; i++) {
 			cmiiSubmissions.add(create(id - i));
@@ -45,14 +44,21 @@ public class CmiiSubmissionMockerUpper {
 		int id = new Random().nextInt(100) * -1;
 		return create(id);
 	}
-	
+
 	private CmiiSubmission create(int id) throws Exception {
 
 		CmiiSubmission cmiiSubmission = new CmiiSubmission();
 
 		FieldUtils.writeField(cmiiSubmission, "id", id, true);
 		FieldUtils.writeField(cmiiSubmission, "parentId", null, true);
-		FieldUtils.writeField(cmiiSubmission, "submitted", new Timestamp(System.currentTimeMillis() - 900000000000L), true); // make very old so it is found first
+		FieldUtils.writeField(cmiiSubmission, "submitted", new Timestamp(System.currentTimeMillis() - 900000000000L), true); // make
+																																// very
+																																// old
+																																// so
+																																// it
+																																// is
+																																// found
+																																// first
 		FieldUtils.writeField(cmiiSubmission, "description", "description" + id, true);
 		FieldUtils.writeField(cmiiSubmission, "cmiiUser", cmiiUserMockerUpper.create(id), true);
 		FieldUtils.writeField(cmiiSubmission, "cmiiFormVersion", cmiiFormVersionMockerUpper.create(id), true);
@@ -60,7 +66,7 @@ public class CmiiSubmissionMockerUpper {
 
 		return cmiiSubmission;
 	}
-	
+
 }
 
 @Component

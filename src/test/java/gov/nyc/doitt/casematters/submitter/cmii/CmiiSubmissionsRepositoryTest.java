@@ -18,12 +18,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import gov.nyc.doitt.casematters.submitter.TestBase;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CmiiSubmissionsRepositoryTest {
+public class CmiiSubmissionsRepositoryTest extends TestBase {
 
 	@Autowired
 	private CmiiSubmissionRepository cmiiSubmissionRepository;

@@ -29,12 +29,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import gov.nyc.doitt.casematters.submitter.TestBase;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CmiiSubmissionServiceTest {
+public class CmiiSubmissionServiceTest extends TestBase {
 
 	@Autowired
 	private CmiiSubmissionMockerUpper cmiiSubmissionMockerUpper;

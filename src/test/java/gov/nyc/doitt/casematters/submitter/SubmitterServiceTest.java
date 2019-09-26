@@ -26,7 +26,7 @@ import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SubmitterServiceTest {
+public class SubmitterServiceTest extends TestBase {
 
 	@Autowired
 	private CmiiSubmissionMockerUpper cmiiSubmissionMockerUpper;
