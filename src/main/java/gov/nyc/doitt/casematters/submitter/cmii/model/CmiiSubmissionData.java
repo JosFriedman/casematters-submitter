@@ -13,6 +13,9 @@ public class CmiiSubmissionData {
 	@Column(name = "ID")
 	private long id;
 
+	@Column(name = "DATATYPE")
+	private String dataType = "not used";
+	
 	@Column(name = "SUBMISSIONID")
 	private long submissionId;
 	
@@ -25,6 +28,11 @@ public class CmiiSubmissionData {
 
 	public long getId() {
 		return id;
+	}
+
+	
+	public String getDataType() {
+		return dataType;
 	}
 
 	public long getSubmissionId() {
