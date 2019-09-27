@@ -17,7 +17,7 @@ import org.mockftpserver.fake.filesystem.FileEntry;
 import org.mockftpserver.fake.filesystem.FileSystem;
 import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
 
-public class LmSubmissionServiceTest {
+public class FtpClientIntegrationTest {
 
 	private FakeFtpServer fakeFtpServer;
 
@@ -42,7 +42,7 @@ public class LmSubmissionServiceTest {
 
 	@After
 	public void teardown() throws IOException {
-		ftpClient.close();
+ 
 		fakeFtpServer.stop();
 	}
 

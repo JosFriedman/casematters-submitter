@@ -24,7 +24,7 @@ import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CmiiSubmissionsRepositoryTest extends TestBase {
+public class CmiiSubmissionRepositoryTest extends TestBase {
 
 	@Autowired
 	private CmiiSubmissionRepository cmiiSubmissionRepository;
@@ -35,7 +35,7 @@ public class CmiiSubmissionsRepositoryTest extends TestBase {
 	@Value("${submitter.cmii.maxBatchSize}")
 	private int maxBatchSize;
 
-	@Value(" ${submitter.cmii.maxRetriesForError}")
+	@Value("${submitter.cmii.maxRetriesForError}")
 	private int maxRetriesForError;
 
 	@Test

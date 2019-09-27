@@ -14,7 +14,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
-class FtpClient {
+public class FtpClient {
 
 	private final String server;
 	private final int port;
@@ -22,14 +22,14 @@ class FtpClient {
 	private final String password;
 	private FTPClient ftp;
 
-	FtpClient(String server, int port, String user, String password) {
+	public FtpClient(String server, int port, String user, String password) {
 		this.server = server;
 		this.port = port;
 		this.user = user;
 		this.password = password;
 	}
 
-	void open() throws IOException {
+	public void open() throws IOException {
 		ftp = new FTPClient();
 
 		ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
@@ -44,21 +44,21 @@ class FtpClient {
 		ftp.login(user, password);
 	}
 
-	void close() throws IOException {
+	public void close() throws IOException {
 		ftp.disconnect();
 	}
 
-	Collection<String> listFiles(String path) throws IOException {
+	public Collection<String> listFiles(String path) throws IOException {
 		FTPFile[] files = ftp.listFiles(path);
 
 		return Arrays.stream(files).map(FTPFile::getName).collect(Collectors.toList());
 	}
 
-	void putFileToPath(File file, String path) throws IOException {
+	public void putFileToPath(File file, String path) throws IOException {
 		ftp.storeFile(path, new FileInputStream(file));
 	}
 
-	void downloadFile(String source, String destination) throws IOException {
+	public void downloadFile(String source, String destination) throws IOException {
 		FileOutputStream out = new FileOutputStream(destination);
 		ftp.retrieveFile(source, out);
 		out.close();

@@ -12,7 +12,7 @@ import gov.nyc.doitt.casematters.submitter.TestBase;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LmSubmissionsRepositoryTest extends TestBase {
+public class LmSubmissionRepositoryTest extends TestBase {
 
 	@Autowired
 	private LmSubmissionRepository lmSubmissionRepository;

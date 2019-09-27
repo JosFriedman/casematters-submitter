@@ -29,7 +29,7 @@ public class CmiiSubmissionService {
 	@Value("${submitter.cmii.maxBatchSize}")
 	private int maxBatchSize;
 
-	@Value(" ${submitter.cmii.maxRetriesForError}")
+	@Value("${submitter.cmii.maxRetriesForError}")
 	private int maxRetriesForError;
 
 	private PageRequest pageRequest;

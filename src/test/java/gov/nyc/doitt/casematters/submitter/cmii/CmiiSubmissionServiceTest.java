@@ -50,7 +50,7 @@ public class CmiiSubmissionServiceTest extends TestBase {
 	@Value("${submitter.cmii.maxBatchSize}")
 	private int maxBatchSize;
 
-	@Value(" ${submitter.cmii.maxRetriesForError}")
+	@Value("${submitter.cmii.maxRetriesForError}")
 	private int maxRetriesForError;
 
 	private Pageable pageable;
