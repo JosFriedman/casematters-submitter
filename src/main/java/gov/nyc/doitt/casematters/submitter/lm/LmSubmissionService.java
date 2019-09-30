@@ -16,6 +16,9 @@ public class LmSubmissionService {
 	@Autowired
 	private LmSubmissionRepository lmSubmissionRepository;
 
+	@Autowired
+	private LmAttachmentUploader lmAttachmentUploader;
+
 	@Transactional("lmTransactionManager")
 	public void processSubmission(LmSubmission lmSubmission) {
 
@@ -36,7 +39,7 @@ public class LmSubmissionService {
 
 	private void transferAttachments(LmSubmission lmSubmission) {
 
-//		\\msdwvw-ctwcmwb1.csc.nycnet\CM_DEV_OATH_FS
+		// \\msdwvw-ctwcmwb1.csc.nycnet\CM_DEV_OATH_FS
 		logger.debug("transferAttachments: lmSubmission: {}", lmSubmission);
 
 	}

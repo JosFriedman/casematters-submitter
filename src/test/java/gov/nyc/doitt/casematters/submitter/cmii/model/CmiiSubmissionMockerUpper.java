@@ -1,26 +1,23 @@
-package gov.nyc.doitt.casematters.submitter.cmii;
+package gov.nyc.doitt.casematters.submitter.cmii.model;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiAgency;
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiForm;
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiFormVersion;
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionData;
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiUser;
 
 @Component
 public class CmiiSubmissionMockerUpper {
 
 	@Autowired
 	private CmiiSubmissionDataMockerUpper cmiiSubmissionDataMockerUpper;
+
+	@Autowired
+	private CmiiSubmissionAttachmentMockerUpper cmiiSubmissionAttachmentMockerUpper;
 
 	@Autowired
 	private CmiiUserMockerUpper cmiiUserMockerUpper;
@@ -51,18 +48,13 @@ public class CmiiSubmissionMockerUpper {
 
 		FieldUtils.writeField(cmiiSubmission, "id", id, true);
 		FieldUtils.writeField(cmiiSubmission, "parentId", null, true);
-		FieldUtils.writeField(cmiiSubmission, "submitted", new Timestamp(System.currentTimeMillis() - 900000000000L), true); // make
-																																// very
-																																// old
-																																// so
-																																// it
-																																// is
-																																// found
-																																// first
+		// make very old so it is found first
+		FieldUtils.writeField(cmiiSubmission, "submitted", new Timestamp(System.currentTimeMillis() - 900000000000L), true);
 		FieldUtils.writeField(cmiiSubmission, "description", "description" + id, true);
 		FieldUtils.writeField(cmiiSubmission, "cmiiUser", cmiiUserMockerUpper.create(id), true);
 		FieldUtils.writeField(cmiiSubmission, "cmiiFormVersion", cmiiFormVersionMockerUpper.create(id), true);
 		FieldUtils.writeField(cmiiSubmission, "cmiiSubmissionDataList", cmiiSubmissionDataMockerUpper.createList(id), true);
+		FieldUtils.writeField(cmiiSubmission, "cmiiSubmissionAttachments", cmiiSubmissionAttachmentMockerUpper.createList(id), true);
 
 		return cmiiSubmission;
 	}
@@ -91,6 +83,35 @@ class CmiiSubmissionDataMockerUpper {
 		FieldUtils.writeField(cmiiSubmissionData, "value", "value" + id, true);
 
 		return cmiiSubmissionData;
+	}
+}
+
+@Component
+class CmiiSubmissionAttachmentMockerUpper {
+
+	public List<CmiiSubmissionAttachment> createList(int submissionId) throws Exception {
+
+		List<CmiiSubmissionAttachment> cmiiSubmissionAttachments = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			cmiiSubmissionAttachments.add(create(submissionId, submissionId - i));
+		}
+		return cmiiSubmissionAttachments;
+	}
+
+	public CmiiSubmissionAttachment create(int submissionId, int id) throws Exception {
+
+		CmiiSubmissionAttachment cmiiSubmissionAttachment = new CmiiSubmissionAttachment();
+
+		FieldUtils.writeField(cmiiSubmissionAttachment, "id", id, true);
+		FieldUtils.writeField(cmiiSubmissionAttachment, "submissionId", submissionId, true);
+		FieldUtils.writeField(cmiiSubmissionAttachment, "contentType", "application/pdf", true);
+		FieldUtils.writeField(cmiiSubmissionAttachment, "originalFileName", "originalFileName" + id, true);
+		FieldUtils.writeField(cmiiSubmissionAttachment, "fileSize", 100000, true);
+		UUID uuid = UUID.randomUUID();
+		FieldUtils.writeField(cmiiSubmissionAttachment, "uniqueFileName", "cmiiAttachment-" + uuid + ".dat", true);
+		FieldUtils.writeField(cmiiSubmissionAttachment, "uuid", uuid, true);
+
+		return cmiiSubmissionAttachment;
 	}
 }
 

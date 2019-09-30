@@ -41,6 +41,10 @@ public class LmSubmission {
 	@JoinColumn(name = "submissionId", referencedColumnName = "submissionID")
 	private List<LmSubmissionData> lmSubmissionDataList;
 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "submissionId", referencedColumnName = "submissionID")
+	private List<LmSubmissionAttachment> lmSubmissionAttachments;
+
 	public int getMessageID() {
 		return messageID;
 	}
@@ -209,16 +213,24 @@ public class LmSubmission {
 		this.lmSubmissionDataList = lmSubmissionDataList;
 	}
 
+	public List<LmSubmissionAttachment> getLmSubmissionAttachments() {
+		return lmSubmissionAttachments;
+	}
+
+	public void setLmSubmissionAttachments(List<LmSubmissionAttachment> lmSubmissionAttachments) {
+		this.lmSubmissionAttachments = lmSubmissionAttachments;
+	}
+
 	@Override
 	public String toString() {
-		return "LmSubmission [messageID=" + messageID + ", submissionID=" + submissionID + ", submissionParentID="
+		return "LmSubmission [submissionID=" + submissionID + ", messageID=" + messageID + ", submissionParentID="
 				+ submissionParentID + ", submissionTimestamp=" + submissionTimestamp + ", submissionDescription="
 				+ submissionDescription + ", agencyID=" + agencyID + ", agency=" + agency + ", agencyAbbreviation="
 				+ agencyAbbreviation + ", formID=" + formID + ", formName=" + formName + ", formAbbreviation=" + formAbbreviation
 				+ ", formVersionID=" + formVersionID + ", formVersion=" + formVersion + ", userID=" + userID + ", userFirstName="
 				+ userFirstName + ", userMiddleName=" + userMiddleName + ", userLastName=" + userLastName + ", userPhone="
 				+ userPhone + ", userFax=" + userFax + ", userEmail=" + userEmail + ", lmSubmissionDataList=" + lmSubmissionDataList
-				+ "]";
+				+ ", lmSubmissionAttachments=" + lmSubmissionAttachments + "]";
 	}
 
 }

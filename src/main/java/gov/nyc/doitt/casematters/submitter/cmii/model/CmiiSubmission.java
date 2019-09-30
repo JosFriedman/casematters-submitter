@@ -16,6 +16,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name = "SUBMISSIONS")
 public class CmiiSubmission {
@@ -42,8 +45,14 @@ public class CmiiSubmission {
 	private CmiiFormVersion cmiiFormVersion;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinColumn(name = "submissionId", updatable = false, insertable = true)
 	private List<CmiiSubmissionData> cmiiSubmissionDataList;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@Fetch(value = FetchMode.SUBSELECT)
+	@JoinColumn(name = "submissionId", updatable = false, insertable = true)
+	private List<CmiiSubmissionAttachment> cmiiSubmissionAttachments;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SUBMITTER_STATUS")
@@ -88,6 +97,10 @@ public class CmiiSubmission {
 
 	public List<CmiiSubmissionData> getCmiiSubmissionDataList() {
 		return cmiiSubmissionDataList;
+	}
+
+	public List<CmiiSubmissionAttachment> getCmiiSubmissionAttachments() {
+		return cmiiSubmissionAttachments;
 	}
 
 	public CmiiSubmitterStatus getCmiiSubmitterStatus() {
@@ -157,9 +170,9 @@ public class CmiiSubmission {
 	}
 
 	public String toSubmissionResult() {
-		return "CmiiSubmission [id=" + id + ", cmiiSubmitterStatus=" + cmiiSubmitterStatus
-				+ ", submitterStartTimestamp=" + submitterStartTimestamp + ", submitterEndTimestamp=" + submitterEndTimestamp
-				+ ", submitterErrorCount=" + submitterErrorCount + "]";
+		return "CmiiSubmission [id=" + id + ", cmiiSubmitterStatus=" + cmiiSubmitterStatus + ", submitterStartTimestamp="
+				+ submitterStartTimestamp + ", submitterEndTimestamp=" + submitterEndTimestamp + ", submitterErrorCount="
+				+ submitterErrorCount + "]";
 	}
 
 }

@@ -31,6 +31,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import gov.nyc.doitt.casematters.submitter.TestBase;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionMockerUpper;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 
 @RunWith(SpringRunner.class)

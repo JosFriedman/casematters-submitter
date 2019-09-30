@@ -16,13 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionMockerUpper;
 import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionService;
 import gov.nyc.doitt.casematters.submitter.cmii.SubmitterConcurrencyException;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionMockerUpper;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionMockerUpper;
 import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionService;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionMockerUpper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

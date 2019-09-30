@@ -104,7 +104,7 @@ public class LmSubmitterServiceTest5 extends TestBase {
 	@Test
 	public void storeFile() throws IOException {
 
-		String sourceFileName = "/susflag.txt";
+		String sourceFileName = "/misc/susflag.txt";
 		String targetFileName = "/susflag2.txt";
 
 		org.apache.commons.net.ftp.FTPSClient ftpClient = new org.apache.commons.net.ftp.FTPSClient(true);
@@ -234,7 +234,7 @@ public class LmSubmitterServiceTest5 extends TestBase {
 		
 
 		String sourceFileName = "/misc/susflag.txt";
-		String targetFileName = "/susflag2.txt";
+		String targetFileName = "susflag.txt";
 
 		NtlmPasswordAuthentication smbAuth = new NtlmPasswordAuthentication(smbDomain, smbUserName, smbPassword);
 
@@ -243,7 +243,7 @@ public class LmSubmitterServiceTest5 extends TestBase {
 //		SmbFile smbDir = new SmbFile(smbPath, smbAuth);
         String smbTarget = smbPath + targetFileName;
 
-		File targetFile = new File(sourceFileName);
+		File sourceFile = new File(sourceFileName);
 		
         SmbFile smbFile = new SmbFile(smbTarget,smbAuth);
 
@@ -253,7 +253,7 @@ public class LmSubmitterServiceTest5 extends TestBase {
         
 		SmbFileOutputStream smbOS= new SmbFileOutputStream(smbFile);
 
-        FileUtils.copyFile(targetFile, smbOS);
+        FileUtils.copyFile(sourceFile, smbOS);
 
         smbOS.close();
 
