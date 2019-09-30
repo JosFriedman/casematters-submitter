@@ -76,18 +76,18 @@ class LmSubmissionDataMockerUpper {
 
 		List<LmSubmissionData> lmSubmissionDataList = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
-			lmSubmissionDataList.add(create(submissionId, submissionId - i));
+			lmSubmissionDataList.add(create(submissionId, i));
 		}
 		return lmSubmissionDataList;
 	}
 
-	public LmSubmissionData create(int submissionId, int id) throws Exception {
+	public LmSubmissionData create(int submissionId, int i) throws Exception {
 
 		LmSubmissionData lmSubmissionData = new LmSubmissionData();
 
-		LmSubmissionDataKey lmSubmissionDataKey = new LmSubmissionDataKey(submissionId, "fieldName" + id);
+		LmSubmissionDataKey lmSubmissionDataKey = new LmSubmissionDataKey(submissionId, "fieldName" + i);
 		lmSubmissionData.setLmSubmissionDataKey(lmSubmissionDataKey);
-		lmSubmissionData.setFieldValue("fieldValue" + 1);
+		lmSubmissionData.setFieldValue("fieldValue" + i);
 		lmSubmissionData.setMessageId(-1);
 	
 		return lmSubmissionData;
@@ -101,23 +101,33 @@ class LmSubmissionAttachmentMockerUpper {
 
 		List<LmSubmissionAttachment> lmSubmissionAttachments = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
-			lmSubmissionAttachments.add(create(submissionId, submissionId - i));
+			lmSubmissionAttachments.add(create(submissionId, i));
 		}
 		return lmSubmissionAttachments;
 	}
 
-	public LmSubmissionAttachment create(int submissionId, int id) throws Exception {
+	public LmSubmissionAttachment create(int submissionId, int i) throws Exception {
 
 		LmSubmissionAttachment lmSubmissionAttachment = new LmSubmissionAttachment();
 
-		FieldUtils.writeField(lmSubmissionAttachment, "id", id, true);
-		FieldUtils.writeField(lmSubmissionAttachment, "submissionId", submissionId, true);
-		FieldUtils.writeField(lmSubmissionAttachment, "contentType", "application/pdf", true);
-		FieldUtils.writeField(lmSubmissionAttachment, "originalFileName", "originalFileName" + id, true);
-		FieldUtils.writeField(lmSubmissionAttachment, "fileSize", 100000, true);
-		UUID uuid = UUID.randomUUID();
-		FieldUtils.writeField(lmSubmissionAttachment, "uniqueFileName", "lmAttachment-" + uuid + ".dat", true);
-		FieldUtils.writeField(lmSubmissionAttachment, "uuid", uuid, true);
+		LmSubmissionAttachmentKey lmSubmissionAttachmentKey = new LmSubmissionAttachmentKey(submissionId, i);
+		lmSubmissionAttachment.setLmSubmissionAttachmentKey(lmSubmissionAttachmentKey);
+
+		lmSubmissionAttachment.setOriginalFileName("originalFileName" + i);
+		lmSubmissionAttachment.setStandardizedFileName("standardizedFileName" + i);
+		lmSubmissionAttachment.setLawManagerFileName("originalFileName" + i);
+		lmSubmissionAttachment.setOriginalFileName("lawManagerFileName" + i);
+		lmSubmissionAttachment.setExtension("pdf");
+		lmSubmissionAttachment.setContentType("application/pdf");
+		lmSubmissionAttachment.setHashSHA256(null);
+		lmSubmissionAttachment.setFileSize(100000);
+		lmSubmissionAttachment.setFileMoved(false);
+		lmSubmissionAttachment.setDocumentkey(i);
+		lmSubmissionAttachment.setErrorFlag(false);
+		lmSubmissionAttachment.setMessageId(-1L);
+		lmSubmissionAttachment.setFtpCopyDurationInMillis(10123);
+		lmSubmissionAttachment.setSmbCopyDurationInMillis(10456);
+		lmSubmissionAttachment.setDecryptDurationInMillis(10789);
 
 		return lmSubmissionAttachment;
 	}

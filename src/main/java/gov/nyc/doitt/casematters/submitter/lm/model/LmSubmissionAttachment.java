@@ -42,6 +42,32 @@ public class LmSubmissionAttachment {
 	@Column(name = "document_key")
 	private int documentkey;
 
+	@Column(name = "error_flag")
+	private boolean errorFlag;
+
+	@Column(name = "messageID")
+	private long messageId;
+
+	@Column(name = "ftpCopyDurationInMillis")
+	private long ftpCopyDurationInMillis;
+
+	@Column(name = "smbCopyDurationInMillis")
+	private long smbCopyDurationInMillis;
+
+	@Column(name = "decryptDurationInMillis")
+	private long decryptDurationInMillis;
+
+	@Override
+	public String toString() {
+		return "LmSubmissionAttachment [lmSubmissionAttachmentKey=" + lmSubmissionAttachmentKey + ", title=" + title
+				+ ", originalFileName=" + originalFileName + ", standardizedFileName=" + standardizedFileName
+				+ ", lawManagerFileName=" + lawManagerFileName + ", extension=" + extension + ", contentType=" + contentType
+				+ ", hashSHA256=" + hashSHA256 + ", fileSize=" + fileSize + ", fileMoved=" + fileMoved + ", documentkey="
+				+ documentkey + ", errorFlag=" + errorFlag + ", messageId=" + messageId + ", ftpCopyDurationInMillis="
+				+ ftpCopyDurationInMillis + ", smbCopyDurationInMillis=" + smbCopyDurationInMillis + ", decryptDurationInMillis="
+				+ decryptDurationInMillis + "]";
+	}
+
 	public LmSubmissionAttachmentKey getLmSubmissionAttachmentKey() {
 		return lmSubmissionAttachmentKey;
 	}
@@ -168,32 +194,6 @@ public class LmSubmissionAttachment {
 
 	public void setDecryptDurationInMillis(long decryptDurationInMillis) {
 		this.decryptDurationInMillis = decryptDurationInMillis;
-	}
-
-	@Column(name = "error_flag")
-	private boolean errorFlag;
-
-	@Column(name = "messageID")
-	private long messageId;
-
-	@Column(name = "ftpCopyDurationInMillis")
-	private long ftpCopyDurationInMillis;
-
-	@Column(name = "smbCopyDurationInMillis")
-	private long smbCopyDurationInMillis;
-
-	@Column(name = "decryptDurationInMillis")
-	private long decryptDurationInMillis;
-
-	@Override
-	public String toString() {
-		return "LmSubmissionAttachment [lmSubmissionAttachmentKey=" + lmSubmissionAttachmentKey + ", title=" + title
-				+ ", originalFileName=" + originalFileName + ", standardizedFileName=" + standardizedFileName
-				+ ", lawManagerFileName=" + lawManagerFileName + ", extension=" + extension + ", contentType=" + contentType
-				+ ", hashSHA256=" + hashSHA256 + ", fileSize=" + fileSize + ", fileMoved=" + fileMoved + ", documentkey="
-				+ documentkey + ", errorFlag=" + errorFlag + ", messageId=" + messageId + ", ftpCopyDurationInMillis="
-				+ ftpCopyDurationInMillis + ", smbCopyDurationInMillis=" + smbCopyDurationInMillis + ", decryptDurationInMillis="
-				+ decryptDurationInMillis + "]";
 	}
 
 }
