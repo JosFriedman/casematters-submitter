@@ -40,10 +40,10 @@ public class LmSubmissionAttachment {
 	private boolean fileMoved;
 
 	@Column(name = "document_key")
-	private int documentkey;
+	private Integer documentkey;
 
 	@Column(name = "error_flag")
-	private boolean errorFlag;
+	private Boolean errorFlag;
 
 	@Column(name = "messageID")
 	private long messageId;
@@ -135,27 +135,27 @@ public class LmSubmissionAttachment {
 		this.fileSize = fileSize;
 	}
 
-	public boolean isFileMoved() {
+	public Boolean isFileMoved() {
 		return fileMoved;
 	}
 
-	public void setFileMoved(boolean fileMoved) {
+	public void setFileMoved(Boolean fileMoved) {
 		this.fileMoved = fileMoved;
 	}
 
-	public int getDocumentkey() {
+	public Integer getDocumentkey() {
 		return documentkey;
 	}
 
-	public void setDocumentkey(int documentkey) {
+	public void setDocumentkey(Integer documentkey) {
 		this.documentkey = documentkey;
 	}
 
-	public boolean isErrorFlag() {
+	public Boolean isErrorFlag() {
 		return errorFlag;
 	}
 
-	public void setErrorFlag(boolean errorFlag) {
+	public void setErrorFlag(Boolean errorFlag) {
 		this.errorFlag = errorFlag;
 	}
 

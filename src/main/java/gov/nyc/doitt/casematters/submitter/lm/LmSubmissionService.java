@@ -32,8 +32,9 @@ public class LmSubmissionService {
 
 		lmSubmissionRepository.save(lmSubmission);
 
-		// do an update to force the update trigger to fire
+		// do update to force the update triggers to fire
 		lmSubmission.setMessageID(0);
+		lmSubmission.getLmSubmissionAttachments().forEach(p -> p.setFileMoved(true));
 		lmSubmissionRepository.save(lmSubmission);
 	}
 
