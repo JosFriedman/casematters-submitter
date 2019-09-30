@@ -1,8 +1,10 @@
 package gov.nyc.doitt.casematters.submitter;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -11,13 +13,15 @@ import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiAgency;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiForm;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiFormVersion;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionAttachment;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionData;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiUser;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionAttachment;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionData;
 
 /**
- * Map CmiiSubmissionData to LmSubmissionData
+ * Map CmiiSubmission to LmSubmission
  * 
  */
 @Component
@@ -63,6 +67,7 @@ public class CmiiToLmMapper {
 		lmSubmission.setUserEmail(cmmUser.getEmail());
 
 		lmSubmission.setLmSubmissionDataList(fromCmiiSubmissionDataList(cmiiSubmission.getCmiiSubmissionDataList()));
+		lmSubmission.setLmSubmissionAttachments(fromCmiiSubmissionAttachments(cmiiSubmission.getCmiiSubmissionAttachments()));
 
 		logger.debug("lmSubmission={}", lmSubmission);
 
@@ -86,6 +91,34 @@ public class CmiiToLmMapper {
 		logger.debug("lmSubmissionData={}", lmSubmissionData);
 
 		return lmSubmissionData;
+	}
+
+	private List<LmSubmissionAttachment> fromCmiiSubmissionAttachments(
+			List<CmiiSubmissionAttachment> cmiiSubmissionAttachmentList) {
+
+		final AtomicInteger atomicInteger = new AtomicInteger(1);
+		return cmiiSubmissionAttachmentList.stream().map(p -> fromCmii(p, atomicInteger.getAndIncrement()))
+				.collect(Collectors.toList());
+	}
+
+	public LmSubmissionAttachment fromCmii(CmiiSubmissionAttachment cmiiSubmissionAttachment, int i) {
+
+		logger.debug("cmiiSubmissionAttachment={}", cmiiSubmissionAttachment);
+
+		LmSubmissionAttachment lmSubmissionAttachment = new LmSubmissionAttachment((int) cmiiSubmissionAttachment.getSubmissionId(),
+				i);
+		lmSubmissionAttachment.setTitle(FilenameUtils.getBaseName(cmiiSubmissionAttachment.getOriginalFileName()));
+		lmSubmissionAttachment.setOriginalFileName(cmiiSubmissionAttachment.getOriginalFileName());
+		lmSubmissionAttachment.setStandardizedFileName(cmiiSubmissionAttachment.getUniqueFileName());
+		lmSubmissionAttachment.setLawManagerFileName(null);
+		lmSubmissionAttachment.setExtension(FilenameUtils.getExtension(cmiiSubmissionAttachment.getOriginalFileName()));
+		lmSubmissionAttachment.setContentType(cmiiSubmissionAttachment.getContentType());
+		lmSubmissionAttachment.setHashSHA256(null);
+		lmSubmissionAttachment.setFileSize(cmiiSubmissionAttachment.getFileSize());
+
+		logger.debug("lmSubmissionAttachment={}", lmSubmissionAttachment);
+
+		return lmSubmissionAttachment;
 	}
 
 }

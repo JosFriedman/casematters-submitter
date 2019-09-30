@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -83,10 +84,8 @@ class LmSubmissionDataMockerUpper {
 
 	public LmSubmissionData create(int submissionId, int i) throws Exception {
 
-		LmSubmissionData lmSubmissionData = new LmSubmissionData();
+		LmSubmissionData lmSubmissionData = new LmSubmissionData(submissionId, "fieldName" + i);
 
-		LmSubmissionDataKey lmSubmissionDataKey = new LmSubmissionDataKey(submissionId, "fieldName" + i);
-		lmSubmissionData.setLmSubmissionDataKey(lmSubmissionDataKey);
 		lmSubmissionData.setFieldValue("fieldValue" + i);
 		lmSubmissionData.setMessageId(-1);
 	
@@ -108,15 +107,12 @@ class LmSubmissionAttachmentMockerUpper {
 
 	public LmSubmissionAttachment create(int submissionId, int i) throws Exception {
 
-		LmSubmissionAttachment lmSubmissionAttachment = new LmSubmissionAttachment();
+		LmSubmissionAttachment lmSubmissionAttachment = new LmSubmissionAttachment(submissionId, i);
 
-		LmSubmissionAttachmentKey lmSubmissionAttachmentKey = new LmSubmissionAttachmentKey(submissionId, i);
-		lmSubmissionAttachment.setLmSubmissionAttachmentKey(lmSubmissionAttachmentKey);
-
-		lmSubmissionAttachment.setOriginalFileName("originalFileName" + i);
+		lmSubmissionAttachment.setOriginalFileName("originalFileName" + i + ".pdf");
+		lmSubmissionAttachment.setTitle("originalFileName" + i );
 		lmSubmissionAttachment.setStandardizedFileName("standardizedFileName" + i);
 		lmSubmissionAttachment.setLawManagerFileName("originalFileName" + i);
-		lmSubmissionAttachment.setOriginalFileName("lawManagerFileName" + i);
 		lmSubmissionAttachment.setExtension("pdf");
 		lmSubmissionAttachment.setContentType("application/pdf");
 		lmSubmissionAttachment.setHashSHA256(null);

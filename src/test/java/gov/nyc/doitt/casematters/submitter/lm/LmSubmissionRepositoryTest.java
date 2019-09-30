@@ -1,6 +1,9 @@
 package gov.nyc.doitt.casematters.submitter.lm;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,11 +28,23 @@ public class LmSubmissionRepositoryTest extends TestBase {
 
 	@Test
 	@Transactional("lmTransactionManager")
-	public void testCreate() throws Exception {
+	public void testSaveOne() throws Exception {
 
 		LmSubmission lmSubmission = lmSubmissionMockerUpper.create();
 
-		assertTrue(true);
+		LmSubmission savedLmSubmission = lmSubmissionRepository.save(lmSubmission);
+		assertNotNull(savedLmSubmission);
+	}
+
+	@Test
+	@Transactional("lmTransactionManager")
+	public void testSaveAll() throws Exception {
+
+		List<LmSubmission> lmSubmissions = lmSubmissionMockerUpper.createList(5);
+
+		List<LmSubmission> savedLmSubmissions = lmSubmissionRepository.saveAll(lmSubmissions);
+		assertNotNull(savedLmSubmissions);
+		assertEquals(lmSubmissions.size(), savedLmSubmissions.size());
 	}
 
 }

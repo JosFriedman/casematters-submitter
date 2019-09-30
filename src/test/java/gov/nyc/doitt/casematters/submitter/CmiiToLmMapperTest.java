@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiAgency;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiForm;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiFormVersion;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
+import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionAttachment;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionData;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionMockerUpper;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiUser;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionAttachment;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionData;
 
 @RunWith(SpringRunner.class)
@@ -79,8 +82,28 @@ public class CmiiToLmMapperTest extends TestBase {
 				assertEquals(cmiiSubmissionData.getEntity(), lmSubmissionData.getLmSubmissionDataKey().getFieldName());
 				assertEquals(-1, lmSubmissionData.getMessageId());
 				assertEquals(cmiiSubmissionData.getValue(), lmSubmissionData.getFieldValue());
+			}
+
+			List<CmiiSubmissionAttachment> cmiiSubmissionAttachments = cmiiSubmission.getCmiiSubmissionAttachments();
+			List<LmSubmissionAttachment> lmSubmissionAttachments = lmSubmission.getLmSubmissionAttachments();
+			for (int j = 0; j < cmiiSubmissionAttachments.size(); j++) {
+				CmiiSubmissionAttachment cmiiSubmissionAttachment = cmiiSubmissionAttachments.get(j);
+				LmSubmissionAttachment lmSubmissionAttachment = lmSubmissionAttachments.get(j);
+
+				assertEquals(cmiiSubmissionAttachment.getSubmissionId(),
+						lmSubmissionAttachment.getLmSubmissionAttachmentKey().getSubmissionId());
+				assertEquals(j+1, lmSubmissionAttachment.getLmSubmissionAttachmentKey().getSequenceNumber());
+				assertEquals(FilenameUtils.getBaseName(cmiiSubmissionAttachment.getOriginalFileName()), lmSubmissionAttachment.getTitle());
+				assertEquals(cmiiSubmissionAttachment.getOriginalFileName(), lmSubmissionAttachment.getOriginalFileName());
+				assertEquals(cmiiSubmissionAttachment.getUniqueFileName(), lmSubmissionAttachment.getStandardizedFileName());
+				assertEquals(null, lmSubmissionAttachment.getLawManagerFileName());
+				assertEquals(FilenameUtils.getExtension(cmiiSubmissionAttachment.getOriginalFileName()), lmSubmissionAttachment.getExtension());
+				assertEquals(cmiiSubmissionAttachment.getContentType(), lmSubmissionAttachment.getContentType());
+				assertEquals(null, lmSubmissionAttachment.getHashSHA256());
+				assertEquals(cmiiSubmissionAttachment.getFileSize(),lmSubmissionAttachment.getFileSize());
 
 			}
+
 		}
 	}
 
