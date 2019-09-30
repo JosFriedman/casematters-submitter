@@ -36,6 +36,7 @@ public class LmSubmission {
 	private String userPhone;
 	private String userFax;
 	private String userEmail;
+	private String lawManagerCaseDirectory;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "submissionId", referencedColumnName = "submissionID")
@@ -221,6 +222,14 @@ public class LmSubmission {
 		this.lmSubmissionAttachments = lmSubmissionAttachments;
 	}
 
+	public String getLawManagerCaseDirectory() {
+		return lawManagerCaseDirectory;
+	}
+
+	public void setLawManagerCaseDirectory(String lawManagerCaseDirectory) {
+		this.lawManagerCaseDirectory = lawManagerCaseDirectory;
+	}
+
 	@Override
 	public String toString() {
 		return "LmSubmission [submissionID=" + submissionID + ", messageID=" + messageID + ", submissionParentID="
@@ -229,8 +238,9 @@ public class LmSubmission {
 				+ agencyAbbreviation + ", formID=" + formID + ", formName=" + formName + ", formAbbreviation=" + formAbbreviation
 				+ ", formVersionID=" + formVersionID + ", formVersion=" + formVersion + ", userID=" + userID + ", userFirstName="
 				+ userFirstName + ", userMiddleName=" + userMiddleName + ", userLastName=" + userLastName + ", userPhone="
-				+ userPhone + ", userFax=" + userFax + ", userEmail=" + userEmail + ", lmSubmissionDataList=" + lmSubmissionDataList
-				+ ", lmSubmissionAttachments=" + lmSubmissionAttachments + "]";
+				+ userPhone + ", userFax=" + userFax + ", userEmail=" + userEmail + ", lawManagerCaseDirectory="
+				+ lawManagerCaseDirectory + ", lmSubmissionDataList=" + lmSubmissionDataList + ", lmSubmissionAttachments="
+				+ lmSubmissionAttachments + "]";
 	}
 
 }

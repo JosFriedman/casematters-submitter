@@ -46,8 +46,8 @@ public class SubmitterService {
 
 		logger.debug("submitOne: cmiiSubmission: {}", cmiiSubmission);
 
-		LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
 		try {
+			LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
 			lmSubmissionService.processSubmission(lmSubmission);
 			cmiiSubmission.setCmiiSubmitterStatus(CmiiSubmitterStatus.COMPLETED);
 		} catch (Exception e) {

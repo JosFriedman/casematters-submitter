@@ -22,13 +22,13 @@ public class LmSubmissionService {
 	@Transactional("lmTransactionManager")
 	public void processSubmission(LmSubmission lmSubmission) {
 
+		logger.debug("processSubmission: lmSubmission: {}", lmSubmission);
+
 		transferAttachments(lmSubmission);
 		saveSubmission(lmSubmission);
 	}
 
 	private void saveSubmission(LmSubmission lmSubmission) {
-
-		logger.debug("saveSubmission: lmSubmission: {}", lmSubmission);
 
 		lmSubmissionRepository.save(lmSubmission);
 
@@ -41,6 +41,8 @@ public class LmSubmissionService {
 
 		// \\msdwvw-ctwcmwb1.csc.nycnet\CM_DEV_OATH_FS
 		logger.debug("transferAttachments: lmSubmission: {}", lmSubmission);
+		
+		lmAttachmentUploader.upload(lmSubmission);
 
 	}
 
