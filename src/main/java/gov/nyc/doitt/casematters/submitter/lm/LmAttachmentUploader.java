@@ -24,7 +24,7 @@ public class LmAttachmentUploader {
 	private Logger logger = LoggerFactory.getLogger(LmAttachmentUploader.class);
 
 	@Autowired
-	private FtpsClientWrapper ftpsClientWrapper;
+	private lmStagedAttachmentRetriever ftpsClientWrapper;
 
 	@Autowired
 	private SmbConfig smbConfig;
@@ -39,10 +39,10 @@ public class LmAttachmentUploader {
 		FTPSClient ftpsClient = null;
 
 		try {
-			ftpsClient = ftpsClientWrapper.open();
+			ftpsClientWrapper.open();
 			lmAttachmentConfig.setLawManagerCaseDirectory(lmSubmission);
 
-			doUpload(lmSubmission, ftpsClient);
+			doUpload(lmSubmission);
 
 		} catch (Exception e) {
 			String msg = "Can't upload submission: " + lmSubmission.getSubmissionID();
@@ -50,11 +50,11 @@ public class LmAttachmentUploader {
 			throw new LmSubmitterException(msg, e);
 
 		} finally {
-			ftpsClientWrapper.close(ftpsClient);
+			ftpsClientWrapper.close();
 		}
 	}
 
-	private void doUpload(LmSubmission lmSubmission, FTPSClient ftpsClient) throws MalformedURLException, SmbException {
+	private void doUpload(LmSubmission lmSubmission) throws MalformedURLException, SmbException {
 
 		NtlmPasswordAuthentication smbAuth = smbConfig.getSmbAuth();
 		String smbPath = "smb:" + lmSubmission.getLawManagerCaseDirectory();
@@ -66,7 +66,7 @@ public class LmAttachmentUploader {
 			InputStream is = null;
 			try {
 
-				is = retrieveFileStream(p, ftpsClient);
+				is = ftpsClientWrapper.retrieveFileStream(p);
 				writeSmbFile(is, smbAuth, smbPath + p.getTargetFileName());
 
 			} catch (Exception e) {
@@ -80,16 +80,7 @@ public class LmAttachmentUploader {
 			}
 		});
 	}
-
-	private InputStream retrieveFileStream(LmSubmissionAttachment lmSubmissionAttachment, FTPSClient ftpsClient)
-			throws IOException {
-
-		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
-		InputStream is = ftpsClient.retrieveFileStream(lmSubmissionAttachment.getStandardizedFileName());
-		
-		return is;
-	}
-
+	
 	private void createSmbDirectory(NtlmPasswordAuthentication smbAuth, String smbPath) throws MalformedURLException, SmbException {
 
 		logger.debug("Creating directory: {}", smbPath);

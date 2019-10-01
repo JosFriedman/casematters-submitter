@@ -1,18 +1,9 @@
 package gov.nyc.doitt.casematters.submitter.lm;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.io.InputStream;
 
-import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
 import org.apache.commons.net.util.TrustManagerUtils;
@@ -21,10 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Component
-public class FtpsClientWrapper {
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionAttachment;
 
-	private Logger logger = LoggerFactory.getLogger(FtpsClientWrapper.class);
+@Component
+public class lmStagedAttachmentRetriever {
+
+	private Logger logger = LoggerFactory.getLogger(lmStagedAttachmentRetriever.class);
 
 	@Value("${submitter.ftp.server}")
 	private String ftpServer;
@@ -38,10 +31,11 @@ public class FtpsClientWrapper {
 	@Value("${submitter.ftp.password}")
 	private String ftpPassword;
 
+	private FTPSClient ftpsClient;
 
-	public FTPSClient open() throws IOException{
+	public void open() throws IOException {
 
-		FTPSClient ftpsClient = null;
+		ftpsClient = null;
 		try {
 			ftpsClient = new FTPSClient(true);
 			ftpsClient.connect(ftpServer, ftpPort);
@@ -72,16 +66,21 @@ public class FtpsClientWrapper {
 				}
 			}
 
-			return ftpsClient;
-
 		} catch (IOException e) {
 			logger.error("Can't open FtpsClient", e);
 			throw e;
 		}
 	}
 
+	public InputStream retrieveFileStream(LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
 
-	public void close(FTPSClient ftpsClient) {
+		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
+		InputStream is = ftpsClient.retrieveFileStream(lmSubmissionAttachment.getStandardizedFileName());
+
+		return is;
+	}
+
+	public void close() {
 		if (ftpsClient != null && ftpsClient.isConnected()) {
 			try {
 				ftpsClient.logout();

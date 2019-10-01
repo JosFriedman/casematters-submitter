@@ -111,7 +111,7 @@ class LmSubmissionAttachmentMockerUpper {
 
 		lmSubmissionAttachment.setOriginalFileName("originalFileName" + i + ".pdf");
 		lmSubmissionAttachment.setTitle("originalFileName" + i );
-		lmSubmissionAttachment.setStandardizedFileName("standardizedFileName" + i);
+		lmSubmissionAttachment.setStandardizedFileName("standardizedFileName" + i + ".dat");
 		lmSubmissionAttachment.setLawManagerFileName("originalFileName" + i);
 		lmSubmissionAttachment.setExtension("pdf");
 		lmSubmissionAttachment.setContentType("application/pdf");
