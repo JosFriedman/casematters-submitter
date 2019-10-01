@@ -27,7 +27,7 @@ import jcifs.smb.SmbFileOutputStream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LmAttachmentUploaderTest extends TestBase {
+public class NotRealLmAttachmentUploaderTest extends TestBase {
 
 	@Value("${submitter.ftp.server}")
 	private String ftpServer;
