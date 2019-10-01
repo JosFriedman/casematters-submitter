@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.lm;
+package gov.nyc.doitt.casematters.submitter.lm.sandbox;
 
 import java.io.File;
 import java.io.FileInputStream;

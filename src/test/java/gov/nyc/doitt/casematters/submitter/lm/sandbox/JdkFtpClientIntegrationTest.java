@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.lm;
+package gov.nyc.doitt.casematters.submitter.lm.sandbox;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
