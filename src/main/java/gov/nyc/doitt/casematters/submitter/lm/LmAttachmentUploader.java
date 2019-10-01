@@ -84,11 +84,15 @@ public class LmAttachmentUploader {
 	private InputStream retrieveFileStream(LmSubmissionAttachment lmSubmissionAttachment, FTPSClient ftpsClient)
 			throws IOException {
 
+		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
 		InputStream is = ftpsClient.retrieveFileStream(lmSubmissionAttachment.getStandardizedFileName());
+		
 		return is;
 	}
 
 	private void createSmbDirectory(NtlmPasswordAuthentication smbAuth, String smbPath) throws MalformedURLException, SmbException {
+
+		logger.debug("Creating directory: {}", smbPath);
 
 		SmbFile smbDir = new SmbFile(smbPath, smbAuth);
 		if (!smbDir.exists()) {
@@ -97,6 +101,8 @@ public class LmAttachmentUploader {
 	}
 
 	private void writeSmbFile(InputStream is, NtlmPasswordAuthentication smbAuth, String smbTarget) throws IOException {
+
+		logger.debug("Writing to file: {}", smbTarget);
 
 		SmbFile smbFile = new SmbFile(smbTarget, smbAuth);
 		if (!smbFile.exists()) {
