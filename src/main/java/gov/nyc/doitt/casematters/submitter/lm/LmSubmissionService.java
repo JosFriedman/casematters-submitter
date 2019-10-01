@@ -40,7 +40,6 @@ public class LmSubmissionService {
 
 	private void transferAttachments(LmSubmission lmSubmission) {
 
-		// \\msdwvw-ctwcmwb1.csc.nycnet\CM_DEV_OATH_FS
 		logger.debug("transferAttachments: lmSubmission: {}", lmSubmission);
 		
 		lmAttachmentUploader.upload(lmSubmission);

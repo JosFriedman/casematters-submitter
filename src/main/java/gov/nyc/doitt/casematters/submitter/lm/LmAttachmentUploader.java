@@ -2,120 +2,80 @@ package gov.nyc.doitt.casematters.submitter.lm;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
-import org.apache.commons.net.util.TrustManagerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionAttachment;
 import jcifs.smb.NtlmPasswordAuthentication;
+import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileOutputStream;
 
 @Component
 public class LmAttachmentUploader {
 
-	// \\msdwvw-ctwcmwb1.csc.nycnet\CM_DEV_OATH_FS
-
 	private Logger logger = LoggerFactory.getLogger(LmAttachmentUploader.class);
 
-	@Value("${submitter.ftp.server}")
-	private String ftpServer;
+	@Autowired
+	private FtpsClientWrapper ftpsClientWrapper;
 
-	@Value("${submitter.ftp.port}")
-	private int ftpPort;
+	@Autowired
+	private SmbConfig smbConfig;
 
-	@Value("${submitter.ftp.userName}")
-	private String ftpUserName;
+	@Autowired
+	private LmAttachmentConfig lmAttachmentConfig;
 
-	@Value("${submitter.ftp.password}")
-	private String ftpPassword;
+	String dir = "cm_dev_oath_fs";
 
 	public void upload(LmSubmission lmSubmission) {
 
-		FTPSClient ftpsClient = getFtpsClient();
+		FTPSClient ftpsClient = null;
 
 		try {
-			String subDir = "" + lmSubmission.getSubmissionID();
-			String smbPath = String.format("//%s/%s/%s/", smbServer, dir, subDir);
+			ftpsClient = ftpsClientWrapper.open();
+			lmAttachmentConfig.setLawManagerCaseDirectory(lmSubmission);
 
-			lmSubmission.setLawManagerCaseDirectory(smbPath);
 			doUpload(lmSubmission, ftpsClient);
 
 		} catch (Exception e) {
-			logger.error("Can't upload submission: " + lmSubmission.getSubmissionID(), e);
+			String msg = "Can't upload submission: " + lmSubmission.getSubmissionID();
+			logger.error(msg, e);
+			throw new LmSubmitterException(msg, e);
 
 		} finally {
-			if (ftpsClient != null && ftpsClient.isConnected()) {
-				try {
-					ftpsClient.logout();
-					ftpsClient.disconnect();
-				} catch (IOException e) {
-					logger.error("Can't logout of ftpsClient for submission: " + lmSubmission.getSubmissionID(), e);
-					throw new RuntimeException(e);
-				}
-			}
+			ftpsClientWrapper.close(ftpsClient);
 		}
 	}
 
-	private FTPSClient getFtpsClient() {
+	private void doUpload(LmSubmission lmSubmission, FTPSClient ftpsClient) throws MalformedURLException, SmbException {
 
-		FTPSClient ftpsClient = null;
-		try {
-			ftpsClient = new FTPSClient(true);
-			ftpsClient.connect(ftpServer, ftpPort);
+		NtlmPasswordAuthentication smbAuth = smbConfig.getSmbAuth();
+		String smbPath = "smb:" + lmSubmission.getLawManagerCaseDirectory();
 
-			ftpsClient.setTrustManager(TrustManagerUtils.getAcceptAllTrustManager());
-			ftpsClient.setRemoteVerificationEnabled(false);
-
-			// Set aggressive timeouts. The FTP server is on the local network and should
-			// respond quickly, if it doesn't then something is wrong.
-			ftpsClient.setConnectTimeout(10 * 1000);
-			ftpsClient.setDataTimeout(10 * 1000);
-			ftpsClient.setDefaultTimeout(10 * 1000);
-
-			// Connect to host
-			ftpsClient.connect(ftpServer, ftpPort);
-
-			int reply = ftpsClient.getReplyCode();
-
-			if (FTPReply.isPositiveCompletion(reply)) {
-				// Login
-				if (ftpsClient.login(ftpUserName, ftpPassword)) {
-					ftpsClient.setBufferSize(1024 * 1024);
-					ftpsClient.execPROT("P");
-					ftpsClient.execPBSZ(0);
-					ftpsClient.setFileType(FTP.BINARY_FILE_TYPE);
-					ftpsClient.setPassiveNatWorkaround(false);
-					ftpsClient.enterLocalPassiveMode();
-				}
-			}
-
-			return ftpsClient;
-
-		} catch (IOException e) {
-			logger.error("Can't getFtpsClient", e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	private void doUpload(LmSubmission lmSubmission, FTPSClient ftpsClient) {
+		createSmbDirectory(smbAuth, smbPath);
 
 		lmSubmission.getLmSubmissionAttachments().forEach(p -> {
 
-			InputStream is;
+			InputStream is = null;
 			try {
+
 				is = retrieveFileStream(p, ftpsClient);
-				storeOnSmb(lmSubmission.getLawManagerCaseDirectory(), p, is);
+				writeSmbFile(is, smbAuth, smbPath + p.getTargetFileName());
+
 			} catch (Exception e) {
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException e2) {
+					}
+				}
 				throw new RuntimeException(e);
 			}
 		});
@@ -128,35 +88,15 @@ public class LmAttachmentUploader {
 		return is;
 	}
 
-	@Value("${submitter.smb.domain}")
-	private String smbDomain;
+	private void createSmbDirectory(NtlmPasswordAuthentication smbAuth, String smbPath) throws MalformedURLException, SmbException {
 
-	@Value("${submitter.smb.server}")
-	private String smbServer;
-
-	@Value("${submitter.smb.userName}")
-	private String smbUserName;
-
-	@Value("${submitter.smb.password}")
-	private String smbPassword;
-
-	String dir = "cm_dev_oath_fs";
-
-	private void storeOnSmb(String lawManagerCaseDirectory, LmSubmissionAttachment lmSubmissionAttachment, InputStream is)
-			throws Exception {
-
-		NtlmPasswordAuthentication smbAuth = new NtlmPasswordAuthentication(smbDomain, smbUserName, smbPassword);
-
-		String smbPath = "smb:" + lawManagerCaseDirectory;
 		SmbFile smbDir = new SmbFile(smbPath, smbAuth);
-
 		if (!smbDir.exists()) {
 			smbDir.mkdir();
 		}
-		String targetFileName = FilenameUtils.getBaseName(lmSubmissionAttachment.getStandardizedFileName()) + "."
-				+ lmSubmissionAttachment.getExtension();
+	}
 
-		String smbTarget = smbPath + targetFileName;
+	private void writeSmbFile(InputStream is, NtlmPasswordAuthentication smbAuth, String smbTarget) throws IOException {
 
 		SmbFile smbFile = new SmbFile(smbTarget, smbAuth);
 		if (!smbFile.exists()) {
@@ -166,6 +106,7 @@ public class LmAttachmentUploader {
 
 		IOUtils.copy(is, smbOS);
 
+		is.close();
 		smbOS.close();
 
 	}

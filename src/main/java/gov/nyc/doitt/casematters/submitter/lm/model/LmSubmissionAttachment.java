@@ -5,6 +5,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.apache.commons.io.FilenameUtils;
+
 @Entity
 @Table(name = "SubmissionAttachments")
 public class LmSubmissionAttachment {
@@ -63,6 +65,7 @@ public class LmSubmissionAttachment {
 	public LmSubmissionAttachment(int submissionId, int sequenceNumber) {
 		this.lmSubmissionAttachmentKey = new LmSubmissionAttachmentKey(submissionId, sequenceNumber);
 	}
+
 	public LmSubmissionAttachmentKey getLmSubmissionAttachmentKey() {
 		return lmSubmissionAttachmentKey;
 	}
@@ -189,6 +192,10 @@ public class LmSubmissionAttachment {
 
 	public void setDecryptDurationInMillis(long decryptDurationInMillis) {
 		this.decryptDurationInMillis = decryptDurationInMillis;
+	}
+
+	public String getTargetFileName() {
+		return FilenameUtils.getBaseName(standardizedFileName) + "." + extension;
 	}
 
 	@Override
