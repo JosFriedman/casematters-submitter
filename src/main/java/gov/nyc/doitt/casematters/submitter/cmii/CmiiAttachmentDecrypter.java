@@ -23,6 +23,7 @@ import org.bouncycastle.cms.CMSEnvelopedDataParser;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.RecipientInformation;
 import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
+import org.bouncycastle.cms.jcajce.JceKeyTransRecipient;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,13 +62,14 @@ public class CmiiAttachmentDecrypter {
 		KeyStore keystore = KeyStore.getInstance("JKS");
 		keystore.load(keystoreStream, keystorePassword.toCharArray());
 
+		// certificate
 		x509Certificate = (X509Certificate) keystore.getCertificate(certificateName);
 		if (x509Certificate == null) {
 			throw new CertificateException("Can't get X509Certificate");
 		}
 
+		// private key
 		Security.addProvider(new BouncyCastleProvider());
-
 		privateKey = (PrivateKey) keystore.getKey(key, keyPassword.toCharArray());
 		if (privateKey == null) {
 			throw new KeyStoreException("Can't get PrivateKey");
@@ -99,9 +101,9 @@ public class CmiiAttachmentDecrypter {
 		CMSEnvelopedDataParser edp = new CMSEnvelopedDataParser(encryptedStream);
 		RecipientInformation recipientInfo = (RecipientInformation) edp.getRecipientInfos().getRecipients().toArray()[0];
 
-		InputStream is = recipientInfo
-				.getContentStream(new JceKeyTransEnvelopedRecipient(privateKey).setProvider(BouncyCastleProvider.PROVIDER_NAME))
-				.getContentStream();
+		JceKeyTransEnvelopedRecipient jceKeyTransEnvelopedRecipient = new JceKeyTransEnvelopedRecipient(privateKey);
+		JceKeyTransRecipient jceKeyTransRecipient = jceKeyTransEnvelopedRecipient.setProvider(BouncyCastleProvider.PROVIDER_NAME);
+		InputStream is = recipientInfo.getContentStream(jceKeyTransRecipient).getContentStream();
 
 		IOUtils.copy(is, os);
 
