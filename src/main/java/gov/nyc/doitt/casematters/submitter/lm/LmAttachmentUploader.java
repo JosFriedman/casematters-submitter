@@ -1,5 +1,7 @@
 package gov.nyc.doitt.casematters.submitter.lm;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -11,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import gov.nyc.doitt.casematters.submitter.cmii.CmiiAttachmentRetriever;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
-import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionAttachment;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
@@ -24,7 +26,7 @@ public class LmAttachmentUploader {
 	private Logger logger = LoggerFactory.getLogger(LmAttachmentUploader.class);
 
 	@Autowired
-	private lmStagedAttachmentRetriever ftpsClientWrapper;
+	private CmiiAttachmentRetriever cmiiAttachmentRetriever;
 
 	@Autowired
 	private SmbConfig smbConfig;
@@ -39,7 +41,7 @@ public class LmAttachmentUploader {
 		FTPSClient ftpsClient = null;
 
 		try {
-			ftpsClientWrapper.open();
+			cmiiAttachmentRetriever.open();
 			lmAttachmentConfig.setLawManagerCaseDirectory(lmSubmission);
 
 			doUpload(lmSubmission);
@@ -50,7 +52,7 @@ public class LmAttachmentUploader {
 			throw new LmSubmitterException(msg, e);
 
 		} finally {
-			ftpsClientWrapper.close();
+			cmiiAttachmentRetriever.close();
 		}
 	}
 
@@ -66,8 +68,11 @@ public class LmAttachmentUploader {
 			InputStream is = null;
 			try {
 
-				is = ftpsClientWrapper.retrieveFileStream(p);
-				writeSmbFile(is, smbAuth, smbPath + p.getTargetFileName());
+				// is = cmiiAttachmentRetriever.retrieveFileStream(p);
+				// writeSmbFile(is, smbAuth, smbPath + p.getTargetFileName());
+
+				File cmiiFile = cmiiAttachmentRetriever.retrieveFile(p);
+				writeSmbFile(cmiiFile, smbAuth, smbPath + p.getTargetFileName());
 
 			} catch (Exception e) {
 				if (is != null) {
@@ -80,7 +85,7 @@ public class LmAttachmentUploader {
 			}
 		});
 	}
-	
+
 	private void createSmbDirectory(NtlmPasswordAuthentication smbAuth, String smbPath) throws MalformedURLException, SmbException {
 
 		logger.debug("Creating directory: {}", smbPath);
@@ -107,4 +112,21 @@ public class LmAttachmentUploader {
 		smbOS.close();
 
 	}
+
+	private void writeSmbFile(File sourceFile, NtlmPasswordAuthentication smbAuth, String smbTargetFileName) throws IOException {
+
+		logger.debug("Writing source file {} to Smb file: {}", sourceFile.getPath(), smbTargetFileName);
+
+		SmbFile smbFile = new SmbFile(smbTargetFileName, smbAuth);
+		if (!smbFile.exists()) {
+			smbFile.createNewFile();
+		}
+
+		InputStream is = new FileInputStream(sourceFile);
+		SmbFileOutputStream smbOS = new SmbFileOutputStream(smbFile);
+		IOUtils.copy(is, smbOS);
+		is.close();
+		smbOS.close();
+	}
+
 }
