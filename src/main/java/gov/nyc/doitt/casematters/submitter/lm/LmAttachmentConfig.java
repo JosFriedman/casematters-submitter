@@ -15,6 +15,8 @@ public class LmAttachmentConfig {
 	@Autowired
 	private SmbConfig smbConfig;
 
+	// TODO:  replace with getting this from the LM DB
+	
 	public void setLawManagerCaseDirectory(LmSubmission lmSubmission) {
 
 		String lawManagerCaseDirectory = null;
@@ -22,6 +24,8 @@ public class LmAttachmentConfig {
 			lawManagerCaseDirectory = getLmCaseDirectory_OATH(lmSubmission);
 		} else if (lmSubmission.getAgencyAbbreviation().equals("OCB")) {
 			lawManagerCaseDirectory = getLmCaseDirectory_OCB(lmSubmission);
+		} else if (lmSubmission.getAgencyAbbreviation().equals("CSC")) {
+			lawManagerCaseDirectory = getLmCaseDirectory_CSC(lmSubmission);
 		} else {
 			throw new UnsupportedOperationException("Not supported for agency: #" + lmSubmission.getAgency() + "#");
 		}
@@ -37,6 +41,12 @@ public class LmAttachmentConfig {
 
 	private String getLmCaseDirectory_OCB(LmSubmission lmSubmission) {
 		String dir = "cm_dev_ocb_fs";
+		String subDir = "" + lmSubmission.getSubmissionID();
+		return String.format("//%s/%s/%s/", smbConfig.getSmbServer(), dir, subDir);
+	}
+
+	private String getLmCaseDirectory_CSC(LmSubmission lmSubmission) {
+		String dir = "cm_dev_csc_fs";
 		String subDir = "" + lmSubmission.getSubmissionID();
 		return String.format("//%s/%s/%s/", smbConfig.getSmbServer(), dir, subDir);
 	}
