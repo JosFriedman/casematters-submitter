@@ -19,15 +19,11 @@ public class LmSubmissionAttachment {
 	@Column(name = "originalFileName")
 	private String originalFileName;
 
-	// LM SubmissionAttachments has this all confused
-	//
 	@Column(name = "standardizedFileName")
-	private String actualTargetFileName;
+	private String standardizedFileName;
 
 	@Transient
-	private String realStandardizedFileName;
-	//
-	// LM SubmissionAttachments has this all confused
+	private String cmmiUniqueFileName;
 
 	@Column(name = "lawManagerFileName")
 	private String lawManagerFileName;
@@ -96,20 +92,20 @@ public class LmSubmissionAttachment {
 		this.originalFileName = originalFileName;
 	}
 
-	public String getActualTargetFileName() {
-		return actualTargetFileName;
+	public String getStandardizedFileName() {
+		return standardizedFileName;
 	}
 
-	public void setActualTargetFileName(String standardizedFileName) {
-		this.actualTargetFileName = standardizedFileName;
+	public void setStandardizedFileName(String standardizedFileName) {
+		this.standardizedFileName = standardizedFileName;
 	}
 
-	public String getRealStandardizedFileName() {
-		return realStandardizedFileName;
+	public String getCmiiUniqueFileName() {
+		return cmmiUniqueFileName;
 	}
 
-	public void setRealStandardizedFileName(String realStandardizedFileName) {
-		this.realStandardizedFileName = realStandardizedFileName;
+	public void setCmiiUniqueFileName(String cmmiUniqueFileName) {
+		this.cmmiUniqueFileName = cmmiUniqueFileName;
 	}
 
 	public String getLawManagerFileName() {

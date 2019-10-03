@@ -109,8 +109,8 @@ public class CmiiToLmMapper {
 				sequenceNumber);
 		lmSubmissionAttachment.setTitle(FilenameUtils.getBaseName(cmiiSubmissionAttachment.getOriginalFileName()));
 		lmSubmissionAttachment.setOriginalFileName(cmiiSubmissionAttachment.getOriginalFileName());
-		lmSubmissionAttachment.setActualTargetFileName(FilenameUtils.getBaseName(cmiiSubmissionAttachment.getUniqueFileName()) + "." + FilenameUtils.getExtension(cmiiSubmissionAttachment.getOriginalFileName()));
-		lmSubmissionAttachment.setRealStandardizedFileName(cmiiSubmissionAttachment.getUniqueFileName());
+		lmSubmissionAttachment.setStandardizedFileName(FilenameUtils.getBaseName(cmiiSubmissionAttachment.getUniqueFileName()) + "." + FilenameUtils.getExtension(cmiiSubmissionAttachment.getOriginalFileName()));
+		lmSubmissionAttachment.setCmiiUniqueFileName(cmiiSubmissionAttachment.getUniqueFileName());
 		lmSubmissionAttachment.setLawManagerFileName(null);
 		lmSubmissionAttachment.setExtension(FilenameUtils.getExtension(cmiiSubmissionAttachment.getOriginalFileName()));
 		lmSubmissionAttachment.setContentType(cmiiSubmissionAttachment.getContentType());

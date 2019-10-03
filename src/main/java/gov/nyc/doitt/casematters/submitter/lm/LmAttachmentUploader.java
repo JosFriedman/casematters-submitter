@@ -61,7 +61,7 @@ public class LmAttachmentUploader {
 		lmSubmission.getLmSubmissionAttachments().forEach(p -> {
 			try {
 				File cmiiFile = cmiiAttachmentRetriever.retrieveFile(p);
-				writeSmbFile(cmiiFile, smbAuth, smbPath + p.getActualTargetFileName());
+				writeSmbFile(cmiiFile, smbAuth, smbPath + p.getStandardizedFileName());
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
