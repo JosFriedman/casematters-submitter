@@ -105,7 +105,7 @@ class CmiiSubmissionAttachmentMockerUpper {
 		FieldUtils.writeField(cmiiSubmissionAttachment, "id", id, true);
 		FieldUtils.writeField(cmiiSubmissionAttachment, "submissionId", submissionId, true);
 		FieldUtils.writeField(cmiiSubmissionAttachment, "contentType", "application/pdf", true);
-		FieldUtils.writeField(cmiiSubmissionAttachment, "originalFileName", "originalFileName" + id, true);
+		FieldUtils.writeField(cmiiSubmissionAttachment, "originalFileName", "originalFileName" + id + ".pdf", true);
 		FieldUtils.writeField(cmiiSubmissionAttachment, "fileSize", 100000, true);
 		UUID uuid = UUID.randomUUID();
 		FieldUtils.writeField(cmiiSubmissionAttachment, "uniqueFileName", "cmiiAttachment-" + uuid + ".dat", true);

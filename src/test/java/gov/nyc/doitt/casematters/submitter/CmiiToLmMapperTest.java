@@ -95,7 +95,8 @@ public class CmiiToLmMapperTest extends TestBase {
 				assertEquals(j+1, lmSubmissionAttachment.getLmSubmissionAttachmentKey().getSequenceNumber());
 				assertEquals(FilenameUtils.getBaseName(cmiiSubmissionAttachment.getOriginalFileName()), lmSubmissionAttachment.getTitle());
 				assertEquals(cmiiSubmissionAttachment.getOriginalFileName(), lmSubmissionAttachment.getOriginalFileName());
-				assertEquals(cmiiSubmissionAttachment.getUniqueFileName(), lmSubmissionAttachment.getStandardizedFileName());
+				assertEquals(cmiiSubmissionAttachment.getUniqueFileName(), lmSubmissionAttachment.getCmiiUniqueFileName());
+				assertEquals(FilenameUtils.getBaseName(cmiiSubmissionAttachment.getUniqueFileName()) + "." + FilenameUtils.getExtension(cmiiSubmissionAttachment.getOriginalFileName()), lmSubmissionAttachment.getStandardizedFileName());
 				assertEquals(null, lmSubmissionAttachment.getLawManagerFileName());
 				assertEquals(FilenameUtils.getExtension(cmiiSubmissionAttachment.getOriginalFileName()), lmSubmissionAttachment.getExtension());
 				assertEquals(cmiiSubmissionAttachment.getContentType(), lmSubmissionAttachment.getContentType());
