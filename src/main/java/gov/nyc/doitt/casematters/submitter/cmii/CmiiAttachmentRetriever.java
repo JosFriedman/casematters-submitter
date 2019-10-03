@@ -83,13 +83,13 @@ public class CmiiAttachmentRetriever {
 
 	public InputStream retrieveFileStream(LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
 
-		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
-		InputStream is = ftpsClient.retrieveFileStream(lmSubmissionAttachment.getStandardizedFileName());
+		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getActualTargetFileName());
+		InputStream is = ftpsClient.retrieveFileStream(lmSubmissionAttachment.getActualTargetFileName());
 
-		File tmpFile = File.createTempFile(FilenameUtils.getBaseName(lmSubmissionAttachment.getStandardizedFileName())
+		File tmpFile = File.createTempFile(FilenameUtils.getBaseName(lmSubmissionAttachment.getActualTargetFileName())
 				+ RandomStringUtils.random(3, true, true), null);
 		FileOutputStream fos = new FileOutputStream(tmpFile);
-		boolean retrieved = ftpsClient.retrieveFile(lmSubmissionAttachment.getStandardizedFileName(), fos);
+		boolean retrieved = ftpsClient.retrieveFile(lmSubmissionAttachment.getActualTargetFileName(), fos);
 		fos.close();
 
 		InputStream is2 = new FileInputStream(tmpFile.getName());
@@ -99,15 +99,15 @@ public class CmiiAttachmentRetriever {
 
 	public File retrieveFile(LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
 
-		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
+		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getActualTargetFileName());
 
-		String baseFileName = String.format("%s_%s", FilenameUtils.getBaseName(lmSubmissionAttachment.getStandardizedFileName()),
+		String baseFileName = String.format("%s_%s", FilenameUtils.getBaseName(lmSubmissionAttachment.getActualTargetFileName()),
 				RandomStringUtils.random(4, true, true));
 
 		String encryptedFileName = String.format("%s", baseFileName);
 		File encryptedFile = File.createTempFile(encryptedFileName, null);
 		FileOutputStream fos = new FileOutputStream(encryptedFile);
-		boolean retrieved = ftpsClient.retrieveFile(lmSubmissionAttachment.getStandardizedFileName(), fos);
+		boolean retrieved = ftpsClient.retrieveFile(lmSubmissionAttachment.getRealStandardizedFileName(), fos);
 		fos.close();
 		
 		String decryptedFileName = cmiiAttachmentDecrypter.decrypt(encryptedFile.getPath());

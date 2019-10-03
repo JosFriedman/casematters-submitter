@@ -1,6 +1,7 @@
 package gov.nyc.doitt.casematters.submitter.lm.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -207,19 +208,31 @@ public class LmSubmission {
 	}
 
 	public List<LmSubmissionData> getLmSubmissionDataList() {
+		if (lmSubmissionDataList == null) {
+			lmSubmissionDataList = new ArrayList<>();
+		}
 		return lmSubmissionDataList;
 	}
 
 	public void setLmSubmissionDataList(List<LmSubmissionData> lmSubmissionDataList) {
-		this.lmSubmissionDataList = lmSubmissionDataList;
+		getLmSubmissionDataList().clear();
+		getLmSubmissionDataList().addAll(lmSubmissionDataList);
 	}
 
 	public List<LmSubmissionAttachment> getLmSubmissionAttachments() {
+		if (lmSubmissionAttachments == null) {
+			lmSubmissionAttachments = new ArrayList<>();
+		}
 		return lmSubmissionAttachments;
 	}
 
 	public void setLmSubmissionAttachments(List<LmSubmissionAttachment> lmSubmissionAttachments) {
-		this.lmSubmissionAttachments = lmSubmissionAttachments;
+		getLmSubmissionAttachments().clear();
+		getLmSubmissionAttachments().addAll(lmSubmissionAttachments);
+	}
+
+	public boolean hasLmSubmissionAttachments() {
+		return !getLmSubmissionAttachments().isEmpty();
 	}
 
 	public String getLawManagerCaseDirectory() {

@@ -4,8 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.apache.commons.io.FilenameUtils;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "SubmissionAttachments")
@@ -20,8 +19,15 @@ public class LmSubmissionAttachment {
 	@Column(name = "originalFileName")
 	private String originalFileName;
 
+	// LM SubmissionAttachments has this all confused
+	//
 	@Column(name = "standardizedFileName")
-	private String standardizedFileName;
+	private String actualTargetFileName;
+
+	@Transient
+	private String realStandardizedFileName;
+	//
+	// LM SubmissionAttachments has this all confused
 
 	@Column(name = "lawManagerFileName")
 	private String lawManagerFileName;
@@ -90,12 +96,20 @@ public class LmSubmissionAttachment {
 		this.originalFileName = originalFileName;
 	}
 
-	public String getStandardizedFileName() {
-		return standardizedFileName;
+	public String getActualTargetFileName() {
+		return actualTargetFileName;
 	}
 
-	public void setStandardizedFileName(String standardizedFileName) {
-		this.standardizedFileName = standardizedFileName;
+	public void setActualTargetFileName(String standardizedFileName) {
+		this.actualTargetFileName = standardizedFileName;
+	}
+
+	public String getRealStandardizedFileName() {
+		return realStandardizedFileName;
+	}
+
+	public void setRealStandardizedFileName(String realStandardizedFileName) {
+		this.realStandardizedFileName = realStandardizedFileName;
 	}
 
 	public String getLawManagerFileName() {
@@ -193,20 +207,4 @@ public class LmSubmissionAttachment {
 	public void setDecryptDurationInMillis(long decryptDurationInMillis) {
 		this.decryptDurationInMillis = decryptDurationInMillis;
 	}
-
-	public String getTargetFileName() {
-		return FilenameUtils.getBaseName(standardizedFileName) + "." + extension;
-	}
-
-	@Override
-	public String toString() {
-		return "LmSubmissionAttachment [lmSubmissionAttachmentKey=" + lmSubmissionAttachmentKey + ", title=" + title
-				+ ", originalFileName=" + originalFileName + ", standardizedFileName=" + standardizedFileName
-				+ ", lawManagerFileName=" + lawManagerFileName + ", extension=" + extension + ", contentType=" + contentType
-				+ ", hashSHA256=" + hashSHA256 + ", fileSize=" + fileSize + ", fileMoved=" + fileMoved + ", documentkey="
-				+ documentkey + ", errorFlag=" + errorFlag + ", messageId=" + messageId + ", ftpCopyDurationInMillis="
-				+ ftpCopyDurationInMillis + ", smbCopyDurationInMillis=" + smbCopyDurationInMillis + ", decryptDurationInMillis="
-				+ decryptDurationInMillis + "]";
-	}
-
 }

@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.net.ftp.FTPSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +33,13 @@ public class LmAttachmentUploader {
 	@Autowired
 	private LmAttachmentConfig lmAttachmentConfig;
 
-	String dir = "cm_dev_oath_fs";
-
 	public void upload(LmSubmission lmSubmission) {
-
-		FTPSClient ftpsClient = null;
+		
+		logger.debug("Uploading lmSubmission: {}", lmSubmission);
 
 		try {
-			cmiiAttachmentRetriever.open();
 			lmAttachmentConfig.setLawManagerCaseDirectory(lmSubmission);
+			cmiiAttachmentRetriever.open();
 
 			doUpload(lmSubmission);
 
@@ -59,58 +56,29 @@ public class LmAttachmentUploader {
 	private void doUpload(LmSubmission lmSubmission) throws MalformedURLException, SmbException {
 
 		NtlmPasswordAuthentication smbAuth = smbConfig.getSmbAuth();
-		String smbPath = "smb:" + lmSubmission.getLawManagerCaseDirectory();
-
-		createSmbDirectory(smbAuth, smbPath);
+		String smbPath = createSmbDirectory(lmSubmission, smbAuth);
 
 		lmSubmission.getLmSubmissionAttachments().forEach(p -> {
-
-			InputStream is = null;
 			try {
-
-				// is = cmiiAttachmentRetriever.retrieveFileStream(p);
-				// writeSmbFile(is, smbAuth, smbPath + p.getTargetFileName());
-
 				File cmiiFile = cmiiAttachmentRetriever.retrieveFile(p);
-				writeSmbFile(cmiiFile, smbAuth, smbPath + p.getTargetFileName());
-
+				writeSmbFile(cmiiFile, smbAuth, smbPath + p.getActualTargetFileName());
 			} catch (Exception e) {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException e2) {
-					}
-				}
 				throw new RuntimeException(e);
 			}
 		});
 	}
 
-	private void createSmbDirectory(NtlmPasswordAuthentication smbAuth, String smbPath) throws MalformedURLException, SmbException {
+	private String createSmbDirectory(LmSubmission lmSubmission, NtlmPasswordAuthentication smbAuth)
+			throws MalformedURLException, SmbException {
 
-		logger.debug("Creating directory: {}", smbPath);
+		String smbPath = "smb:" + lmSubmission.getLawManagerCaseDirectory();
+		logger.debug("Creating directory (if it does not already exist): {}", smbPath);
 
 		SmbFile smbDir = new SmbFile(smbPath, smbAuth);
 		if (!smbDir.exists()) {
 			smbDir.mkdir();
 		}
-	}
-
-	private void writeSmbFile(InputStream is, NtlmPasswordAuthentication smbAuth, String smbTarget) throws IOException {
-
-		logger.debug("Writing to file: {}", smbTarget);
-
-		SmbFile smbFile = new SmbFile(smbTarget, smbAuth);
-		if (!smbFile.exists()) {
-			smbFile.createNewFile();
-		}
-		SmbFileOutputStream smbOS = new SmbFileOutputStream(smbFile);
-
-		IOUtils.copy(is, smbOS);
-
-		is.close();
-		smbOS.close();
-
+		return smbPath;
 	}
 
 	private void writeSmbFile(File sourceFile, NtlmPasswordAuthentication smbAuth, String smbTargetFileName) throws IOException {

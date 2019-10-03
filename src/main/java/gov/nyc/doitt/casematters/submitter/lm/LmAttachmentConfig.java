@@ -20,16 +20,23 @@ public class LmAttachmentConfig {
 		String lawManagerCaseDirectory = null;
 		if (lmSubmission.getAgencyAbbreviation().equals("OATH")) {
 			lawManagerCaseDirectory = getLmCaseDirectory_OATH(lmSubmission);
+		} else if (lmSubmission.getAgencyAbbreviation().equals("OCB")) {
+			lawManagerCaseDirectory = getLmCaseDirectory_OCB(lmSubmission);
 		} else {
 			throw new UnsupportedOperationException("Not supported for agency: #" + lmSubmission.getAgency() + "#");
 		}
-	
+
 		lmSubmission.setLawManagerCaseDirectory(lawManagerCaseDirectory);
 	}
 
 	private String getLmCaseDirectory_OATH(LmSubmission lmSubmission) {
-
 		String dir = "cm_dev_oath_fs";
+		String subDir = "" + lmSubmission.getSubmissionID();
+		return String.format("//%s/%s/%s/", smbConfig.getSmbServer(), dir, subDir);
+	}
+
+	private String getLmCaseDirectory_OCB(LmSubmission lmSubmission) {
+		String dir = "cm_dev_ocb_fs";
 		String subDir = "" + lmSubmission.getSubmissionID();
 		return String.format("//%s/%s/%s/", smbConfig.getSmbServer(), dir, subDir);
 	}

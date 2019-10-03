@@ -24,12 +24,17 @@ public class LmSubmissionService {
 
 		logger.debug("processSubmission: lmSubmission: {}", lmSubmission);
 
-		lmAttachmentUploader.upload(lmSubmission);
+		if (lmSubmission.hasLmSubmissionAttachments()) {
+			lmAttachmentUploader.upload(lmSubmission);
+		}
 		lmSubmissionRepository.save(lmSubmission);
 
 		// do update to force the update triggers to fire
-		lmSubmission.setMessageID(0);
-		lmSubmission.getLmSubmissionAttachments().forEach(p -> p.setFileMoved(true));
+		if (!lmSubmission.hasLmSubmissionAttachments()) {
+			lmSubmission.setMessageID(0);
+		} else {
+			lmSubmission.getLmSubmissionAttachments().forEach(p -> p.setFileMoved(true));
+		}
 		lmSubmissionRepository.save(lmSubmission);
 	}
 }
