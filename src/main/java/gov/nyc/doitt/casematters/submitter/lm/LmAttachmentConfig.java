@@ -1,10 +1,15 @@
 package gov.nyc.doitt.casematters.submitter.lm;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import gov.nyc.doitt.casematters.submitter.lm.model.LmAttachmentPath;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
 
 @Component
@@ -15,39 +20,32 @@ public class LmAttachmentConfig {
 	@Autowired
 	private SmbConfig smbConfig;
 
-	// TODO:  replace with getting this from the LM DB
-	
+	@Autowired
+	private LmAttachmentPathRepository lmAttachmentPathRepository;
+
+	private Map<String, String> lmAttachmentPathMap;
+
+	private void initMap() {
+
+		if (lmAttachmentPathMap == null) {
+			List<LmAttachmentPath> lmAttachmentPaths = lmAttachmentPathRepository.findAll();
+			if (lmAttachmentPaths.isEmpty()) {
+				throw new IllegalStateException("Can't initialize lmAttachmentPathMap");
+			}
+			lmAttachmentPathMap = lmAttachmentPaths.stream()
+					.collect(Collectors.toMap(p -> p.getAgencyAbbreviation(), p -> p.getAttachmentPath().replace("\\", "/")));
+		}
+	}
+
 	public void setLawManagerCaseDirectory(LmSubmission lmSubmission) {
 
-		String lawManagerCaseDirectory = null;
-		if (lmSubmission.getAgencyAbbreviation().equals("OATH")) {
-			lawManagerCaseDirectory = getLmCaseDirectory_OATH(lmSubmission);
-		} else if (lmSubmission.getAgencyAbbreviation().equals("OCB")) {
-			lawManagerCaseDirectory = getLmCaseDirectory_OCB(lmSubmission);
-		} else if (lmSubmission.getAgencyAbbreviation().equals("CSC")) {
-			lawManagerCaseDirectory = getLmCaseDirectory_CSC(lmSubmission);
-		} else {
-			throw new UnsupportedOperationException("Not supported for agency: #" + lmSubmission.getAgency() + "#");
+		initMap();
+
+		if (!lmAttachmentPathMap.containsKey(lmSubmission.getAgencyAbbreviation())) {
+			throw new UnsupportedOperationException("Not supported for agency: #" + lmSubmission.getAgencyAbbreviation() + "#");
 		}
-
+		String lawManagerCaseDirectory = String.format("%s/%s", lmAttachmentPathMap.get(lmSubmission.getAgencyAbbreviation()),
+				lmSubmission.getSubmissionID());
 		lmSubmission.setLawManagerCaseDirectory(lawManagerCaseDirectory);
-	}
-
-	private String getLmCaseDirectory_OATH(LmSubmission lmSubmission) {
-		String dir = "cm_dev_oath_fs";
-		String subDir = "" + lmSubmission.getSubmissionID();
-		return String.format("//%s/%s/%s/", smbConfig.getSmbServer(), dir, subDir);
-	}
-
-	private String getLmCaseDirectory_OCB(LmSubmission lmSubmission) {
-		String dir = "cm_dev_ocb_fs";
-		String subDir = "" + lmSubmission.getSubmissionID();
-		return String.format("//%s/%s/%s/", smbConfig.getSmbServer(), dir, subDir);
-	}
-
-	private String getLmCaseDirectory_CSC(LmSubmission lmSubmission) {
-		String dir = "cm_dev_csc_fs";
-		String subDir = "" + lmSubmission.getSubmissionID();
-		return String.format("//%s/%s/%s/", smbConfig.getSmbServer(), dir, subDir);
 	}
 }
