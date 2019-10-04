@@ -1,10 +1,8 @@
 package gov.nyc.doitt.casematters.submitter.cmii;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -81,22 +79,6 @@ public class CmiiAttachmentRetriever {
 		}
 	}
 
-	public InputStream retrieveFileStream(LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
-
-		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
-		InputStream is = ftpsClient.retrieveFileStream(lmSubmissionAttachment.getStandardizedFileName());
-
-		File tmpFile = File.createTempFile(FilenameUtils.getBaseName(lmSubmissionAttachment.getStandardizedFileName())
-				+ RandomStringUtils.random(3, true, true), null);
-		FileOutputStream fos = new FileOutputStream(tmpFile);
-		boolean retrieved = ftpsClient.retrieveFile(lmSubmissionAttachment.getStandardizedFileName(), fos);
-		fos.close();
-
-		InputStream is2 = new FileInputStream(tmpFile.getName());
-
-		return is;
-	}
-
 	public File retrieveFile(LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
 
 		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
@@ -107,12 +89,12 @@ public class CmiiAttachmentRetriever {
 		String encryptedFileName = String.format("%s", baseFileName);
 		File encryptedFile = File.createTempFile(encryptedFileName, null);
 		FileOutputStream fos = new FileOutputStream(encryptedFile);
-		boolean retrieved = ftpsClient.retrieveFile(lmSubmissionAttachment.getCmiiUniqueFileName(), fos);
+		ftpsClient.retrieveFile(lmSubmissionAttachment.getCmiiUniqueFileName(), fos);
 		fos.close();
-		
+
 		String decryptedFileName = cmiiAttachmentDecrypter.decrypt(encryptedFile.getPath());
 		return new File(decryptedFileName);
-	
+
 	}
 
 	public void close() {
