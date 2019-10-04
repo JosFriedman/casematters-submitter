@@ -29,15 +29,13 @@ public class LmSubmissionService {
 		}
 		lmSubmissionRepository.save(lmSubmission);
 
-		if (lmSubmission.hasLmSubmissionAttachments()) {
-			// update needed for attachments to 'seen' by trigger's stored proc
-			lmSubmission.getLmSubmissionAttachments().forEach(p -> p.setFileMoved(true));
-			lmSubmissionRepository.save(lmSubmission);
-		} else {
-			// do 'no-harm' update to force the update triggers to fire
-			lmSubmission.setMessageID(0);
-			lmSubmissionRepository.save(lmSubmission);
-		}
+		// do 'no-harm' update to force the update triggers to fire
+		lmSubmission.setMessageID(0);
 
+		if (lmSubmission.hasLmSubmissionAttachments()) {
+			// fileMoved==true needed for attachments to be seen by update trigger's stored proc
+			lmSubmission.getLmSubmissionAttachments().forEach(p -> p.setFileMoved(true));
+		}
+		lmSubmissionRepository.save(lmSubmission);
 	}
 }
