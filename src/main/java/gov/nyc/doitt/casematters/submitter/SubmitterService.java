@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionService;
-import gov.nyc.doitt.casematters.submitter.cmii.SubmitterConcurrencyException;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionService;
@@ -33,13 +32,8 @@ public class SubmitterService {
 	public void submitBatch() {
 
 		logger.info("submitBatch: entering");
-		try {
-			cmiiSubmissionService.getNextBatch().forEach(p -> submitOne(p));
-		} catch (SubmitterConcurrencyException e) {
-			logger.warn("Another instance has picked up one or more of the submissions; no processing to do.");
-		} finally {
-			logger.info("submitBatch: exiting");
-		}
+		cmiiSubmissionService.getNextBatch().forEach(p -> submitOne(p));
+		logger.info("submitBatch: exiting");
 	}
 
 	private void submitOne(CmiiSubmission cmiiSubmission) {
