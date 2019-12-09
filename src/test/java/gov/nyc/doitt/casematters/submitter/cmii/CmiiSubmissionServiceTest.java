@@ -1,23 +1,8 @@
 package gov.nyc.doitt.casematters.submitter.cmii;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -30,9 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import gov.nyc.doitt.casematters.submitter.TestBase;
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmissionMockerUpper;
-import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmitterStatus;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -3,14 +3,11 @@ package gov.nyc.doitt.casematters.submitter;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -36,15 +33,24 @@ public class JobFlowManagerAccessor {
 	 * 
 	 * @return
 	 */
-	public List<String> getNextBatch() {
+	public List<String> getNextBatchOfJobIds() {
 
-		String getJobFlowsBatchUrl = String.format("%s/jobFlows/batches/%s", baseUrl, appId);
+		String getJobFlowIdsUrl = String.format("%s/jobFlowIds/%s?nextBatch=true", baseUrl, appId);
 		try {
-			HttpHeaders headers = new HttpHeaders();
-			HttpEntity<String> entity = new HttpEntity<>(headers);
-			ResponseEntity<JobFlowDto[]> response = restTemplate.getForEntity(new URI(getJobFlowsBatchUrl), JobFlowDto[].class);
-			List<JobFlowDto> jobFlowDtos = Arrays.asList(response.getBody());
-			return jobFlowDtos.stream().map(p -> p.getJobId()).collect(Collectors.toList());
+			ResponseEntity<String[]> response = restTemplate.getForEntity(new URI(getJobFlowIdsUrl), String[].class);
+			return Arrays.asList(response.getBody());
+		} catch (Exception e) {
+			throw new CmiiSubmitterException(e);
+		}
+	}
+
+	public List<JobFlowDto> updateJobResults(List<JobFlowDto> jobFlowDtos) {
+
+		String updateJobFlowsUrl = String.format("%s/jobFlows/%s?nextBatch=true", baseUrl, appId);
+		try {
+			JobFlowDto[] responseJobFlowDtos = restTemplate.patchForObject(new URI(updateJobFlowsUrl), jobFlowDtos.toArray(),
+					JobFlowDto[].class);
+			return Arrays.asList(responseJobFlowDtos);
 		} catch (Exception e) {
 			throw new CmiiSubmitterException(e);
 		}

@@ -1,28 +1,22 @@
 package gov.nyc.doitt.casematters.submitter;
 
-import java.sql.Timestamp;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
 public class JobFlowDto {
 
-	private String appId;
 	private String jobId;
-	private String description;
-	private Timestamp jobCreatedTimestamp;
 	private String status;
-	private Timestamp startTimestamp;
-	private Timestamp endTimestamp;
-	private int errorCount;
+	private String errorReason;
 
-	public String getAppId() {
-		return appId;
+	public JobFlowDto() {
+		super();
 	}
 
-	public void setAppId(String appId) {
-		this.appId = appId;
+	public JobFlowDto(String jobId) {
+		super();
+		this.jobId = jobId;
 	}
 
 	public String getJobId() {
@@ -33,22 +27,6 @@ public class JobFlowDto {
 		this.jobId = jobId;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Timestamp getJobCreatedTimestamp() {
-		return jobCreatedTimestamp;
-	}
-
-	public void setJobCreatedTimestamp(Timestamp jobCreatedTimestamp) {
-		this.jobCreatedTimestamp = jobCreatedTimestamp;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -57,35 +35,17 @@ public class JobFlowDto {
 		this.status = status;
 	}
 
-	public Timestamp getStartTimestamp() {
-		return startTimestamp;
+	public String getErrorReason() {
+		return errorReason;
 	}
 
-	public void setStartTimestamp(Timestamp startTimestamp) {
-		this.startTimestamp = startTimestamp;
-	}
-
-	public Timestamp getEndTimestamp() {
-		return endTimestamp;
-	}
-
-	public void setEndTimestamp(Timestamp endTimestamp) {
-		this.endTimestamp = endTimestamp;
-	}
-
-	public int getErrorCount() {
-		return errorCount;
-	}
-
-	public void setErrorCount(int errorCount) {
-		this.errorCount = errorCount;
+	public void setErrorReason(String errorReason) {
+		this.errorReason = errorReason;
 	}
 
 	@Override
 	public String toString() {
-		return "JobFlowDto [appId=" + appId + ", jobId=" + jobId + ", description=" + description + ", jobCreated="
-				+ jobCreatedTimestamp + ", status=" + status + ", startTimestamp=" + startTimestamp + ", endTimestamp="
-				+ endTimestamp + ", errorCount=" + errorCount + "]";
+		return "JobFlowDto [jobId=" + jobId + ", status=" + status + ", errorReason=" + errorReason + "]";
 	}
 
 }

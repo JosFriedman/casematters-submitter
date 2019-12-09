@@ -4,10 +4,13 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
 
+import org.apache.http.HttpHost;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -25,10 +28,12 @@ public class AppConfig {
 	@Bean
 	public RestTemplate restTemplate() {
 
-		SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 		if (restTemplateProxyEnabled) {
+
+			DefaultHttpClient httpClient = (DefaultHttpClient) requestFactory.getHttpClient();
 			Proxy proxy = new Proxy(Type.HTTP, new InetSocketAddress(restTemplateProxyHost, restTemplateProxyPort));
-			requestFactory.setProxy(proxy);
+			httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 		}
 		return new RestTemplate(requestFactory);
 	}
