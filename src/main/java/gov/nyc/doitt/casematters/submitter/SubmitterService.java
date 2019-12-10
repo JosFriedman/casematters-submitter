@@ -51,8 +51,11 @@ public class SubmitterService {
 		List<JobFlowDto> jobFlowDtos = JobFlowManagerAccessor.getNextBatchOfJobFlows();
 
 		logger.debug("getNextBatch: number of jobFlowDtos found: {}", jobFlowDtos.size());
-		
-		List<Long> jobIds =  jobFlowDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
+
+		if (jobFlowDtos.size() == 0) {
+			return new ArrayList<CmiiSubmission>();
+		}
+		List<Long> jobIds = jobFlowDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
 		return cmiiSubmissionService.getNextBatch(jobIds);
 	}
 
