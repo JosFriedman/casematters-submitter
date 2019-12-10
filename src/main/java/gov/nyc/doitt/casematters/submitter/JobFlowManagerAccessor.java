@@ -3,6 +3,7 @@ package gov.nyc.doitt.casematters.submitter;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +34,14 @@ public class JobFlowManagerAccessor {
 	 * 
 	 * @return
 	 */
-	public List<String> getNextBatchOfJobIds() {
+	public List<JobFlowDto> getNextBatchOfJobFlows() {
 
-		String getJobFlowIdsUrl = String.format("%s/jobFlowIds/%s?nextBatch=true", baseUrl, appId);
+		String getJobFlowsBatchUrl = String.format("%s/jobFlows/%s?nextBatch=true", baseUrl, appId);
 		try {
-			ResponseEntity<String[]> response = restTemplate.getForEntity(new URI(getJobFlowIdsUrl), String[].class);
-			return Arrays.asList(response.getBody());
+//			ResponseEntity<String[]> response = restTemplate.getForEntity(new URI(getJobFlowIdsUrl), String[].class);
+			ResponseEntity<JobFlowDto[]> response = restTemplate.getForEntity(new URI(getJobFlowsBatchUrl), JobFlowDto[].class);
+			List<JobFlowDto> jobFlowDtos = Arrays.asList(response.getBody());
+			return jobFlowDtos;
 		} catch (Exception e) {
 			throw new CmiiSubmitterException(e);
 		}
