@@ -31,20 +31,10 @@ public class CmiiSubmissionServiceTest extends TestBase {
 	@InjectMocks
 	private CmiiSubmissionService cmiiSubmissionService = new CmiiSubmissionService();
 
-	@Value("${submitter.cmii.maxBatchSize}")
-	private int maxBatchSize;
-
-	@Value("${submitter.cmii.maxRetriesForError}")
-	private int maxRetriesForError;
-
-	private Pageable pageable;
 
 	@Before
 	public void init() throws Exception {
 
-		pageable = PageRequest.of(0, maxBatchSize, Sort.by(Sort.Direction.ASC, "submitted"));
-		FieldUtils.writeField(cmiiSubmissionService, "pageRequest", pageable, true);
-		FieldUtils.writeField(cmiiSubmissionService, "maxRetriesForError", maxRetriesForError, true);
 	}
 
 	/*
