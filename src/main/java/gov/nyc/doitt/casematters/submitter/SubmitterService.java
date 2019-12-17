@@ -50,7 +50,7 @@ public class SubmitterService {
 
 		List<JobFlowDto> jobFlowDtos = JobFlowManagerAccessor.getNextBatchOfJobFlows();
 
-		logger.debug("getNextBatch: number of jobFlowDtos found: {}", jobFlowDtos.size());
+		logger.info("getNextBatch: number of jobFlowDtos found: {}", jobFlowDtos.size());
 
 		if (jobFlowDtos.size() == 0) {
 			return new ArrayList<CmiiSubmission>();
