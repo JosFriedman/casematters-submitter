@@ -71,7 +71,7 @@ public class LmAttachmentUploader {
 	private String createSmbDirectory(LmSubmission lmSubmission, NtlmPasswordAuthentication smbAuth)
 			throws MalformedURLException, SmbException {
 
-		String smbPath = String.format("smb:%s/", lmSubmission.getLawManagerCaseDirectory());
+		String smbPath = String.format("smb:%s/", lmSubmission.getLawManagerCaseDirectory().replace("\\", "/"));
 		logger.debug("Creating directory (if it does not already exist): {}", smbPath);
 
 		SmbFile smbDir = new SmbFile(smbPath, smbAuth);
