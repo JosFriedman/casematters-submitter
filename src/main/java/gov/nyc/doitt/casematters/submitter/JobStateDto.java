@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class JobFlowDto {
+public class JobStateDto {
 
 	private String jobId;
 	private String status;
 	private String errorReason;
 
-	public JobFlowDto() {
+	public JobStateDto() {
 		super();
 	}
 
-	public JobFlowDto(String jobId) {
+	public JobStateDto(String jobId) {
 		super();
 		this.jobId = jobId;
 	}
