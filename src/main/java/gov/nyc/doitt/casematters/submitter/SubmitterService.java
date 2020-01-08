@@ -24,7 +24,7 @@ public class SubmitterService {
 	private CmiiSubmissionService cmiiSubmissionService;
 
 	@Autowired
-	private JobStateManagerAccessor JobFlowManagerAccessor;
+	private JobStateManagerAccessor jobStateManagerAccessor;
 
 	@Autowired
 	private LmSubmissionService lmSubmissionService;
@@ -36,43 +36,43 @@ public class SubmitterService {
 	public void submitBatch() {
 
 		logger.info("submitBatch: entering");
-		List<JobStateDto> jobStateDtos = new ArrayList<>();
+		List<JobDto> jobDtos = new ArrayList<>();
 
-		getNextBatch().forEach(p -> jobStateDtos.add(submitOne(p)));
+		getNextBatch().forEach(p -> jobDtos.add(submitOne(p)));
 
-		if (!jobStateDtos.isEmpty()) {
-			JobFlowManagerAccessor.updateJobResults(jobStateDtos);
+		if (!jobDtos.isEmpty()) {
+			jobStateManagerAccessor.updateJobResults(jobDtos);
 		}
 		logger.info("submitBatch: exiting");
 	}
 
 	private List<CmiiSubmission> getNextBatch() {
 
-		List<JobStateDto> jobStateDtos = JobFlowManagerAccessor.getNextBatchOfJobFlows();
+		List<JobDto> jobDtos = jobStateManagerAccessor.getNextBatchOfJobs();
 
-		logger.info("getNextBatch: number of jobStates found: {}", jobStateDtos.size());
+		logger.info("getNextBatch: number of jobs found: {}", jobDtos.size());
 
-		if (jobStateDtos.size() == 0) {
+		if (jobDtos.size() == 0) {
 			return new ArrayList<CmiiSubmission>();
 		}
-		List<Long> jobIds = jobStateDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
+		List<Long> jobIds = jobDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
 		return cmiiSubmissionService.getNextBatch(jobIds);
 	}
 
-	private JobStateDto submitOne(CmiiSubmission cmiiSubmission) {
+	private JobDto submitOne(CmiiSubmission cmiiSubmission) {
 
-		JobStateDto jobStateDto = new JobStateDto(String.valueOf(cmiiSubmission.getId()));
+		JobDto jobDto = new JobDto(String.valueOf(cmiiSubmission.getId()));
 		logger.debug("submitOne: cmiiSubmission: {}", cmiiSubmission);
 		try {
 			LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
 			lmSubmissionService.processSubmission(lmSubmission);
-			jobStateDto.setStatus(JobStatus.COMPLETED.toString());
+			jobDto.setState(JobState.COMPLETED.toString());
 		} catch (Exception e) {
 			logger.error("Can't save submission to LawManager", e);
-			jobStateDto.setStatus(JobStatus.ERROR.toString());
-			jobStateDto.setErrorReason(e.getMessage());
+			jobDto.setState(JobState.ERROR.toString());
+			jobDto.setErrorReason(e.getMessage());
 		}
-		return jobStateDto;
+		return jobDto;
 	}
 
 }

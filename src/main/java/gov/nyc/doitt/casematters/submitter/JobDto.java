@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class JobStateDto {
+public class JobDto {
 
 	private String jobId;
-	private String status;
+	private String state;
 	private String errorReason;
 
-	public JobStateDto() {
+	public JobDto() {
 		super();
 	}
 
-	public JobStateDto(String jobId) {
+	public JobDto(String jobId) {
 		super();
 		this.jobId = jobId;
 	}
@@ -27,12 +27,12 @@ public class JobStateDto {
 		this.jobId = jobId;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getState() {
+		return state;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setState(String status) {
+		this.state = status;
 	}
 
 	public String getErrorReason() {
@@ -45,7 +45,7 @@ public class JobStateDto {
 
 	@Override
 	public String toString() {
-		return "JobFlowDto [jobId=" + jobId + ", status=" + status + ", errorReason=" + errorReason + "]";
+		return "JobDto [jobId=" + jobId + ", state=" + state + ", errorReason=" + errorReason + "]";
 	}
 
 }

@@ -17,40 +17,27 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(
-        entityManagerFactoryRef = "lmEntityManagerFactory",
-        transactionManagerRef = "lmTransactionManager",
-        basePackages = {"gov.nyc.doitt.casematters.submitter.lm"}
-)
+@EnableJpaRepositories(entityManagerFactoryRef = "lmEntityManagerFactory", transactionManagerRef = "lmTransactionManager", basePackages = {
+		"gov.nyc.doitt.casematters.submitter.lm" })
 
 public class LmConfig {
 
+	@Bean(name = "lmDataSource")
+	@ConfigurationProperties(prefix = "lm.datasource")
+	public DataSource dataSource() {
+		return DataSourceBuilder.create().build();
+	}
 
-        @Bean(name = "lmDataSource")
-        @ConfigurationProperties(prefix = "lm.datasource")
-        public DataSource dataSource() {
-            return DataSourceBuilder.create().build();
-        }
+	@Bean(name = "lmEntityManagerFactory")
+	public LocalContainerEntityManagerFactoryBean barEntityManagerFactory(EntityManagerFactoryBuilder builder,
+			@Qualifier("lmDataSource") DataSource dataSource) {
+		return builder.dataSource(dataSource).packages("gov.nyc.doitt.casematters.submitter.lm")
+				.persistenceUnit("CASEMATTERS_INTERNET_INTAKE").build();
+	}
 
-        @Bean(name = "lmEntityManagerFactory")
-        public LocalContainerEntityManagerFactoryBean
-        barEntityManagerFactory(
-                EntityManagerFactoryBuilder builder,
-                @Qualifier("lmDataSource") DataSource dataSource
-        ) {
-            return
-                    builder
-                            .dataSource(dataSource)
-                            .packages("gov.nyc.doitt.casematters.submitter.lm")
-                            .persistenceUnit("CASEMATTERS_INTERNET_INTAKE")
-                            .build();
-        }
-
-        @Bean(name = "lmTransactionManager")
-        public PlatformTransactionManager lmTransactionManager(
-                @Qualifier("lmEntityManagerFactory") EntityManagerFactory
-                        lmEntityManagerFactory
-        ) {
-            return new JpaTransactionManager(lmEntityManagerFactory);
-        }
+	@Bean(name = "lmTransactionManager")
+	public PlatformTransactionManager lmTransactionManager(
+			@Qualifier("lmEntityManagerFactory") EntityManagerFactory lmEntityManagerFactory) {
+		return new JpaTransactionManager(lmEntityManagerFactory);
+	}
 }

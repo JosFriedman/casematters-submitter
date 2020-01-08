@@ -17,10 +17,10 @@ public class JobStateManagerAccessor {
 
 	private Logger logger = LoggerFactory.getLogger(JobStateManagerAccessor.class);
 
-	@Value("${submitter.JobFlowManagerAccessor.baseUrl}")
+	@Value("${submitter.JobStateManagerAccessor.baseUrl}")
 	private String baseUrl;
 
-	@Value("${submitter.JobFlowManagerAccessor.appId}")
+	@Value("${submitter.JobStateManagerAccessor.appId}")
 	private String appId;
 
 	@Autowired
@@ -31,25 +31,25 @@ public class JobStateManagerAccessor {
 	 * 
 	 * @return
 	 */
-	public List<JobStateDto> getNextBatchOfJobFlows() {
+	public List<JobDto> getNextBatchOfJobs() {
 
-		String getJobFlowsBatchUrl = String.format("%s/jobStates/%s?nextBatch=true", baseUrl, appId);
+		String getJobsBatchUrl = String.format("%s/jobs/%s?nextBatch=true", baseUrl, appId);
 		try {
-			ResponseEntity<JobStateDto[]> response = restTemplate.getForEntity(new URI(getJobFlowsBatchUrl), JobStateDto[].class);
-			List<JobStateDto> jobStateDtos = Arrays.asList(response.getBody());
-			return jobStateDtos;
+			ResponseEntity<JobDto[]> response = restTemplate.getForEntity(new URI(getJobsBatchUrl), JobDto[].class);
+			List<JobDto> jobDtos = Arrays.asList(response.getBody());
+			return jobDtos;
 		} catch (Exception e) {
 			throw new JobStateManagerException(e);
 		}
 	}
 
-	public List<JobStateDto> updateJobResults(List<JobStateDto> jobStateDtos) {
+	public List<JobDto> updateJobResults(List<JobDto> jobDtos) {
 
-		String updateJobFlowsUrl = String.format("%s/jobStates/%s?nextBatch=true", baseUrl, appId);
+		String updateJobsUrl = String.format("%s/jobs/%s?nextBatch=true", baseUrl, appId);
 		try {
-			JobStateDto[] responseJobFlowDtos = restTemplate.patchForObject(new URI(updateJobFlowsUrl), jobStateDtos.toArray(),
-					JobStateDto[].class);
-			return Arrays.asList(responseJobFlowDtos);
+			JobDto[] responseJobDtos = restTemplate.patchForObject(new URI(updateJobsUrl), jobDtos.toArray(),
+					JobDto[].class);
+			return Arrays.asList(responseJobDtos);
 		} catch (Exception e) {
 			throw new JobStateManagerException(e);
 		}
