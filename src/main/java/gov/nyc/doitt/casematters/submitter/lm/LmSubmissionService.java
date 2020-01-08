@@ -28,14 +28,20 @@ public class LmSubmissionService {
 			lmAttachmentUploader.upload(lmSubmission);
 		}
 		lmSubmissionRepository.save(lmSubmission);
+		
+		forceDbTriggers(lmSubmission);
+	}
 
-		// do 'no-harm' update to force the update triggers to fire
-		lmSubmission.setMessageID(0);
+	private void forceDbTriggers(LmSubmission lmSubmission) {
 
 		if (lmSubmission.hasLmSubmissionAttachments()) {
-			// fileMoved==true needed for attachments to be seen by update trigger's stored proc
+			// fileMoved == true needed for attachments to be processed by update attachment trigger
 			lmSubmission.getLmSubmissionAttachments().forEach(p -> p.setFileMoved(true));
+		} else {
+			// do 'no-harm' update to force the update submission trigger to fire
+			lmSubmission.setMessageID(0);
 		}
+
 		lmSubmissionRepository.save(lmSubmission);
 	}
 }

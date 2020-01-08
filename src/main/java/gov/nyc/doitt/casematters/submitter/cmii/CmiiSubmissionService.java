@@ -18,16 +18,16 @@ public class CmiiSubmissionService {
 	@Autowired
 	private CmiiSubmissionRepository cmiiSubmissionRepository;
 
-	/**
-	 * Return next batch of submissions
+	/**'
+	 * Get submissions from list of ids
 	 * 
+	 * @param ids
 	 * @return
 	 */
 	@Transactional(transactionManager = "cmiiTransactionManager")
-	public List<CmiiSubmission> getNextBatch(List<Long> ids) {
+	public List<CmiiSubmission> getSubmissions(List<Long> ids) {
 
-		List<CmiiSubmission> cmiiSubmissions = cmiiSubmissionRepository.getByIdIn(ids);
-		return cmiiSubmissions;
+		return cmiiSubmissionRepository.getByIdIn(ids);
 	}
 
 }

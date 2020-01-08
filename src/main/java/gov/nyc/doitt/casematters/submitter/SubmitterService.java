@@ -59,7 +59,7 @@ public class SubmitterService {
 			return new ArrayList<CmiiSubmission>();
 		}
 		List<Long> jobIds = jobDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
-		return cmiiSubmissionService.getNextBatch(jobIds);
+		return cmiiSubmissionService.getSubmissions(jobIds);
 	}
 
 	private JobDto submitOne(CmiiSubmission cmiiSubmission) {
