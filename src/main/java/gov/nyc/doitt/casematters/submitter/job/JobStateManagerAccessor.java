@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter;
+package gov.nyc.doitt.casematters.submitter.job;
 
 import java.net.URI;
 import java.util.Arrays;

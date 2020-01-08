@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter;
+package gov.nyc.doitt.casematters.submitter.lm;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;

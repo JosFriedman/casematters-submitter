@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter;
+package gov.nyc.doitt.casematters.submitter.job;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
