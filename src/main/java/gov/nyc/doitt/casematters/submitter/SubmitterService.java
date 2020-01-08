@@ -73,7 +73,7 @@ public class SubmitterService {
 		} catch (Exception e) {
 			logger.error("Can't save submission to LawManager", e);
 			jobDto.setState(JobState.ERROR.toString());
-			jobDto.setErrorReason(e.getMessage());
+			jobDto.setErrorReason(e.toString() + ": " + e.getMessage());
 		}
 		return jobDto;
 	}
