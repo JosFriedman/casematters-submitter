@@ -19,12 +19,6 @@ public class CmiiSubmissionRepositoryTest extends TestBase {
 	@Autowired
 	private CmiiSubmissionMockerUpper cmiiSubmissionMockerUpper;
 
-	@Value("${submitter.cmii.maxBatchSize}")
-	private int maxBatchSize;
-
-	@Value("${submitter.cmii.maxRetriesForError}")
-	private int maxRetriesForError;
-
 	/*
 	 * @Test
 	 * 
