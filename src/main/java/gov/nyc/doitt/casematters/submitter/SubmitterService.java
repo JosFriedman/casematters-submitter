@@ -54,10 +54,11 @@ public class SubmitterService {
 		List<JobDto> jobDtos = jobStateManagerAccessor.getNextBatchOfJobs();
 
 		logger.info("getNextBatch: number of jobs found: {}", jobDtos.size());
-
 		if (jobDtos.size() == 0) {
 			return new ArrayList<CmiiSubmission>();
 		}
+		jobDtos.forEach(p -> logger.debug("job: %s", p));
+		
 		List<Long> jobIds = jobDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
 		return cmiiSubmissionService.getSubmissions(jobIds);
 	}
@@ -73,7 +74,7 @@ public class SubmitterService {
 		} catch (Exception e) {
 			logger.error("Can't save submission to LawManager", e);
 			jobDto.setState(JobState.ERROR.toString());
-			jobDto.setErrorReason(e.toString() + ": " + e.getMessage());
+			jobDto.setErrorReason(e.toString());
 		}
 		return jobDto;
 	}

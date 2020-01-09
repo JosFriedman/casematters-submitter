@@ -44,7 +44,7 @@ public class LmAttachmentUploader {
 			doUpload(lmSubmission);
 
 		} catch (Exception e) {
-			String msg = "Can't upload submission: " + lmSubmission.getSubmissionID();
+			String msg = "Can't upload submission: " + lmSubmission.getSubmissionID() + ": " + e;
 			logger.error(msg, e);
 			throw new LmSubmitterException(msg, e);
 

@@ -88,10 +88,9 @@ public class CmiiAttachmentRetriever {
 
 		String encryptedFileName = String.format("%s", baseFileName);
 		File encryptedFile = File.createTempFile(encryptedFileName, null);
-		FileOutputStream fos = new FileOutputStream(encryptedFile);
-		ftpsClient.retrieveFile(lmSubmissionAttachment.getCmiiUniqueFileName(), fos);
-		fos.close();
-
+		try (FileOutputStream fos = new FileOutputStream(encryptedFile)) {
+			ftpsClient.retrieveFile(lmSubmissionAttachment.getCmiiUniqueFileName(), fos);
+		}
 		String decryptedFileName = cmiiAttachmentDecrypter.decrypt(encryptedFile.getPath());
 		return new File(decryptedFileName);
 
