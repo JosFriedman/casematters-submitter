@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.cms.CMSEnvelopedDataParser;
-import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.RecipientInformation;
 import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
 import org.bouncycastle.cms.jcajce.JceKeyTransRecipient;
@@ -81,35 +80,22 @@ public class CmiiAttachmentDecrypter {
 		try {
 			String decryptedFileName = String.format("%s-decrypted", FilenameUtils.getBaseName(encryptedFileName));
 			File decryptedFile = File.createTempFile(decryptedFileName, null);
-			InputStream is = new FileInputStream(new File(encryptedFileName));
-			OutputStream os = new FileOutputStream(decryptedFile);
+			try (InputStream encryptedStream = new FileInputStream(new File(encryptedFileName));
+					OutputStream os = new FileOutputStream(decryptedFile)) {
 
-			doDecrypt(is, os);
-
-			is.close();
-			os.close();
-
-			return decryptedFile.getPath();
-
+				CMSEnvelopedDataParser edp = new CMSEnvelopedDataParser(encryptedStream);
+				RecipientInformation recipientInfo = (RecipientInformation) edp.getRecipientInfos().getRecipients().toArray()[0];
+				JceKeyTransEnvelopedRecipient jceKeyTransEnvelopedRecipient = new JceKeyTransEnvelopedRecipient(privateKey);
+				JceKeyTransRecipient jceKeyTransRecipient = jceKeyTransEnvelopedRecipient
+						.setProvider(BouncyCastleProvider.PROVIDER_NAME);
+				try (InputStream is = recipientInfo.getContentStream(jceKeyTransRecipient).getContentStream()) {
+					IOUtils.copy(is, os);
+				}
+				return decryptedFile.getPath();
+			}
 		} catch (Exception e) {
 			throw new CmiiSubmitterException("Can't decrypt: " + encryptedFileName, e);
 		}
-	}
-
-	private void doDecrypt(InputStream encryptedStream, OutputStream os) throws IOException, CMSException {
-
-		CMSEnvelopedDataParser edp = new CMSEnvelopedDataParser(encryptedStream);
-		RecipientInformation recipientInfo = (RecipientInformation) edp.getRecipientInfos().getRecipients().toArray()[0];
-
-		JceKeyTransEnvelopedRecipient jceKeyTransEnvelopedRecipient = new JceKeyTransEnvelopedRecipient(privateKey);
-		JceKeyTransRecipient jceKeyTransRecipient = jceKeyTransEnvelopedRecipient.setProvider(BouncyCastleProvider.PROVIDER_NAME);
-		InputStream is = recipientInfo.getContentStream(jceKeyTransRecipient).getContentStream();
-
-		IOUtils.copy(is, os);
-
-		is.close();
-		os.close();
-		encryptedStream.close();
 	}
 
 }
