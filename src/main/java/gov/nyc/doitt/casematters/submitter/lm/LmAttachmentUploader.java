@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.net.ftp.FTPSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,11 @@ public class LmAttachmentUploader {
 
 		logger.debug("Uploading lmSubmission: {}", lmSubmission);
 
+		FTPSClient ftpsClient = null;
 		try {
-			lmAttachmentConfig.setLawManagerCaseDirectory(lmSubmission);
-			cmiiAttachmentRetriever.open();
+			ftpsClient = cmiiAttachmentRetriever.open();
 
-			doUpload(lmSubmission);
+			upload(ftpsClient, lmSubmission);
 
 		} catch (Exception e) {
 			String msg = "Can't upload submission: " + lmSubmission.getSubmissionID() + ": " + e;
@@ -49,18 +50,18 @@ public class LmAttachmentUploader {
 			throw new LmSubmitterException(msg, e);
 
 		} finally {
-			cmiiAttachmentRetriever.close();
+			cmiiAttachmentRetriever.close(ftpsClient);
 		}
 	}
 
-	private void doUpload(LmSubmission lmSubmission) throws MalformedURLException, SmbException {
+	private void upload(FTPSClient ftpsClient, LmSubmission lmSubmission) throws MalformedURLException, SmbException {
 
 		NtlmPasswordAuthentication smbAuth = smbConfig.getSmbAuth();
 		String smbPath = createSmbDirectory(lmSubmission, smbAuth);
 
 		lmSubmission.getLmSubmissionAttachments().forEach(p -> {
 			try {
-				File cmiiFile = cmiiAttachmentRetriever.retrieveFile(p);
+				File cmiiFile = cmiiAttachmentRetriever.retrieveFile(ftpsClient, p);
 				writeSmbFile(cmiiFile, smbAuth, smbPath + p.getStandardizedFileName());
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -70,6 +71,8 @@ public class LmAttachmentUploader {
 
 	private String createSmbDirectory(LmSubmission lmSubmission, NtlmPasswordAuthentication smbAuth)
 			throws MalformedURLException, SmbException {
+
+		lmAttachmentConfig.setLawManagerCaseDirectory(lmSubmission);
 
 		String smbPath = String.format("smb:%s/", lmSubmission.getLawManagerCaseDirectory().replace("\\", "/"));
 		logger.debug("Creating directory (if it does not already exist): {}", smbPath);
@@ -90,11 +93,9 @@ public class LmAttachmentUploader {
 			smbFile.createNewFile();
 		}
 
-		InputStream is = new FileInputStream(sourceFile);
-		SmbFileOutputStream smbOS = new SmbFileOutputStream(smbFile);
-		IOUtils.copy(is, smbOS);
-		is.close();
-		smbOS.close();
+		try (InputStream is = new FileInputStream(sourceFile); SmbFileOutputStream smbOS = new SmbFileOutputStream(smbFile)) {
+			IOUtils.copy(is, smbOS);
+		}
 	}
 
 }

@@ -35,16 +35,29 @@ public class CmiiAttachmentRetriever {
 	@Value("${submitter.ftp.password}")
 	private String ftpPassword;
 
-	private FTPSClient ftpsClient;
-
 	@Autowired
 	private CmiiAttachmentDecrypter cmiiAttachmentDecrypter;
 
-	public void open() throws IOException {
+	public File retrieveFile(FTPSClient ftpsClient, LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
 
-		ftpsClient = null;
+		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
+
+		String baseFileName = String.format("%s_%s", FilenameUtils.getBaseName(lmSubmissionAttachment.getStandardizedFileName()),
+				RandomStringUtils.random(4, true, true));
+
+		String encryptedFileName = String.format("%s", baseFileName);
+		File encryptedFile = File.createTempFile(encryptedFileName, null);
+		try (FileOutputStream fos = new FileOutputStream(encryptedFile)) {
+			ftpsClient.retrieveFile(lmSubmissionAttachment.getCmiiUniqueFileName(), fos);
+		}
+		String decryptedFileName = cmiiAttachmentDecrypter.decrypt(encryptedFile.getPath());
+		return new File(decryptedFileName);
+	}
+
+	public FTPSClient open() throws IOException {
+
 		try {
-			ftpsClient = new FTPSClient(true);
+			FTPSClient ftpsClient = new FTPSClient(true);
 			ftpsClient.connect(ftpServer, ftpPort);
 
 			ftpsClient.setTrustManager(TrustManagerUtils.getAcceptAllTrustManager());
@@ -73,30 +86,15 @@ public class CmiiAttachmentRetriever {
 				}
 			}
 
+			return ftpsClient;
+
 		} catch (IOException e) {
 			logger.error("Can't open FtpsClient", e);
 			throw e;
 		}
 	}
 
-	public File retrieveFile(LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
-
-		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
-
-		String baseFileName = String.format("%s_%s", FilenameUtils.getBaseName(lmSubmissionAttachment.getStandardizedFileName()),
-				RandomStringUtils.random(4, true, true));
-
-		String encryptedFileName = String.format("%s", baseFileName);
-		File encryptedFile = File.createTempFile(encryptedFileName, null);
-		try (FileOutputStream fos = new FileOutputStream(encryptedFile)) {
-			ftpsClient.retrieveFile(lmSubmissionAttachment.getCmiiUniqueFileName(), fos);
-		}
-		String decryptedFileName = cmiiAttachmentDecrypter.decrypt(encryptedFile.getPath());
-		return new File(decryptedFileName);
-
-	}
-
-	public void close() {
+	public void close(FTPSClient ftpsClient) {
 		if (ftpsClient != null && ftpsClient.isConnected()) {
 			try {
 				ftpsClient.logout();

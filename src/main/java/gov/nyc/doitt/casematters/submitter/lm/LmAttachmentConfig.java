@@ -18,9 +18,6 @@ public class LmAttachmentConfig {
 	private Logger logger = LoggerFactory.getLogger(LmAttachmentConfig.class);
 
 	@Autowired
-	private SmbConfig smbConfig;
-
-	@Autowired
 	private LmAttachmentPathRepository lmAttachmentPathRepository;
 
 	private Map<String, String> lmAttachmentPathMap;
@@ -37,7 +34,7 @@ public class LmAttachmentConfig {
 		}
 	}
 
-	public void setLawManagerCaseDirectory(LmSubmission lmSubmission) {
+	public synchronized void setLawManagerCaseDirectory(LmSubmission lmSubmission) {
 
 		initMap();
 
