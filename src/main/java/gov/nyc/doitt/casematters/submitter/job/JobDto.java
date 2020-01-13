@@ -1,5 +1,7 @@
 package gov.nyc.doitt.casematters.submitter.job;
 
+import java.sql.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -7,15 +9,18 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class JobDto {
 
 	private String jobId;
+	private String description;
+	private Timestamp createdTimestamp;
 	private String state;
+	private Timestamp startTimestamp;
+	private Timestamp endTimestamp;
+	private int errorCount;
 	private String errorReason;
 
 	public JobDto() {
-		super();
 	}
 
 	public JobDto(String jobId) {
-		super();
 		this.jobId = jobId;
 	}
 
@@ -27,12 +32,52 @@ public class JobDto {
 		this.jobId = jobId;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Timestamp getCreatedTimestamp() {
+		return createdTimestamp;
+	}
+
+	public void setCreatedTimestamp(Timestamp createdTimestamp) {
+		this.createdTimestamp = createdTimestamp;
+	}
+
 	public String getState() {
 		return state;
 	}
 
-	public void setState(String status) {
-		this.state = status;
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public Timestamp getStartTimestamp() {
+		return startTimestamp;
+	}
+
+	public void setStartTimestamp(Timestamp startTimestamp) {
+		this.startTimestamp = startTimestamp;
+	}
+
+	public Timestamp getEndTimestamp() {
+		return endTimestamp;
+	}
+
+	public void setEndTimestamp(Timestamp endTimestamp) {
+		this.endTimestamp = endTimestamp;
+	}
+
+	public int getErrorCount() {
+		return errorCount;
+	}
+
+	public void setErrorCount(int errorCount) {
+		this.errorCount = errorCount;
 	}
 
 	public String getErrorReason() {
@@ -45,7 +90,9 @@ public class JobDto {
 
 	@Override
 	public String toString() {
-		return "JobDto [jobId=" + jobId + ", state=" + state + ", errorReason=" + errorReason + "]";
+		return "JobDto [jobId=" + jobId + ", description=" + description + ", createdTimestamp=" + createdTimestamp + ", state="
+				+ state + ", startTimestamp=" + startTimestamp + ", endTimestamp=" + endTimestamp + ", errorCount=" + errorCount
+				+ ", errorReason=" + errorReason + "]";
 	}
 
 }

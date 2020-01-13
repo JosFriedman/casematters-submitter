@@ -57,8 +57,9 @@ public class SubmitterService {
 		if (jobDtos.size() == 0) {
 			return new ArrayList<CmiiSubmission>();
 		}
-		jobDtos.forEach(p -> logger.debug("job: %s", p));
-		
+		if (logger.isDebugEnabled()) {
+			jobDtos.forEach(p -> logger.debug("job: {}", p.toString()));
+		}
 		List<Long> jobIds = jobDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
 		return cmiiSubmissionService.getSubmissions(jobIds);
 	}
