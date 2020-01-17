@@ -70,7 +70,7 @@ public class SubmitterServiceTest extends TestBase {
 		List<Long> jobIds = jobDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
 		when(cmiiSubmissionService.getSubmissions(jobIds)).thenReturn(cmiiSubmissions);
 
-		when(jobStateManagerAccessor.getNextBatchOfJobs()).thenReturn(jobDtos);
+		when(jobStateManagerAccessor.startNextBatchOfJobs()).thenReturn(jobDtos);
 
 		submitterService.submitBatch();
 
@@ -85,7 +85,7 @@ public class SubmitterServiceTest extends TestBase {
 		List<JobDto> jobDtos = jobDtoMockerUpper.createList(listSize);
 		List<Long> jobIds = jobDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
 		when(cmiiSubmissionService.getSubmissions(jobIds)).thenReturn(cmiiSubmissions);
-		when(jobStateManagerAccessor.getNextBatchOfJobs()).thenReturn(jobDtos);
+		when(jobStateManagerAccessor.startNextBatchOfJobs()).thenReturn(jobDtos);
 
 		submitterService.submitBatch();
 

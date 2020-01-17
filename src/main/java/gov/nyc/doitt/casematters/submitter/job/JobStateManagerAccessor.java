@@ -31,12 +31,12 @@ public class JobStateManagerAccessor {
 	 * 
 	 * @return
 	 */
-	public List<JobDto> getNextBatchOfJobs() {
+	public List<JobDto> startNextBatchOfJobs() {
 
-		String getJobsBatchUrl = String.format("%s/jobs/%s?nextBatch=true", baseUrl, appId);
+		String getJobsBatchUrl = String.format("%s/jobs/%s/startNextBatch", baseUrl, appId);
 		try {
-			ResponseEntity<JobDto[]> response = restTemplate.getForEntity(new URI(getJobsBatchUrl), JobDto[].class);
-			List<JobDto> jobDtos = Arrays.asList(response.getBody());
+			JobDto[] response = restTemplate.postForObject(new URI(getJobsBatchUrl), null, JobDto[].class);
+			List<JobDto> jobDtos = Arrays.asList(response);
 			return jobDtos;
 		} catch (Exception e) {
 			throw new JobStateManagerException(e);

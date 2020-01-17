@@ -51,7 +51,7 @@ public class SubmitterService {
 
 	private List<CmiiSubmission> getNextBatch() {
 
-		List<JobDto> jobDtos = jobStateManagerAccessor.getNextBatchOfJobs();
+		List<JobDto> jobDtos = jobStateManagerAccessor.startNextBatchOfJobs();
 
 		logger.info("getNextBatch: number of jobs found: {}", jobDtos.size());
 		if (jobDtos.size() == 0) {
