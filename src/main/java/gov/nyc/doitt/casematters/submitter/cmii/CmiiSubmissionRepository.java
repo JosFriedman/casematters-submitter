@@ -10,7 +10,6 @@ import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
 @Repository
 interface CmiiSubmissionRepository extends JpaRepository<CmiiSubmission, Integer> {
 
-
-	List<CmiiSubmission> getByIdIn(List<Long> ids);
+	List<CmiiSubmission> findByIdIn(List<Long> ids);
 
 }

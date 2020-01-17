@@ -2,26 +2,39 @@ package gov.nyc.doitt.casematters.submitter.job;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
 public class JobDto {
 
+	@NotBlank(message = "appId may not be empty")
+	private String appId;
+	@NotBlank(message = "jobId may not be empty")
 	private String jobId;
 	private String description;
 	private Timestamp createdTimestamp;
 	private String state;
+	private String payload;
 	private Timestamp startTimestamp;
 	private Timestamp endTimestamp;
 	private int errorCount;
 	private String errorReason;
-
+	private Boolean reset;
 	public JobDto() {
 	}
 
 	public JobDto(String jobId) {
 		this.jobId = jobId;
+	}
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
 	}
 
 	public String getJobId() {
@@ -56,6 +69,14 @@ public class JobDto {
 		this.state = state;
 	}
 
+	public String getPayload() {
+		return payload;
+	}
+
+	public void setPayload(String payload) {
+		this.payload = payload;
+	}
+
 	public Timestamp getStartTimestamp() {
 		return startTimestamp;
 	}
@@ -88,11 +109,20 @@ public class JobDto {
 		this.errorReason = errorReason;
 	}
 
+	public Boolean isReset() {
+		return reset;
+	}
+
+	public void setReset(Boolean reset) {
+		this.reset = reset;
+	}
+
 	@Override
 	public String toString() {
-		return "JobDto [jobId=" + jobId + ", description=" + description + ", createdTimestamp=" + createdTimestamp + ", state="
-				+ state + ", startTimestamp=" + startTimestamp + ", endTimestamp=" + endTimestamp + ", errorCount=" + errorCount
-				+ ", errorReason=" + errorReason + "]";
+		return "JobDto [appId=" + appId + ", jobId=" + jobId + ", description=" + description + ", createdTimestamp="
+				+ createdTimestamp + ", state=" + state + ", payload=" + payload + ", startTimestamp=" + startTimestamp
+				+ ", endTimestamp=" + endTimestamp + ", errorCount=" + errorCount + ", errorReason=" + errorReason + ", reset="
+				+ reset + "]";
 	}
 
 }

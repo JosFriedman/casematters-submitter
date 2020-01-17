@@ -16,16 +16,11 @@ public class TestBase {
 
 	@Before
 	public void init() throws Exception {
-//		postProcessor.setApplicationContext(appContext);
-//		removeScheduledTasks();
+		postProcessor.setApplicationContext(appContext);
+		removeScheduledTasks();
 	}
 
 	private void removeScheduledTasks() {
-//		postProcessor.getScheduledTasks().forEach(p -> p.cancel());
-	}
-
-	@Test
-	public void dummy() {
-
+		postProcessor.getScheduledTasks().forEach(p -> p.cancel());
 	}
 }

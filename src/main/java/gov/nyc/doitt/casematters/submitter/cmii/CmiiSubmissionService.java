@@ -27,7 +27,7 @@ public class CmiiSubmissionService {
 	@Transactional(transactionManager = "cmiiTransactionManager")
 	public List<CmiiSubmission> getSubmissions(List<Long> ids) {
 
-		return cmiiSubmissionRepository.getByIdIn(ids);
+		return cmiiSubmissionRepository.findByIdIn(ids);
 	}
 
 }
