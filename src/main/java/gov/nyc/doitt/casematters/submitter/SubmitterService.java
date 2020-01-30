@@ -39,13 +39,18 @@ public class SubmitterService {
 	public void submitBatch() {
 
 		logger.info("submitBatch: entering");
-		List<TaskDto> taskDtos = new ArrayList<>();
 
-		getNextBatch().forEach(p -> taskDtos.add(submitOne(p)));
+		try {
+			List<TaskDto> taskDtos = new ArrayList<>();
 
-		if (!taskDtos.isEmpty()) {
-			jobStateManagerAccessor.updateTaskResults(taskDtos);
-		}
+			getNextBatch().forEach(p -> taskDtos.add(submitOne(p)));
+
+			if (!taskDtos.isEmpty()) {
+				jobStateManagerAccessor.updateTaskResults(taskDtos);
+			}
+		} catch (Exception e) {
+			logger.error("Can't submit batch", e);
+		} 
 		logger.info("submitBatch: exiting");
 	}
 

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -19,8 +20,8 @@ public class JobStateManagerAccessor {
 	@Value("${submitter.JobStateManagerAccessor.baseUrl}")
 	private String baseUrl;
 
-	@Value("${submitter.JobStateManagerAccessor.appName}")
-	private String appName;
+	@Value("${submitter.JobStateManagerAccessor.jobName}")
+	private String jobName;
 
 	@Value("${submitter.JobStateManagerAccessor.taskName}")
 	private String taskName;
@@ -35,11 +36,11 @@ public class JobStateManagerAccessor {
 	 */
 	public List<TaskDto> startNextBatchOfTasks() {
 
-		String getTasksBatchUrl = String.format("%s/tasks/%s?taskName=%s", baseUrl, appName, taskName);
+		String getTasksBatchUrl = String.format("%s/tasks/%s?taskName=%s", baseUrl, jobName, taskName);
 		try {
-			TaskDto[] response = restTemplate.postForObject(new URI(getTasksBatchUrl), null, TaskDto[].class);
-			List<TaskDto> taskDtos = Arrays.asList(response);
-			return taskDtos;
+			 return Arrays.asList(restTemplate.postForObject(new URI(getTasksBatchUrl), null, TaskDto[].class));
+		} catch (HttpClientErrorException e) {
+			throw new JobStateManagerException(e.getResponseBodyAsString(), e);
 		} catch (Exception e) {
 			throw new JobStateManagerException(e);
 		}
@@ -47,9 +48,11 @@ public class JobStateManagerAccessor {
 
 	public void updateTaskResults(List<TaskDto> taskDtos) {
 
-		String updateTasksUrl = String.format("%s/tasks/%s?taskName=%s", baseUrl, appName, taskName);
+		String updateTasksUrl = String.format("%s/tasks/%s?taskName=%s", baseUrl, jobName, taskName);
 		try {
 			restTemplate.put(new URI(updateTasksUrl), taskDtos.toArray());
+		} catch (HttpClientErrorException e) {
+			throw new JobStateManagerException(e.getResponseBodyAsString(), e);
 		} catch (Exception e) {
 			throw new JobStateManagerException(e);
 		}
