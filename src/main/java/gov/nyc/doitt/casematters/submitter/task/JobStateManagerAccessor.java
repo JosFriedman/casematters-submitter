@@ -36,7 +36,7 @@ public class JobStateManagerAccessor {
 	 */
 	public List<TaskDto> startNextBatchOfTasks() {
 
-		String getTasksBatchUrl = String.format("%s/tasks/%s?taskName=%s", baseUrl, jobName, taskName);
+		String getTasksBatchUrl = String.format("%s/tasks?jobName=%s&taskName=%s", baseUrl, jobName, taskName);
 		try {
 			 return Arrays.asList(restTemplate.postForObject(new URI(getTasksBatchUrl), null, TaskDto[].class));
 		} catch (HttpClientErrorException e) {
@@ -48,7 +48,7 @@ public class JobStateManagerAccessor {
 
 	public void updateTaskResults(List<TaskDto> taskDtos) {
 
-		String updateTasksUrl = String.format("%s/tasks/%s?taskName=%s", baseUrl, jobName, taskName);
+		String updateTasksUrl = String.format("%s/tasks?jobName=%s&taskName=%s", baseUrl, jobName, taskName);
 		try {
 			restTemplate.put(new URI(updateTasksUrl), taskDtos.toArray());
 		} catch (HttpClientErrorException e) {

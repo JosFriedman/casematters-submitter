@@ -49,7 +49,7 @@ public class SubmitterService {
 				jobStateManagerAccessor.updateTaskResults(taskDtos);
 			}
 		} catch (Exception e) {
-			logger.error("Can't submit batch", e);
+			logger.error("Error trying to find or submit batch", e);
 		} 
 		logger.info("submitBatch: exiting");
 	}
