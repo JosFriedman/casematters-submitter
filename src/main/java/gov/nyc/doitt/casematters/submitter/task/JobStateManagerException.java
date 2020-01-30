@@ -1,4 +1,4 @@
-package gov.nyc.doitt.casematters.submitter.job;
+package gov.nyc.doitt.casematters.submitter.task;
 
 public class JobStateManagerException extends RuntimeException {
 

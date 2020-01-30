@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 
 import gov.nyc.doitt.casematters.submitter.cmii.CmiiSubmissionService;
 import gov.nyc.doitt.casematters.submitter.cmii.model.CmiiSubmission;
-import gov.nyc.doitt.casematters.submitter.job.JobDto;
-import gov.nyc.doitt.casematters.submitter.job.JobState;
-import gov.nyc.doitt.casematters.submitter.job.JobStateManagerAccessor;
 import gov.nyc.doitt.casematters.submitter.lm.LmSubmissionService;
 import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
+import gov.nyc.doitt.casematters.submitter.task.JobStateManagerAccessor;
+import gov.nyc.doitt.casematters.submitter.task.TaskDto;
+import gov.nyc.doitt.casematters.submitter.task.TaskState;
 
 @Component
 public class SubmitterService {
@@ -39,45 +39,45 @@ public class SubmitterService {
 	public void submitBatch() {
 
 		logger.info("submitBatch: entering");
-		List<JobDto> jobDtos = new ArrayList<>();
+		List<TaskDto> taskDtos = new ArrayList<>();
 
-		getNextBatch().forEach(p -> jobDtos.add(submitOne(p)));
+		getNextBatch().forEach(p -> taskDtos.add(submitOne(p)));
 
-		if (!jobDtos.isEmpty()) {
-			jobStateManagerAccessor.updateJobResults(jobDtos);
+		if (!taskDtos.isEmpty()) {
+			jobStateManagerAccessor.updateTaskResults(taskDtos);
 		}
 		logger.info("submitBatch: exiting");
 	}
 
 	private List<CmiiSubmission> getNextBatch() {
 
-		List<JobDto> jobDtos = jobStateManagerAccessor.startNextBatchOfJobs();
+		List<TaskDto> taskDtos = jobStateManagerAccessor.startNextBatchOfTasks();
 
-		logger.info("getNextBatch: number of jobs found: {}", jobDtos.size());
-		if (jobDtos.size() == 0) {
+		logger.info("getNextBatch: number of tasks found: {}", taskDtos.size());
+		if (taskDtos.size() == 0) {
 			return new ArrayList<CmiiSubmission>();
 		}
 		if (logger.isDebugEnabled()) {
-			jobDtos.forEach(p -> logger.debug("job: {}", p.toString()));
+			taskDtos.forEach(p -> logger.debug("task: {}", p.toString()));
 		}
-		List<Long> jobIds = jobDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
+		List<Long> jobIds = taskDtos.stream().map(p -> Long.parseLong(p.getJobId())).collect(Collectors.toList());
 		return cmiiSubmissionService.getSubmissions(jobIds);
 	}
 
-	private JobDto submitOne(CmiiSubmission cmiiSubmission) {
+	private TaskDto submitOne(CmiiSubmission cmiiSubmission) {
 
-		JobDto jobDto = new JobDto(String.valueOf(cmiiSubmission.getId()));
+		TaskDto taskDto = new TaskDto(String.valueOf(cmiiSubmission.getId()));
 		logger.debug("submitOne: cmiiSubmission: {}", cmiiSubmission);
 		try {
 			LmSubmission lmSubmission = cmiiToLmMapper.fromCmii(cmiiSubmission);
 			lmSubmissionService.processSubmission(lmSubmission);
-			jobDto.setState(JobState.COMPLETED.toString());
+			taskDto.setState(TaskState.COMPLETED.toString());
 		} catch (Exception e) {
 			logger.error("Can't save submission to LawManager", e);
-			jobDto.setState(JobState.ERROR.toString());
-			jobDto.setErrorReason(e.toString());
+			taskDto.setState(TaskState.ERROR.toString());
+			taskDto.setErrorReason(e.toString());
 		}
-		return jobDto;
+		return taskDto;
 	}
 
 }
