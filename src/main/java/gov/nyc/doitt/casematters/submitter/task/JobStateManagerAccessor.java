@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +28,9 @@ public class JobStateManagerAccessor {
 	@Value("${submitter.JobStateManagerAccessor.taskName}")
 	private String taskName;
 
+	@Value("${submitter.JobStateManagerAccessor.authToken}")
+	private String authToken;
+
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -38,7 +43,10 @@ public class JobStateManagerAccessor {
 
 		String getTasksBatchUrl = String.format("%s/tasks?jobName=%s&taskName=%s", baseUrl, jobName, taskName);
 		try {
-			 return Arrays.asList(restTemplate.postForObject(new URI(getTasksBatchUrl), null, TaskDto[].class));
+			HttpHeaders headers = createHttpHeaders();
+			HttpEntity<?> entity = new HttpEntity<Object>(headers);
+
+			return Arrays.asList(restTemplate.postForObject(new URI(getTasksBatchUrl), entity, TaskDto[].class));
 		} catch (HttpClientErrorException e) {
 			throw new JobStateManagerException(e.getResponseBodyAsString(), e);
 		} catch (Exception e) {
@@ -50,12 +58,23 @@ public class JobStateManagerAccessor {
 
 		String updateTasksUrl = String.format("%s/tasks?jobName=%s&taskName=%s", baseUrl, jobName, taskName);
 		try {
-			restTemplate.put(new URI(updateTasksUrl), taskDtos.toArray());
+			HttpHeaders headers = createHttpHeaders();
+			HttpEntity<?> entity = new HttpEntity<Object>(taskDtos.toArray(), headers);
+
+			restTemplate.put(new URI(updateTasksUrl), entity);
 		} catch (HttpClientErrorException e) {
 			throw new JobStateManagerException(e.getResponseBodyAsString(), e);
 		} catch (Exception e) {
 			throw new JobStateManagerException(e);
 		}
+
+	}
+
+	private HttpHeaders createHttpHeaders() {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer" + " " + authToken);
+		return headers;
 
 	}
 
