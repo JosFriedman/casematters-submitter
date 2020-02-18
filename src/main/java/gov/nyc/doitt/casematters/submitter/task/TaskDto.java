@@ -1,6 +1,6 @@
 package gov.nyc.doitt.casematters.submitter.task;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -10,8 +10,8 @@ public class TaskDto {
 
 	private String jobId;
 	private String name;
-	private Timestamp startTimestamp;
-	private Timestamp endTimestamp;
+	private Date startDate;
+	private Date endDate;
 	private String state;
 	private String errorReason;
 	private long errorCount;
@@ -39,20 +39,20 @@ public class TaskDto {
 		this.name = name;
 	}
 
-	public Timestamp getStartTimestamp() {
-		return startTimestamp;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setStartTimestamp(Timestamp startTimestamp) {
-		this.startTimestamp = startTimestamp;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
-	public Timestamp getEndTimestamp() {
-		return endTimestamp;
+	public Date getEndDate() {
+		return endDate;
 	}
 
-	public void setEndTimestamp(Timestamp endTimestamp) {
-		this.endTimestamp = endTimestamp;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public String getState() {
@@ -81,8 +81,8 @@ public class TaskDto {
 
 	@Override
 	public String toString() {
-		return "TaskDto [jobId=" + jobId + ", name=" + name + ", startTimestamp=" + startTimestamp + ", endTimestamp="
-				+ endTimestamp + ", state=" + state + ", errorReason=" + errorReason + ", errorCount=" + errorCount + "]";
+		return "TaskDto [jobId=" + jobId + ", name=" + name + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", state=" + state + ", errorReason=" + errorReason + ", errorCount=" + errorCount + "]";
 	}
 
 }
