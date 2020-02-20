@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.net.UnknownHostException;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.net.ftp.FTPReply;
@@ -87,6 +88,19 @@ public class CmiiAttachmentRetrieverTest extends TestBase {
 		assertTrue(FTPReply.isPositiveCompletion(ftpsClient.getReplyCode()));
 
 		cmiiAttachmentRetriever.close(ftpsClient);
+	}
+
+	@Test
+	public void testOpen_Fail() throws Exception {
+
+		FieldUtils.writeField(cmiiAttachmentRetriever, "ftpServer", "bad", true);
+
+		try {
+			cmiiAttachmentRetriever.open();
+			assertTrue(false);
+		} catch (CmiiSubmitterException e) {
+			assertEquals(UnknownHostException.class, e.getCause().getClass());
+		}
 	}
 
 	@Test

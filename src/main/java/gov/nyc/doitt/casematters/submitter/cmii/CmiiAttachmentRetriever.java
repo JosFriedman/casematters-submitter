@@ -87,7 +87,7 @@ public class CmiiAttachmentRetriever {
 			return ftpsClient;
 
 		} catch (IOException e) {
-			String msg = String.format("Can't open FtpsClient: server=%s, port=%i, user=%s", ftpServer, ftpPort, ftpUserName);
+			String msg = String.format("Can't open FtpsClient: server=%s, port=%d, user=%s", ftpServer, ftpPort, ftpUserName);
 			logger.error(msg, e);
 			throw new CmiiSubmitterException(msg, e);
 		}
