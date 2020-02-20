@@ -13,7 +13,6 @@ import java.security.PrivateKey;
 import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 import javax.annotation.PostConstruct;
 
@@ -40,16 +39,11 @@ public class CmiiAttachmentDecrypter {
 	@Value("${submitter.cmmii.decryption.keystorePassword}")
 	private String keystorePassword;
 
-	@Value("${submitter.cmmii.decryption.certificateName}")
-	private String certificateName;
-
 	@Value("${submitter.cmmii.decryption.key}")
 	private String key;
 
 	@Value("${submitter.cmmii.decryption.keyPassword}")
 	private String keyPassword;
-
-	private X509Certificate x509Certificate;
 
 	private PrivateKey privateKey;
 
@@ -60,12 +54,6 @@ public class CmiiAttachmentDecrypter {
 		InputStream keystoreStream = getClass().getClassLoader().getResourceAsStream(keystoreFileName);
 		KeyStore keystore = KeyStore.getInstance("JKS");
 		keystore.load(keystoreStream, keystorePassword.toCharArray());
-
-		// certificate
-		x509Certificate = (X509Certificate) keystore.getCertificate(certificateName);
-		if (x509Certificate == null) {
-			throw new CertificateException("Can't get X509Certificate");
-		}
 
 		// private key
 		Security.addProvider(new BouncyCastleProvider());

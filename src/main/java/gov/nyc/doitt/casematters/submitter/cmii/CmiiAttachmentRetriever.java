@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionAttachment;
-
 @Component
 public class CmiiAttachmentRetriever {
 
@@ -38,23 +36,23 @@ public class CmiiAttachmentRetriever {
 	@Autowired
 	private CmiiAttachmentDecrypter cmiiAttachmentDecrypter;
 
-	public File retrieveFile(FTPSClient ftpsClient, LmSubmissionAttachment lmSubmissionAttachment) throws IOException {
+	public File retrieveFile(FTPSClient ftpsClient, String standardizedFileName, String cmiiUniqueFileName) throws IOException {
 
-		logger.debug("Retrieving file: {}", lmSubmissionAttachment.getStandardizedFileName());
+		logger.debug("Retrieving file: {}", standardizedFileName);
 
-		String baseFileName = String.format("%s_%s", FilenameUtils.getBaseName(lmSubmissionAttachment.getStandardizedFileName()),
+		String baseFileName = String.format("%s_%s", FilenameUtils.getBaseName(standardizedFileName),
 				RandomStringUtils.random(4, true, true));
 
 		String encryptedFileName = String.format("%s", baseFileName);
 		File encryptedFile = File.createTempFile(encryptedFileName, null);
 		try (FileOutputStream fos = new FileOutputStream(encryptedFile)) {
-			ftpsClient.retrieveFile(lmSubmissionAttachment.getCmiiUniqueFileName(), fos);
+			ftpsClient.retrieveFile(cmiiUniqueFileName, fos);
 		}
 		String decryptedFileName = cmiiAttachmentDecrypter.decrypt(encryptedFile.getPath());
 		return new File(decryptedFileName);
 	}
 
-	public FTPSClient open() throws IOException {
+	public FTPSClient open() {
 
 		try {
 			FTPSClient ftpsClient = new FTPSClient(true);
@@ -89,8 +87,9 @@ public class CmiiAttachmentRetriever {
 			return ftpsClient;
 
 		} catch (IOException e) {
-			logger.error("Can't open FtpsClient", e);
-			throw e;
+			String msg = String.format("Can't open FtpsClient: server=%s, port=%i, user=%s", ftpServer, ftpPort, ftpUserName);
+			logger.error(msg, e);
+			throw new CmiiSubmitterException(msg, e);
 		}
 	}
 

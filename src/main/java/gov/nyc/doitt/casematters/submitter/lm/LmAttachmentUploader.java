@@ -61,7 +61,7 @@ public class LmAttachmentUploader {
 
 		lmSubmission.getLmSubmissionAttachments().forEach(p -> {
 			try {
-				File cmiiFile = cmiiAttachmentRetriever.retrieveFile(ftpsClient, p);
+				File cmiiFile = cmiiAttachmentRetriever.retrieveFile(ftpsClient, p.getStandardizedFileName(), p.getCmiiUniqueFileName());
 				writeSmbFile(cmiiFile, smbAuth, smbPath + p.getStandardizedFileName());
 			} catch (Exception e) {
 				throw new LmSubmitterException(e);
