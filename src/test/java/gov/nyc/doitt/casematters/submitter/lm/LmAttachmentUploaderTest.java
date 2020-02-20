@@ -1,73 +1,90 @@
 package gov.nyc.doitt.casematters.submitter.lm;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Collection;
 
+import org.apache.commons.net.ftp.FTPSClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockftpserver.fake.FakeFtpServer;
-import org.mockftpserver.fake.UserAccount;
-import org.mockftpserver.fake.filesystem.DirectoryEntry;
-import org.mockftpserver.fake.filesystem.FileEntry;
-import org.mockftpserver.fake.filesystem.FileSystem;
-import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-public class LmAttachmentUploaderTest {
+import gov.nyc.doitt.casematters.submitter.TestBase;
+import gov.nyc.doitt.casematters.submitter.cmii.CmiiAttachmentDecrypter;
+import gov.nyc.doitt.casematters.submitter.cmii.CmiiAttachmentRetriever;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmission;
+import gov.nyc.doitt.casematters.submitter.lm.model.LmSubmissionMockerUpper;
+import jcifs.smb.NtlmPasswordAuthentication;
 
-	private FakeFtpServer fakeFtpServer;
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class LmAttachmentUploaderTest extends TestBase {
 
-	private FtpClient ftpClient;
+	@Mock
+	private CmiiAttachmentDecrypter cmiiAttachmentDecrypter;
+
+	@Mock
+	private CmiiAttachmentRetriever cmiiAttachmentRetriever;
+
+	@Mock
+	private SmbConfig smbConfig;
+
+	@Mock
+	private LmAttachmentConfig lmAttachmentConfig;
+
+	@Autowired
+	private LmSubmissionMockerUpper lmSubmissionMockerUpper;
+
+	@InjectMocks
+	private LmAttachmentUploader lmAttachmentUploader = new LmAttachmentUploader();
 
 	@Before
-	public void setup() throws IOException {
-		fakeFtpServer = new FakeFtpServer();
-		fakeFtpServer.addUserAccount(new UserAccount("user", "password", "/data"));
-
-		FileSystem fileSystem = new UnixFakeFileSystem();
-		fileSystem.add(new DirectoryEntry("/data"));
-		fileSystem.add(new FileEntry("/data/foobar.txt", "abcdef 1234567890"));
-		fakeFtpServer.setFileSystem(fileSystem);
-		fakeFtpServer.setServerControlPort(0);
-
-		fakeFtpServer.start();
-
-		ftpClient = new FtpClient("localhost", fakeFtpServer.getServerControlPort(), "user", "password");
-		ftpClient.open();
+	public void setup() throws Exception {
 	}
 
 	@After
-	public void teardown() throws IOException {
-
-		fakeFtpServer.stop();
+	public void teardown() throws Exception {
 	}
 
-	@Test
-	public void givenRemoteFile_whenListingRemoteFiles_thenItIsContainedInList() throws IOException {
-		Collection<String> files = ftpClient.listFiles("");
-
-		assertThat(files).contains("foobar.txt");
-	}
+	// TODO: no successful test due to not mocking up a SMB file service at this time
 
 	@Test
-	public void givenRemoteFile_whenDownloading_thenItIsOnTheLocalFilesystem() throws IOException {
-		ftpClient.downloadFile("/foobar.txt", "downloaded_buz.txt");
+	public void testUpload_FailLogin() throws Exception {
 
-		assertThat(new File("downloaded_buz.txt")).exists();
-		new File("downloaded_buz.txt").delete(); // cleanup
-	}
+		LmSubmission lmSubmission = lmSubmissionMockerUpper.create();
 
-	@Test
-	public void givenLocalFile_whenUploadingIt_thenItExistsOnRemoteLocation() throws URISyntaxException, IOException {
-		File file = new File(getClass().getClassLoader().getResource("ftp/baz.txt").toURI());
+		FTPSClient ftpsClient = new FTPSClient();
+		when(cmiiAttachmentRetriever.open()).thenReturn(ftpsClient);
 
-		ftpClient.putFileToPath(file, "/buz.txt");
+		NtlmPasswordAuthentication ntlmPasswordAuthentication = new NtlmPasswordAuthentication("smbDomain", "smbUserName",
+				"smbPassword");
+		when(smbConfig.getSmbAuth()).thenReturn(ntlmPasswordAuthentication);
 
-		assertThat(fakeFtpServer.getFileSystem().exists("/buz.txt")).isTrue();
+		String encryptedFileName = "cmiAttachment-encrypted.dat";
+		File file = new File(getClass().getClassLoader().getResource(encryptedFileName).toURI());
+		when(cmiiAttachmentRetriever.retrieveFile(any(FTPSClient.class), anyString(), anyString())).thenReturn(file);
+
+		try {
+			lmAttachmentUploader.upload(lmSubmission);
+			assertTrue(false);
+		} catch (LmSubmitterException e) {
+			assertTrue(e.getMessage().contains("jcifs.smb.SmbAuthException: Logon failure: unknown user name or bad password."));
+		}
+
+		verify(cmiiAttachmentRetriever).open();
+		verify(cmiiAttachmentRetriever).close(any(FTPSClient.class));
+		verify(cmiiAttachmentRetriever).retrieveFile(any(FTPSClient.class), anyString(), anyString());
+		verify(smbConfig).getSmbAuth();
 	}
 
 }

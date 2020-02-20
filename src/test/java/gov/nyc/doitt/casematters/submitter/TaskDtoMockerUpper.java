@@ -1,6 +1,7 @@
 package gov.nyc.doitt.casematters.submitter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +36,8 @@ public class TaskDtoMockerUpper {
 		taskDto.setName("nextTaskName" + idx);
 		taskDto.setJobId(jobId);
 		taskDto.setState(TaskState.PROCESSING.toString());
+		taskDto.setStartDate(new Date(System.currentTimeMillis()));
+		taskDto.setEndDate(new Date(System.currentTimeMillis()));
 
 		return taskDto;
 	}

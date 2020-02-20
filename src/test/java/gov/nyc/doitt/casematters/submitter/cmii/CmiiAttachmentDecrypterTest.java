@@ -1,5 +1,7 @@
 package gov.nyc.doitt.casematters.submitter.cmii;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -53,7 +55,8 @@ public class CmiiAttachmentDecrypterTest extends TestBase {
 		String encryptedFileName = "cmiAttachment-encrypted.dat";
 		File file = new File(getClass().getClassLoader().getResource(encryptedFileName).toURI());
 
-		cmiiAttachmentDecrypter.decrypt(file.getAbsolutePath());
+		String decryptedFileName = cmiiAttachmentDecrypter.decrypt(file.getAbsolutePath());
+		assertNotNull(decryptedFileName);
 	}
 
 }

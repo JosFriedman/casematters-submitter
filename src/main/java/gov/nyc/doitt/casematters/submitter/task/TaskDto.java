@@ -1,6 +1,8 @@
 package gov.nyc.doitt.casematters.submitter.task;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

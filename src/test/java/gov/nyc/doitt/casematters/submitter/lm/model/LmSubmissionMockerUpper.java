@@ -58,6 +58,8 @@ public class LmSubmissionMockerUpper {
 		lmSubmission.setUserPhone("userPhone" + id);
 		lmSubmission.setUserFax(null);
 		lmSubmission.setUserEmail("userEmail@abc.com" + id);
+		
+		lmSubmission.setLawManagerCaseDirectory(".");
 
 		lmSubmission.setLmSubmissionDataList(lmSubmissionDataMockerUpper.createList(id));
 		lmSubmission.setLmSubmissionAttachments(lmSubmissionAttachmentMockerUpper.createList(id));

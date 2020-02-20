@@ -45,7 +45,7 @@ public class LmAttachmentUploader {
 			upload(ftpsClient, lmSubmission);
 
 		} catch (Exception e) {
-			String msg = "Can't upload submission: " + lmSubmission.getSubmissionID() + ": " + e;
+			String msg = String.format("Can't upload submission: %s: %s", lmSubmission.getSubmissionID(), e.getMessage());
 			logger.error(msg, e);
 			throw new LmSubmitterException(msg, e);
 
