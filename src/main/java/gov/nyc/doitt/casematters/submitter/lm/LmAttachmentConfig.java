@@ -30,7 +30,7 @@ public class LmAttachmentConfig {
 				throw new IllegalStateException("Can't initialize lmAttachmentPathMap");
 			}
 			lmAttachmentPathMap = lmAttachmentPaths.stream()
-					.collect(Collectors.toMap(p -> p.getAgencyAbbreviation(), p -> p.getAttachmentPath()));
+					.collect(Collectors.toMap(LmAttachmentPath::getAgencyAbbreviation, LmAttachmentPath::getAttachmentPath));
 		}
 	}
 

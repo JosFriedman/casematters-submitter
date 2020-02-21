@@ -9,6 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class CaseMattersSubmitterSpringBootApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CaseMattersSubmitterSpringBootApplication.class, args);
+		SpringApplication.run(CaseMattersSubmitterSpringBootApplication.class);
 	}
 }

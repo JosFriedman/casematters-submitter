@@ -72,23 +72,19 @@ public class CmiiAttachmentRetriever {
 
 			int reply = ftpsClient.getReplyCode();
 
-			if (FTPReply.isPositiveCompletion(reply)) {
-				// Login
-				if (ftpsClient.login(ftpUserName, ftpPassword)) {
-					ftpsClient.setBufferSize(1024 * 1024);
-					ftpsClient.execPROT("P");
-					ftpsClient.execPBSZ(0);
-					ftpsClient.setFileType(FTP.BINARY_FILE_TYPE);
-					ftpsClient.setPassiveNatWorkaround(false);
-					ftpsClient.enterLocalPassiveMode();
-				}
+			if (FTPReply.isPositiveCompletion(reply) && ftpsClient.login(ftpUserName, ftpPassword)) {
+				ftpsClient.setBufferSize(1024 * 1024);
+				ftpsClient.execPROT("P");
+				ftpsClient.execPBSZ(0);
+				ftpsClient.setFileType(FTP.BINARY_FILE_TYPE);
+				ftpsClient.enterLocalPassiveMode();
+				return ftpsClient;
 			}
-
-			return ftpsClient;
+			String msg = String.format("Can't open FtpsClient: server=%s, port=%d, user=%s", ftpServer, ftpPort, ftpUserName);
+			throw new CmiiSubmitterException(msg);
 
 		} catch (IOException e) {
 			String msg = String.format("Can't open FtpsClient: server=%s, port=%d, user=%s", ftpServer, ftpPort, ftpUserName);
-			logger.error(msg, e);
 			throw new CmiiSubmitterException(msg, e);
 		}
 	}
