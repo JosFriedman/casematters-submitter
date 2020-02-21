@@ -15,22 +15,20 @@ public class CmiiSubmissionData {
 
 	@Column(name = "DATATYPE")
 	private String dataType = "not used";
-	
+
 	@Column(name = "SUBMISSIONID")
 	private long submissionId;
-	
+
 	@Column(name = "ENTITY")
 	private String entity;
-	
+
 	@Column(name = "VALUE")
 	private String value;
-
 
 	public long getId() {
 		return id;
 	}
 
-	
 	public String getDataType() {
 		return dataType;
 	}
@@ -51,6 +49,5 @@ public class CmiiSubmissionData {
 	public String getValue() {
 		return value;
 	}
-	
-	
+
 }

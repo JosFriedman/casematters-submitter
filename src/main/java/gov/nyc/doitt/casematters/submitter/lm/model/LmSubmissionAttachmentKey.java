@@ -20,7 +20,6 @@ public class LmSubmissionAttachmentKey implements Serializable {
 	}
 
 	public LmSubmissionAttachmentKey(int submissionId, int sequenceNumber) {
-		super();
 		this.submissionId = submissionId;
 		this.sequenceNumber = sequenceNumber;
 	}
@@ -29,16 +28,8 @@ public class LmSubmissionAttachmentKey implements Serializable {
 		return submissionId;
 	}
 
-	public void setSubmissionId(int submissionId) {
-		this.submissionId = submissionId;
-	}
-
 	public int getSequenceNumber() {
 		return sequenceNumber;
-	}
-
-	public void setSequenceNumber(int sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
 	}
 
 	@Override

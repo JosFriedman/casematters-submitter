@@ -29,10 +29,6 @@ public class LmSubmissionData {
 		return lmSubmissionDataKey;
 	}
 
-	public void setLmSubmissionDataKey(LmSubmissionDataKey lmSubmissionDataKey) {
-		this.lmSubmissionDataKey = lmSubmissionDataKey;
-	}
-
 	public String getFieldValue() {
 		return fieldValue;
 	}
@@ -47,6 +43,31 @@ public class LmSubmissionData {
 
 	public void setMessageId(int messageId) {
 		this.messageId = messageId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((lmSubmissionDataKey == null) ? 0 : lmSubmissionDataKey.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LmSubmissionData other = (LmSubmissionData) obj;
+		if (lmSubmissionDataKey == null) {
+			if (other.lmSubmissionDataKey != null)
+				return false;
+		} else if (!lmSubmissionDataKey.equals(other.lmSubmissionDataKey))
+			return false;
+		return true;
 	}
 
 	@Override

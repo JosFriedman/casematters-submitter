@@ -33,37 +33,30 @@ public class CmiiSubmissionAttachment {
 	@Column(name = "UUID")
 	private UUID uuid;
 
-	
 	public long getId() {
 		return id;
 	}
 
-	
 	public long getSubmissionId() {
 		return submissionId;
 	}
 
-	
 	public String getContentType() {
 		return contentType;
 	}
 
-	
 	public String getOriginalFileName() {
 		return originalFileName;
 	}
 
-	
 	public long getFileSize() {
 		return fileSize;
 	}
 
-	
 	public String getUniqueFileName() {
 		return uniqueFileName;
 	}
 
-	
 	public UUID getUuid() {
 		return uuid;
 	}

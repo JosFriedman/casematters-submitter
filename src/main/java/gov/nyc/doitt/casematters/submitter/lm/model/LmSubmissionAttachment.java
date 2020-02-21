@@ -72,10 +72,6 @@ public class LmSubmissionAttachment {
 		return lmSubmissionAttachmentKey;
 	}
 
-	public void setLmSubmissionAttachmentKey(LmSubmissionAttachmentKey lmSubmissionAttachmentKey) {
-		this.lmSubmissionAttachmentKey = lmSubmissionAttachmentKey;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -202,6 +198,31 @@ public class LmSubmissionAttachment {
 
 	public void setDecryptDurationInMillis(long decryptDurationInMillis) {
 		this.decryptDurationInMillis = decryptDurationInMillis;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((lmSubmissionAttachmentKey == null) ? 0 : lmSubmissionAttachmentKey.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LmSubmissionAttachment other = (LmSubmissionAttachment) obj;
+		if (lmSubmissionAttachmentKey == null) {
+			if (other.lmSubmissionAttachmentKey != null)
+				return false;
+		} else if (!lmSubmissionAttachmentKey.equals(other.lmSubmissionAttachmentKey))
+			return false;
+		return true;
 	}
 
 	@Override

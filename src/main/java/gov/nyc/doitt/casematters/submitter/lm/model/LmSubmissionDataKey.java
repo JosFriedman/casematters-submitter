@@ -28,16 +28,8 @@ public class LmSubmissionDataKey implements Serializable {
 		return submissionId;
 	}
 
-	public void setSubmissionId(int submissionId) {
-		this.submissionId = submissionId;
-	}
-
 	public String getFieldName() {
 		return fieldName;
-	}
-
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
 	}
 
 	@Override
