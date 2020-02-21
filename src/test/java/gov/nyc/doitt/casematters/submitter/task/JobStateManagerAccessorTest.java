@@ -78,6 +78,27 @@ public class JobStateManagerAccessorTest extends TestBase {
 	}
 
 	@Test
+	public void testStartNextBatchOfTasks_Fail() throws Exception {
+
+		doThrow(new HttpClientErrorException(HttpStatus.UNAUTHORIZED)).when(restTemplate).postForObject(any(URI.class), any(HttpEntity.class), any(Class.class));
+		try {
+			jobStateManagerAccessor.startNextBatchOfTasks();
+			assertTrue(false);
+		} catch (JobStateManagerException e) {
+			assertEquals(HttpClientErrorException.class, e.getCause().getClass());
+		}
+		
+		doThrow(new RuntimeException("error")).when(restTemplate).postForObject(any(URI.class), any(HttpEntity.class), any(Class.class));
+		try {
+			jobStateManagerAccessor.startNextBatchOfTasks();
+			assertTrue(false);
+		} catch (JobStateManagerException e) {
+			assertEquals(RuntimeException.class, e.getCause().getClass());
+		}
+
+	}
+
+	@Test
 	public void testUpdateTaskResults() throws Exception {
 
 		int listSize = 5;
@@ -104,6 +125,14 @@ public class JobStateManagerAccessorTest extends TestBase {
 		} catch (JobStateManagerException e) {
 			assertEquals(HttpClientErrorException.class, e.getCause().getClass());
 		}
-	}
+		
+		doThrow(new RuntimeException("error")).when(restTemplate).put(any(URI.class), any(HttpEntity.class));
+		try {
+			jobStateManagerAccessor.updateTaskResults(taskDtos);
+			assertTrue(false);
+		} catch (JobStateManagerException e) {
+			assertEquals(RuntimeException.class, e.getCause().getClass());
+		}
 
+	}
 }

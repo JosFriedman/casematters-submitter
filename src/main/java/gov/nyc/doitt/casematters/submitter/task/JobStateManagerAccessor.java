@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Provides REST interaction with JobStateManager
+ */
 @Component
 public class JobStateManagerAccessor {
 
@@ -35,7 +38,7 @@ public class JobStateManagerAccessor {
 	private RestTemplate restTemplate;
 
 	/**
-	 * Return next batch of task ids
+	 * Return next batch of task ids from JobStateManager
 	 * 
 	 * @return
 	 */
@@ -44,7 +47,7 @@ public class JobStateManagerAccessor {
 		String getTasksBatchUrl = String.format("%s/tasks?jobName=%s&taskName=%s", baseUrl, jobName, taskName);
 		try {
 			HttpHeaders headers = createHttpHeaders();
-			HttpEntity<?> entity = new HttpEntity<Object>(headers);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
 
 			return Arrays.asList(restTemplate.postForObject(new URI(getTasksBatchUrl), entity, TaskDto[].class));
 		} catch (HttpClientErrorException e) {
@@ -54,12 +57,17 @@ public class JobStateManagerAccessor {
 		}
 	}
 
+	/**
+	 * Update JobStateManager with task results in taskDtos
+	 * 
+	 * @param taskDtos
+	 */
 	public void updateTaskResults(List<TaskDto> taskDtos) {
 
 		String updateTasksUrl = String.format("%s/tasks?jobName=%s&taskName=%s", baseUrl, jobName, taskName);
 		try {
 			HttpHeaders headers = createHttpHeaders();
-			HttpEntity<?> entity = new HttpEntity<Object>(taskDtos.toArray(), headers);
+			HttpEntity<?> entity = new HttpEntity<>(taskDtos.toArray(), headers);
 
 			restTemplate.put(new URI(updateTasksUrl), entity);
 		} catch (HttpClientErrorException e) {
@@ -67,7 +75,6 @@ public class JobStateManagerAccessor {
 		} catch (Exception e) {
 			throw new JobStateManagerException(e);
 		}
-
 	}
 
 	private HttpHeaders createHttpHeaders() {
@@ -75,7 +82,6 @@ public class JobStateManagerAccessor {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer" + " " + authToken);
 		return headers;
-
 	}
 
 }
